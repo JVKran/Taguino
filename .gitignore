@@ -1,0 +1,11 @@
+*.o
+*.project
+*.exe
+main.exe
+Makefi*
+*.ld
+*.elf
+*.bin
+*.map
+bmptk_fixed_size_stack.c
+*.hex
