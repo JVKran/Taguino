@@ -9,15 +9,15 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := transceiver.cpp
+SOURCES := NRF24L01.cpp
 
 # header files in this project
-HEADERS := transceiver.hpp
+HEADERS := NRF24L01.hpp
 
 # other places to look for files for this project
 SEARCH  := 
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there
-RELATIVE := ..
+RELATIVE := ../..
 include $(RELATIVE)/Makefile.due
