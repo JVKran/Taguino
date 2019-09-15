@@ -1,16 +1,20 @@
-/*
 #include "hwlib.hpp"
 
 
-class transmitter : public hwlib::target::d2_36kHz {
+class transmitter {
 private:
    hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
 public:
    void sendBit(const bool bit){
-      transmitter.set(1);
+      transmitter.write(1);
       hwlib::wait_us(800 * (1 + bit));
-      transmitter.set(0);
+      transmitter.write(0);
       hwlib::wait_us(800 * (1 + !bit));
+   }
+   void sendChar(const char test){
+      for(int i = 7; i >= 0; i--){
+         sendBit((test >> i) & 1UL);
+      }
    }
 };
 
@@ -33,16 +37,17 @@ int main( void ){
    // wait for the PC terminal to start
    hwlib::wait_ms( 500 );
 
-   auto irLed = transmitter();
+   auto ir = transmitter();
    
    // when the switch is pressed, 
    // repeat sending 1 ms signal and 1 ms silence
    // and show this on the LED
    for(;;){
-      
+      ir.sendChar('c');
+      hwlib::wait_ms(1000);
    }
 }
-*/
+
 
 
 /*
@@ -79,7 +84,6 @@ int main( void ){
    }
 }
 
-*/
 
 #include "hwlib.hpp"
 #include "transmitter.hpp"
@@ -88,5 +92,7 @@ int main( void ){
 int main(){
    auto irLed = transmitter();
 }
+
+*/
 
 
