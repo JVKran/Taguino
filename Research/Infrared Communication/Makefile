@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := transmitter.cpp
+SOURCES := transceiver.cpp
 
 # header files in this project
-HEADERS := transmitter.hpp
+HEADERS := transceiver.hpp
 
 # other places to look for files for this project
 SEARCH  := 
