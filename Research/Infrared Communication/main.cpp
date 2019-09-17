@@ -9,7 +9,9 @@ int main( void ){
    auto irReceiver = receiver(irReceiverPin);
 
    for(;;){
+      if(irReceiver.dataAvailable()){
       //irTransmitter.sendChar('c');
-      hwlib::cout << irReceiver.readBit() << hwlib::endl;
-   }
+      hwlib::cout << irReceiver.readChar() << hwlib::endl;
+      }
+      }
 }

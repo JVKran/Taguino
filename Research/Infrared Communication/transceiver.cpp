@@ -22,7 +22,7 @@ receiver::receiver(hwlib::target::pin_in & irReceiver):
 {}
 
 bool receiver::dataAvailable(){
-   while(irReceiver.read() == 1){
+   while(irReceiver.read() == 0){
       hwlib::wait_us(200);
    }
    return true;
@@ -35,11 +35,11 @@ bool receiver::dataAvailable(){
 /// It first waits for the signal to become high (which is a low signal from the receiver).
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
 bool receiver::readBit(){
-   while(irReceiver.read() == 0){
+   while(irReceiver.read() == 1){
       hwlib::wait_us(50);
    }
    highDuration = hwlib::now_us();
-   while(irReceiver.read() == 1){
+   while(irReceiver.read() == 0){
       hwlib::wait_us(50);
    }
    highDuration = hwlib::now_us() - highDuration;
