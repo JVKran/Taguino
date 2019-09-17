@@ -4,10 +4,12 @@
 int main( void ){	
    hwlib::wait_ms( 500 );
 
-   auto ir = transmitter();
+   //auto irTransmitter = transmitter();
+   auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
+   auto irReceiver = receiver(irReceiverPin);
 
    for(;;){
-      ir.sendChar('c');
-      hwlib::wait_ms(1000);
+      //irTransmitter.sendChar('c');
+      hwlib::cout << irReceiver.readBit() << hwlib::endl;
    }
 }
