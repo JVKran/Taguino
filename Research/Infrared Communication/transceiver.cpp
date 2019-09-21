@@ -87,7 +87,7 @@ void receiver::binaryDebugTerminal(){
          //If startbit received
          if(highDuration > 1600){
             receivedChar = 0;
-            for(unsigned int i = 0; i < 8;){
+            for(unsigned int i = 0; i <= 8; i++){
                highDuration = hwlib::now_us();
                while(!irReceiver.read()){
                   irReceiver.refresh();
@@ -95,11 +95,10 @@ void receiver::binaryDebugTerminal(){
                highDuration = hwlib::now_us() - highDuration;
                if(highDuration > 800){
                   hwlib::cout << '1';
-                  receivedChar |= (1UL << (7 - i));
+                  receivedChar |= (1UL << (8 - i));
                } else {
                   hwlib::cout << '0';
                }
-               i++;
                lowDuration = hwlib::now_us();
                while(irReceiver.read()){
                   irReceiver.refresh();
@@ -108,7 +107,7 @@ void receiver::binaryDebugTerminal(){
                   }
                }
             }
-            hwlib::cout << " = " << int(receivedChar) << " = " << receivedChar << hwlib::endl;
+            hwlib::cout << " = " << receivedChar << " = " << char(receivedChar) << hwlib::endl;
          }
       }
    }

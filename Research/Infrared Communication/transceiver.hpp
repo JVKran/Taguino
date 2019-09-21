@@ -18,7 +18,7 @@ private:
 	uint_fast64_t highDuration = 0;
 	uint_fast64_t lowDuration = 0;
 
-	char receivedChar;
+	int receivedChar;
 public:
 	receiver(hwlib::target::pin_in & irReceiver);
 
