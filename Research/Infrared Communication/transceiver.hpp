@@ -16,6 +16,8 @@ private:
 	hwlib::target::pin_in irReceiver;
 
 	uint_fast64_t highDuration = 0;
+	uint_fast64_t lowDuration = 0;
+
 	char receivedChar;
 public:
 	receiver(hwlib::target::pin_in & irReceiver);
@@ -24,6 +26,8 @@ public:
 
 	bool readBit();
 	char readChar();
+
+	void binaryDebugTerminal();
 };
 
 #endif //__TRANSCEIVER_HPP
