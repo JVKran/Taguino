@@ -12,7 +12,7 @@ void transmitter::sendBit(const bool bit){
    }
    
 void transmitter::sendChar(const char test){
-   for(int i = 7; i >= 0; i--){
+   for(int i = 7; i > 0; i--){
       sendBit((test >> i) & 1UL);
    }
 }
@@ -22,10 +22,15 @@ receiver::receiver(hwlib::target::pin_in & irReceiver):
 {}
 
 bool receiver::dataAvailable(){
-   while(irReceiver.read() == 0){
-      hwlib::wait_us(200);
+   if(!irReceiver.read()){
+      //Wait while the signal remains high. Then return.
+      while(!irReceiver.read()){
+         hwlib::wait_us(50);
+      }
+      return true;
+   } else {
+      return false;
    }
-   return true;
 }
 
 /// \brief
