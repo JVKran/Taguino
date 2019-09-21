@@ -60,10 +60,10 @@ bool receiver::readBit(){
    return (highDuration > 800) ? true : false;
 }
 
-char receiver::readChar(){
-   receivedChar = 0;
+char receiver::readInt(){
+   receivedInt = 0;
    for(unsigned int i = 0; i < 7;){
-      receivedChar |= (readBit() << i);
+      receivedInt |= (readBit() << i);
       i++;
       lowDuration = hwlib::now_us();
       while(irReceiver.read()){
@@ -73,7 +73,7 @@ char receiver::readChar(){
          }
       }
    }
-   return receivedChar;
+   return receivedInt;
 }
 
 void receiver::binaryDebugTerminal(){
@@ -86,8 +86,8 @@ void receiver::binaryDebugTerminal(){
          highDuration = hwlib::now_us() - highDuration;
          //If startbit received
          if(highDuration > 1600){
-            receivedChar = 0;
-            for(unsigned int i = 0; i <= 8; i++){
+            receivedInt = 0;
+            for(int i = 8; i >= 0; i--){
                highDuration = hwlib::now_us();
                while(!irReceiver.read()){
                   irReceiver.refresh();
@@ -95,19 +95,15 @@ void receiver::binaryDebugTerminal(){
                highDuration = hwlib::now_us() - highDuration;
                if(highDuration > 800){
                   hwlib::cout << '1';
-                  receivedChar |= (1UL << (8 - i));
+                  receivedInt |= (1UL << i);
                } else {
                   hwlib::cout << '0';
                }
-               lowDuration = hwlib::now_us();
                while(irReceiver.read()){
                   irReceiver.refresh();
-                  if(hwlib::now_us() - lowDuration > 2400){
-                     break;
-                  }
                }
             }
-            hwlib::cout << " = " << receivedChar << " = " << char(receivedChar) << hwlib::endl;
+            hwlib::cout << " = " << receivedInt << " = " << char(receivedInt) << hwlib::endl;
          }
       }
    }

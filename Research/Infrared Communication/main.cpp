@@ -11,7 +11,7 @@ int main( void ){
 
    for(;;){
       if(irReceiver.dataAvailable()){
-         hwlib::cout << irReceiver.readChar() << hwlib::endl;
+         hwlib::cout << irReceiver.readInt() << hwlib::endl;
       }
    }
 
