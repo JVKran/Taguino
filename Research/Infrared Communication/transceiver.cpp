@@ -14,7 +14,9 @@ void transmitter::sendBit(const bool bit){
 void transmitter::sendChar(const char test){
    transmitter.write(1);
    hwlib::wait_us(2400);
-   for(int i = 7; i > 0; i--){
+   transmitter.write(0);
+   hwlib::wait_us(2400);
+   for(int i = 7; i >= 0; i--){
       sendBit((test >> i) & 1UL);
    }
 }
@@ -23,6 +25,12 @@ receiver::receiver(hwlib::target::pin_in & irReceiver):
    irReceiver(irReceiver)
 {}
 
+/// \brief
+/// Data Available
+/// \details
+/// This function checks if a start condition is currently happening. A start of communication
+/// is recognizable by a high signal for 2400us followed by a low signal for 2400us. Since
+/// neither a low or high bit is represented this way, it must be the start condition.
 bool receiver::dataAvailable(){
    if(!irReceiver.read()){
       highDuration = hwlib::now_us();
@@ -32,11 +40,16 @@ bool receiver::dataAvailable(){
       highDuration = hwlib::now_us() - highDuration;
       //If startbit received
       if(highDuration > 1600){
-         //First wait until it has become high again. Then this bit transaction is over.
+         lowDuration = hwlib::now_us();
          while(irReceiver.read()){
             irReceiver.refresh();
          }
-         return true;
+         lowDuration = hwlib::now_us() - lowDuration;
+         if(lowDuration > 1600){
+            return true;
+         } else {
+            return false;
+         }
       } else {
          return false;
       }
@@ -60,23 +73,30 @@ bool receiver::readBit(){
    return (highDuration > 800) ? true : false;
 }
 
-char receiver::readInt(){
-   receivedInt = 0;
-   for(unsigned int i = 0; i < 7;){
-      receivedInt |= (readBit() << i);
-      i++;
+char receiver::readChar(){
+   receivedChar = 0;
+   for(int i = 7; i >= 0; i--){
       lowDuration = hwlib::now_us();
       while(irReceiver.read()){
          irReceiver.refresh();
          if(hwlib::now_us() - lowDuration > 2400){
-            break;
+            return 0;
          }
       }
+      highDuration = hwlib::now_us();
+      while(!irReceiver.read()){
+         irReceiver.refresh();
+         hwlib::wait_us(50);
+      }
+      highDuration = hwlib::now_us() - highDuration;
+      if(highDuration > 800){
+         receivedChar |= (1UL << i);
+      }
    }
-   return receivedInt;
+   return receivedChar;
 }
 
-void receiver::binaryDebugTerminal(){
+void receiver::debugTerminal(){
    for(;;){
       if(!irReceiver.read()){
          highDuration = hwlib::now_us();
@@ -86,24 +106,30 @@ void receiver::binaryDebugTerminal(){
          highDuration = hwlib::now_us() - highDuration;
          //If startbit received
          if(highDuration > 1600){
-            receivedInt = 0;
-            for(int i = 8; i >= 0; i--){
-               highDuration = hwlib::now_us();
-               while(!irReceiver.read()){
-                  irReceiver.refresh();
-               }
-               highDuration = hwlib::now_us() - highDuration;
-               if(highDuration > 800){
-                  hwlib::cout << '1';
-                  receivedInt |= (1UL << i);
-               } else {
-                  hwlib::cout << '0';
-               }
-               while(irReceiver.read()){
-                  irReceiver.refresh();
-               }
+            lowDuration = hwlib::now_us();
+            while(irReceiver.read()){
+               irReceiver.refresh();
             }
-            hwlib::cout << " = " << receivedInt << " = " << char(receivedInt) << hwlib::endl;
+            lowDuration = hwlib::now_us() - lowDuration;
+            if(lowDuration > 1600){
+               receivedChar = 0;
+               for(int i = 7; i >= 0; i--){
+                  while(irReceiver.read()){
+                     irReceiver.refresh();
+                     hwlib::wait_us(50);
+                  }
+                  highDuration = hwlib::now_us();
+                  while(!irReceiver.read()){
+                     irReceiver.refresh();
+                     hwlib::wait_us(50);
+                  }
+                  highDuration = hwlib::now_us() - highDuration;
+                  if(highDuration > 800){
+                     receivedChar |= (1UL << i);
+                  }
+               }
+               hwlib::cout << int(receivedChar) << " = " << receivedChar << hwlib::endl;
+            }
          }
       }
    }
