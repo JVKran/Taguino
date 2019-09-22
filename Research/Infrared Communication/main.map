@@ -33,12 +33,16 @@ Discarded input sections
                 0x0000000000000000        0x4 transceiver.o
  .text._ZN5hwlib9uart_getcEv
                 0x0000000000000000        0x4 transceiver.o
+ .text._ZN11transmitter14startConditionEv
+                0x0000000000000000       0x2c transceiver.o
  .text._ZN11transmitter7sendBitEb
                 0x0000000000000000       0x38 transceiver.o
  .text._ZN11transmitter8sendCharEc
-                0x0000000000000000       0x44 transceiver.o
- .text._ZN8receiver7readBitEv
-                0x0000000000000000       0x44 transceiver.o
+                0x0000000000000000       0x22 transceiver.o
+ .text._ZN11transmitter8sendDataEt
+                0x0000000000000000       0x22 transceiver.o
+ .text._ZN8receiver8readCharEv
+                0x0000000000000000       0x2c transceiver.o
  .text._ZN8receiver13debugTerminalEv
                 0x0000000000000000      0x1bc transceiver.o
  .rodata._ZN8receiver13debugTerminalEv.str1.1
@@ -1343,6 +1347,7 @@ Discarded input sections
                 0x0000000000000000       0xa4 hwlib.o
  .group         0x0000000000000000        0x8 main.o
  .group         0x0000000000000000        0x8 main.o
+ .group         0x0000000000000000        0x8 main.o
  .group         0x0000000000000000        0xc main.o
  .group         0x0000000000000000        0xc main.o
  .text          0x0000000000000000        0x0 main.o
@@ -1352,6 +1357,8 @@ Discarded input sections
                 0x0000000000000000       0x10 main.o
  .text._ZN3due6pin_in7refreshEv
                 0x0000000000000000        0x2 main.o
+ .text._ZN5hwlib7ostreamlsEc
+                0x0000000000000000        0xe main.o
  .text._ZN6sam3xa10SystemInitEv
                 0x0000000000000000       0x7c main.o
  .text._ZN3due8pin_infoENS_4pinsE
@@ -1411,10 +1418,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 bmptk_fixed_size_stack.o
  .data          0x0000000000000000        0x0 bmptk_fixed_size_stack.o
  .bss           0x0000000000000000        0x0 bmptk_fixed_size_stack.o
- .text          0x0000000000000000       0xa0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
  .data          0x0000000000000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
  .bss           0x0000000000000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
- .debug_frame   0x0000000000000000       0x44 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
  .data          0x0000000000000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
  .bss           0x0000000000000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
  .data          0x0000000000000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
@@ -1459,7 +1464,7 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
                 [!provide]                        PROVIDE (__ram_size = __ram_size)
                 [!provide]                        PROVIDE (__ram_end = __ram_end)
 
-.text           0x0000000000000000      0xa9c
+.text           0x0000000000000000      0xc4c
                 0x0000000000000000                . = ALIGN (0x4)
                 0x0000000000000000                __text_start = .
                 [!provide]                        PROVIDE (__text_start = __text_start)
@@ -1508,10 +1513,12 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
  .text._ZN8receiver13dataAvailableEv
                 0x0000000000000244       0x84 transceiver.o
                 0x0000000000000244                receiver::dataAvailable()
- .text._ZN8receiver8readCharEv
-                0x00000000000002c8       0x9a transceiver.o
-                0x00000000000002c8                receiver::readChar()
- *fill*         0x0000000000000362        0x2 
+ .text._ZN8receiver7readBitEv
+                0x00000000000002c8       0x7a transceiver.o
+                0x00000000000002c8                receiver::readBit()
+ .text._ZN8receiver8readDataEv
+                0x0000000000000342       0x22 transceiver.o
+                0x0000000000000342                receiver::readData()
  .text          0x0000000000000364       0x24 switch_to.o
                 0x0000000000000364                switch_from_to
  .text._ZN4rtos9task_base7releaseEv
@@ -1553,74 +1560,76 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
                 0x000000000000057a                hwlib::wait_us_busy(int)
  *fill*         0x0000000000000596        0x2 
  .text.startup.main
-                0x0000000000000598       0x64 main.o
+                0x0000000000000598      0x174 main.o
                 0x0000000000000598                main
  .text.__startup
-                0x00000000000005fc       0x48 bmptk_cortex.o
-                0x00000000000005fc                __startup
- .text          0x0000000000000644       0x30 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
-                0x0000000000000644                __aeabi_uldivmod
- .text          0x0000000000000674      0x2d0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
-                0x0000000000000674                __udivmoddi4
- .text          0x0000000000000944        0x4 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_dvmd_tls.o)
-                0x0000000000000944                __aeabi_ldiv0
-                0x0000000000000948                . = ALIGN (0x4)
+                0x000000000000070c       0x48 bmptk_cortex.o
+                0x000000000000070c                __startup
+ .text          0x0000000000000754       0xa0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
+                0x0000000000000754                __aeabi_ldivmod
+ .text          0x00000000000007f4       0x30 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
+                0x00000000000007f4                __aeabi_uldivmod
+ .text          0x0000000000000824      0x2d0 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
+                0x0000000000000824                __udivmoddi4
+ .text          0x0000000000000af4        0x4 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_dvmd_tls.o)
+                0x0000000000000af4                __aeabi_ldiv0
+                0x0000000000000af8                . = ALIGN (0x4)
  *(.glue_7t .glue_7)
- .glue_7        0x0000000000000948        0x0 linker stubs
- .glue_7t       0x0000000000000948        0x0 linker stubs
-                0x0000000000000948                . = ALIGN (0x4)
+ .glue_7        0x0000000000000af8        0x0 linker stubs
+ .glue_7t       0x0000000000000af8        0x0 linker stubs
+                0x0000000000000af8                . = ALIGN (0x4)
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata._ZTVN3due6pin_inE
-                0x0000000000000948       0x10 transceiver.o
-                0x0000000000000948                vtable for due::pin_in
+                0x0000000000000af8       0x10 transceiver.o
+                0x0000000000000af8                vtable for due::pin_in
  .rodata._ZN3due8pin_infoENS_4pinsE.str1.1
-                0x0000000000000958       0x42 transceiver.o
+                0x0000000000000b08       0x42 transceiver.o
  .rodata._ZZN3due8pin_infoENS_4pinsEE14pin_info_array
-                0x000000000000099a       0xa4 transceiver.o
+                0x0000000000000b4a       0xa4 transceiver.o
  .rodata._ZN4rtos9task_base5blockEv.str1.1
-                0x0000000000000a3e       0x4b rtos.o
- *fill*         0x0000000000000a89        0x3 
+                0x0000000000000bee       0x4b rtos.o
+ *fill*         0x0000000000000c39        0x3 
  .rodata._ZTVN5hwlib20cout_using_uart_putcE
-                0x0000000000000a8c       0x10 hwlib.o
-                0x0000000000000a8c                vtable for hwlib::cout_using_uart_putc
-                0x0000000000000a9c                . = ALIGN (0x4)
+                0x0000000000000c3c       0x10 hwlib.o
+                0x0000000000000c3c                vtable for hwlib::cout_using_uart_putc
+                0x0000000000000c4c                . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000000000a9c                . = ALIGN (0x4)
+                0x0000000000000c4c                . = ALIGN (0x4)
  *(.gcc_except_table)
-                0x0000000000000a9c                . = ALIGN (0x4)
+                0x0000000000000c4c                . = ALIGN (0x4)
  *(.eh_frame_hdr)
-                0x0000000000000a9c                . = ALIGN (0x4)
+                0x0000000000000c4c                . = ALIGN (0x4)
  *(.eh_frame)
-                0x0000000000000a9c                . = ALIGN (0x4)
-                0x0000000000000a9c                __text_end = .
+                0x0000000000000c4c                . = ALIGN (0x4)
+                0x0000000000000c4c                __text_end = .
                 [!provide]                        PROVIDE (__text_end = __text_end)
 
-.vfp11_veneer   0x0000000000000a9c        0x0
- .vfp11_veneer  0x0000000000000a9c        0x0 linker stubs
+.vfp11_veneer   0x0000000000000c4c        0x0
+ .vfp11_veneer  0x0000000000000c4c        0x0 linker stubs
 
-.v4_bx          0x0000000000000a9c        0x0
- .v4_bx         0x0000000000000a9c        0x0 linker stubs
+.v4_bx          0x0000000000000c4c        0x0
+ .v4_bx         0x0000000000000c4c        0x0 linker stubs
 
-.iplt           0x0000000000000a9c        0x0
- .iplt          0x0000000000000a9c        0x0 transceiver.o
+.iplt           0x0000000000000c4c        0x0
+ .iplt          0x0000000000000c4c        0x0 transceiver.o
 
 .IF_YOU_SEE_THIS_YOU_HAVE_ONE_OR_MORE_GLOBAL_OBJECT_CONSTRUCTORS
  *(.init)
  *(.preinit_array)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
-                0x0000000000000a9c                . = ALIGN (0x4)
-                0x0000000000000a9c                __exidx_start = .
+                0x0000000000000c4c                . = ALIGN (0x4)
+                0x0000000000000c4c                __exidx_start = .
                 [!provide]                        PROVIDE (__exidx_start = __exidx_start)
 
-.ARM.exidx      0x0000000000000a9c        0x8
+.ARM.exidx      0x0000000000000c4c        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0000000000000a9c        0x8 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
+ .ARM.exidx     0x0000000000000c4c        0x8 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
 
-.rel.dyn        0x0000000000000aa4        0x0
- .rel.iplt      0x0000000000000aa4        0x0 transceiver.o
-                0x0000000000000aa4                . = ALIGN (0x4)
-                0x0000000000000aa4                __exidx_end = .
+.rel.dyn        0x0000000000000c54        0x0
+ .rel.iplt      0x0000000000000c54        0x0 transceiver.o
+                0x0000000000000c54                . = ALIGN (0x4)
+                0x0000000000000c54                __exidx_end = .
                 [!provide]                        PROVIDE (__exidx_end = __exidx_end)
 
 .bss            0x0000000020000000    0x12024
@@ -1671,9 +1680,9 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
                 0x0000000020012024                __bss_end = .
                 [!provide]                        PROVIDE (__bss_end = __bss_end)
 
-.data           0x0000000020012024       0x20 load address 0x0000000000000aa4
+.data           0x0000000020012024       0x20 load address 0x0000000000000c54
                 0x0000000020012024                . = ALIGN (0x4)
-                0x0000000000000aa4                __data_init_start = LOADADDR (.data)
+                0x0000000000000c54                __data_init_start = LOADADDR (.data)
                 [!provide]                        PROVIDE (__data_init_start = __data_init_start)
                 0x0000000020012024                __data_start = .
                 [!provide]                        PROVIDE (__data_start = __data_start)
@@ -1694,13 +1703,13 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
                 0x0000000020012044                . = ALIGN (0x4)
                 0x0000000020012044                __data_end = .
                 [!provide]                        PROVIDE (__data_end = __data_end)
-                0x0000000000000aa4                __data_init_end = LOADADDR (.data)
+                0x0000000000000c54                __data_init_end = LOADADDR (.data)
                 [!provide]                        PROVIDE (__data_init_end = __data_init_end)
                 [!provide]                        PROVIDE (__data_size = (__data_end - __data_start))
                 [!provide]                        PROVIDE (__data_init_size = __data_size)
                 [!provide]                        PROVIDE (__data_init_end = (__data_init_start + __data_init_size))
 
-.igot.plt       0x0000000020012044        0x0 load address 0x0000000000000ac4
+.igot.plt       0x0000000020012044        0x0 load address 0x0000000000000c74
  .igot.plt      0x0000000020012044        0x0 transceiver.o
                 0x0000000020012044                . = ALIGN (0x4)
                 0x0000000020012044                __heap_start = .
@@ -1742,10 +1751,11 @@ LOAD /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/../../../../arm-none-eabi/lib/thumb
 .debug_line
  *(.debug_line)
 
-.debug_frame    0x0000000000000000       0x60
+.debug_frame    0x0000000000000000       0xa4
  *(.debug_frame)
- .debug_frame   0x0000000000000000       0x2c /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x000000000000002c       0x34 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x0000000000000000       0x44 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_ldivmod.o)
+ .debug_frame   0x0000000000000044       0x2c /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x0000000000000070       0x34 /usr/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/libgcc.a(_udivmoddi4.o)
 
 .comment        0x0000000000000000       0x7f
  .comment       0x0000000000000000       0x7f transceiver.o

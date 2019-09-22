@@ -2,6 +2,13 @@
 
 #include "transceiver.hpp"
 
+void transmitter::startCondition(){
+   transmitter.write(1);
+   hwlib::wait_us(2400);
+   transmitter.write(0);
+   hwlib::wait_us(2400);
+}
+
 // Een bitwaarde 1 bestaat uit 1600 hoog en 800 laag.
 // Een bitwaarde 0 bestaat uit 800 hoog 1600 laag.
 void transmitter::sendBit(const bool bit){
@@ -11,13 +18,17 @@ void transmitter::sendBit(const bool bit){
       hwlib::wait_us(800 * (1 + !bit));
    }
    
-void transmitter::sendChar(const char test){
-   transmitter.write(1);
-   hwlib::wait_us(2400);
-   transmitter.write(0);
-   hwlib::wait_us(2400);
+void transmitter::sendChar(const char character){
+   startCondition();
    for(int i = 7; i >= 0; i--){
-      sendBit((test >> i) & 1UL);
+      sendBit((character >> i) & 1UL);
+   }
+}
+
+void transmitter::sendData(const uint16_t data){
+   startCondition();
+   for(int i = 15; i >= 0; i--){
+      sendBit((data >> i) & 1UL);
    }
 }
 
@@ -65,18 +76,7 @@ bool receiver::dataAvailable(){
 /// It first waits for the signal to become high (which is a low signal from the receiver).
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
 bool receiver::readBit(){
-   highDuration = hwlib::now_us();
-   while(!irReceiver.read()){
-      irReceiver.refresh();
-   }
-   highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > 800) ? true : false;
-}
-
-char receiver::readChar(){
-   receivedChar = 0;
-   for(int i = 7; i >= 0; i--){
-      lowDuration = hwlib::now_us();
+   lowDuration = hwlib::now_us();
       while(irReceiver.read()){
          irReceiver.refresh();
          if(hwlib::now_us() - lowDuration > 2400){
@@ -89,11 +89,23 @@ char receiver::readChar(){
          hwlib::wait_us(50);
       }
       highDuration = hwlib::now_us() - highDuration;
-      if(highDuration > 800){
-         receivedChar |= (1UL << i);
-      }
+      return (highDuration > 800) ? true : false;
+}
+
+char receiver::readChar(){
+   receivedChar = 0;
+   for(int i = 7; i >= 0; i--){
+      receivedChar |= (readBit() << i);
    }
    return receivedChar;
+}
+
+uint16_t receiver::readData(){
+   receivedData = 0;
+   for(int i = 15; i >= 0; i--){
+      receivedData |= (readBit() << i);
+   }
+   return receivedData;
 }
 
 void receiver::debugTerminal(){

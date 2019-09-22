@@ -7,8 +7,11 @@ class transmitter {
 private:
    	hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
 public:
+	void startCondition();
+
    	void sendBit(const bool bit);
-   	void sendChar(const char test);
+   	void sendChar(const char character);
+   	void sendData(const uint16_t data);
 };
 
 class receiver {
@@ -19,6 +22,7 @@ private:
 	uint_fast64_t lowDuration = 0;
 
 	char receivedChar;
+	uint16_t receivedData;
 public:
 	receiver(hwlib::target::pin_in & irReceiver);
 
@@ -26,6 +30,7 @@ public:
 
 	bool readBit();
 	char readChar();
+	uint16_t readData();
 
 	void debugTerminal();
 };
