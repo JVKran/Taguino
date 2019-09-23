@@ -9,7 +9,7 @@ int main( void ){
 	const uint16_t data = 65333;
 
    	for(;;){
-    	irTransmitter.sendChar(data);
+    	irTransmitter.sendData(data);
 		hwlib::wait_ms(2000);
    	}
 }
