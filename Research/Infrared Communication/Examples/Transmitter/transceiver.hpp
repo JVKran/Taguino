@@ -5,7 +5,8 @@
 
 class transmitter {
 private:
-   	hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
+   	//hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
+	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
 public:
 	void startCondition();
 
