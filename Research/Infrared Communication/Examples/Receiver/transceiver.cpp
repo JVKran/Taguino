@@ -26,9 +26,9 @@ void transmitter::startCondition(){
 /// is transmitting the receiver reads a low signal.
 void transmitter::sendBit(const bool bit){
       transmitter.write(1);
-      hwlib::wait_us(800 * (1 + bit));
+      hwlib::wait_us(750 * (1 + bit));
       transmitter.write(0);
-      hwlib::wait_us(800 * (1 + !bit));
+      hwlib::wait_us(750 * (1 + !bit));
    }
 
 /// \brief

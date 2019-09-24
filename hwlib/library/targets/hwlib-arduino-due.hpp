@@ -615,7 +615,7 @@ class d2_38kHz : public hwlib::pin_out {
       // configure pin A match clear
       TC0->TC_CHANNEL[ 0 ].TC_CMR |= TC_CMR_ACPC_SET | TC_CMR_ACPA_CLEAR; 
    
-      // set C match/clear for 36 kHz  
+      // set C match/clear for 38 kHz  
       TC0->TC_CHANNEL[ 0 ].TC_RC = 41'000'000 / 38'000;
       
       // set 50% duty cycle
