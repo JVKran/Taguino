@@ -8,8 +8,10 @@ class keyboard {
 	private:
 		hwlib::keypad<16> & keypad;
 
-		std::array<char, 5> characterBuffer;
+		std::array<char, 10> characterBuffer = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
 		unsigned int bufferLength = 0;
+
+		uint_fast64_t lastKeyPress = 0;
 	public:
 		keyboard(hwlib::keypad<16> & keypad);
 		keyboard(keyboard & existingKeyboard);
@@ -18,8 +20,9 @@ class keyboard {
 		char readChar();
 		bool charAvailable();
 
-		int currentBufferSize();
+		unsigned int currentBufferSize();
 		char getBufferElement(const int position);
+		void clearBuffer();
 
 
 		void debug();

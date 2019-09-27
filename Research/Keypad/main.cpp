@@ -29,6 +29,17 @@ int main( void ){
 
    keyboard keypad = keyboard(numpad);
    
-   keypad.debug();
+   uint_fast64_t lastKeyCheck = hwlib::now_us();
+
+   while(true){
+      keypad.update();
+      if(hwlib::now_us() - lastKeyCheck > 2'000'000){
+         lastKeyCheck = hwlib::now_us();
+         for(unsigned int i = 0; i < keypad.currentBufferSize(); i++){
+            hwlib::cout << keypad.getBufferElement(i);
+         }
+         keypad.clearBuffer();
+      }
+   }
 
 }
