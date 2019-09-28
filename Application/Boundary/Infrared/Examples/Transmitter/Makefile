@@ -12,12 +12,12 @@
 SOURCES := transceiver.cpp
 
 # header files in this project
-HEADERS := transceiver.hpp entities.hpp
+HEADERS := transceiver.hpp
 
 # other places to look for files for this project
-SEARCH  := Boundary/Infrared Boundary/HCSR04 Entity
+SEARCH  := 
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there
-RELATIVE := ..
+RELATIVE := ../../../..
 include $(RELATIVE)/Makefile.due

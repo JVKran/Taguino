@@ -5,7 +5,8 @@
 
 class transmitter {
 private:
-   	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
+   	//hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
+	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
 public:
 	void startCondition();
 
@@ -14,7 +15,7 @@ public:
    	void sendData(const uint16_t data);
 };
 
-class receiver : public task<>{
+class receiver {
 private:
 	hwlib::target::pin_in irReceiver;
 
@@ -33,7 +34,6 @@ public:
 	uint16_t readData();
 
 	void debugTerminal();
-	
 };
 
 #endif //__TRANSCEIVER_HPP

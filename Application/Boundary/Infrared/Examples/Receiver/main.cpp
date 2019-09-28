@@ -2,17 +2,14 @@
 #include "transceiver.hpp"
 
 int main( void ){	
-   hwlib::wait_ms( 500 );
+   hwlib::wait_ms( 600 );
 
    auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
    auto irReceiver = receiver(irReceiverPin);
 
-   irReceiver.debugTerminal();
-
    for(;;){
       if(irReceiver.dataAvailable()){
-         hwlib::cout << irReceiver.readData() << hwlib::endl;
+         hwlib::cout << irReceiver.readChar() << hwlib::endl;
       }
    }
-
 }

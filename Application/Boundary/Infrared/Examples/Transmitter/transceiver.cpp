@@ -55,8 +55,6 @@ void transmitter::sendData(const uint16_t data){
    }
 }
 
-//<<<<<<----------------------------------------------------------------------------->>>>>>
-
 /// \brief
 /// Constructor
 /// \details
