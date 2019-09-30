@@ -940,7 +940,7 @@ ifeq ($(CHIP),esp8266)
    INCLUDES       += -I$(BMPTK)/targets/esp8266 
    DEFINES        += -DBMPTK_INCLUDE_CHIP=esp8266.h 
    
-   CORE_FLAGS     += -Os -g -O2 -Wl,-EL 
+   CORE_FLAGS     += -Os -g -Wl,-EL 
    CORE_FLAGS     += -fno-inline-functions -nostdlib -mlongcalls 
    CORE_FLAGS     += -mtext-section-literals -D__ets__ -DICACHE_FLASH 
    CORE_FLAGS     += 
