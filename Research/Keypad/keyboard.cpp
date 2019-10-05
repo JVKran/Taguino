@@ -9,21 +9,17 @@ keyboard::keyboard(keyboard & existingKeyboard):
 {}
 
 void keyboard::update(){
-	if(keypad.char_available()){
+	if(keypad.pressed()){
 		if(hwlib::now_us() - lastKeyPress > 1'000'000){
 			lastKeyPress = hwlib::now_us();
-			characterBuffer[bufferLength] = keypad.getc();
-			bufferLength++;
+			characterBuffer[bufferLength++] = keypad.getc();
+			while(keypad.pressed()){
+				hwlib::wait_us(50);
+			}
 		} else if(hwlib::now_us() - lastKeyPress < 500'000 && hwlib::now_us() - lastKeyPress > 260'000){
 			lastKeyPress = hwlib::now_us();
-			if(characterBuffer[bufferLength] < 97){
-				characterBuffer[bufferLength] = (((keypad.getc() - '0') - 1) * 3) + 97;
-			} else {
-				characterBuffer[bufferLength]++;
-			}
-			hwlib::cout << "Doublepress!" << hwlib::endl;
-			hwlib::wait_us(50);
-			while(keypad.char_available()){
+			characterBuffer[bufferLength]++;
+			while(keypad.pressed()){
 				hwlib::wait_us(50);
 			}
 		}
