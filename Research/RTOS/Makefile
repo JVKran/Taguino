@@ -1,6 +1,6 @@
-SOURCES :=
+SOURCES := message.cpp pause.cpp
 
-HEADERS :=
+HEADERS := message.hpp pause.hpp
 
 SEARCH  := 
 

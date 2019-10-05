@@ -2,10 +2,10 @@
 
 pauseDetector::pauseDetector(hwlib::target::pin_in & irReceiver, pauseListener & listener, long long duration, const char * name):
 	task(name),
-	irReciever(irReceiver),
+	irReceiver(irReceiver),
 	listener(listener),
-	pauses(this, "Pause Channel"),
-	sampleClock(this, duration, "Sample Clock")
+	sampleClock(this, duration, "Sample Clock"),
+	detectedPauses(this, "Pause Channel")
 {}
 
 void pauseDetector::main(){

@@ -3,30 +3,43 @@
 
 #include "pause.hpp"
 
+class messageListener {
+	public:
+		virtual void messageReceived(const int m) = 0;
+};
+
+//<<<<<<<<<<<<<<<<<<<------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>
+
 class messageDecoder : public rtos::task<>, public pauseListener {
 	private:
 		messageListener & listener;
+		rtos::channel< uint_fast64_t, 1024 > pauses;
+
 		enum class states {idle, message};
 		states state;
-		rtos::channel< uint_fast64_t, 1024 > pauses;
+
+		int n;		//Index of received bit
+		int m;		//Received message
 	public:
-		messageDecoder(const pauseListener & listener);
+		messageDecoder(messageListener & listener);
 
 		void pauseDetected(const uint_fast64_t pause) override;
-
 		void main() override;
 };
 
+//<<<<<<<<<<<<<<<<<<<------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>
 
-class messageListener {
+class messageLogger : public rtos::task<>, public messageListener {
+	private:
+		rtos::channel<int, 1024> messages;
+		rtos::timer clearDisplayTimer;
 	public:
-		messageReceived(const infraredMessage & message) = 0;
-};
+		messageLogger(const char * name);
 
-
-class messageLogger : pulic rtos::task<>, public messageListener {
-	public:
-		rtos::channel< int, 1024 > messages;
+		void messageReceived(const int m) override {
+			messages.write(m);
+		}
+		void main() override;
 };
 
 #endif //__MESSAGE_HPP

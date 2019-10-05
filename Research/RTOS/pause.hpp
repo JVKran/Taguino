@@ -3,6 +3,11 @@
 
 #include "rtos.hpp"
 
+class pauseListener {
+	public:
+		virtual void pauseDetected(const uint_fast64_t pause) = 0;
+};
+
 class pauseDetector : public rtos::task<> {
 	private:
 		hwlib::target::pin_in & irReceiver;
@@ -18,11 +23,5 @@ class pauseDetector : public rtos::task<> {
 
 		void main() override;
 };
-
-class pauseListener {
-	public:
-		void pauseDetected(const uint_fast64_t pause) = 0;
-};
-
 
 #endif //__PAUSE_HPP
