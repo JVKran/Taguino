@@ -28,10 +28,11 @@ void messageDecoder::main(){
 					} else {
 						n++;
 						m = m << 1;
-						m|=(readDuration > 1000)?1:0;
-						if(n == 0){
+						//m|(readDuration > 1000)?1:0;
+						if(n == 15){
 							state = states::idle;
 							listener.messageReceived(m);
+							hwlib::cout << m << hwlib::endl;
 						}
 						break;
 					}
