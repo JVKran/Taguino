@@ -1,3 +1,4 @@
+/// @file
 #include "keyboard.hpp"
 
 keyboard::keyboard(hwlib::keypad<16> & keypad):
@@ -8,52 +9,70 @@ keyboard::keyboard(keyboard & existingKeyboard):
 	keypad(existingKeyboard.keypad)
 {}
 
-void keyboard::update(){
+/// \brief
+/// Read Character
+/// \details
+/// This function returns the character of the pressed key. It simulates a T9 keyboard
+/// in which button 2 can be pressed three times to select letter c. Once to select letter a, etc.
+/// It has to know which key has been pressed. This is tored in the lastKey variable. If this is equal
+/// to the pressed key, we can increment the char with one if it hasn't been done so for three times
+/// already.
+char keyboard::readChar(){
 	if(keypad.char_available()){
-		if(hwlib::now_us() - lastKeyPress > 1'000'000){
-			lastKeyPress = hwlib::now_us();
-			characterBuffer[bufferLength] = keypad.getc();
-			bufferLength++;
-		} else if(hwlib::now_us() - lastKeyPress < 500'000 && hwlib::now_us() - lastKeyPress > 260'000){
-			lastKeyPress = hwlib::now_us();
-			if(characterBuffer[bufferLength] < 97){
-				characterBuffer[bufferLength] = (((keypad.getc() - '0') - 1) * 3) + 97;
-			} else {
-				characterBuffer[bufferLength]++;
-			}
-			hwlib::cout << "Doublepress!" << hwlib::endl;
-			hwlib::wait_us(50);
-			while(keypad.char_available()){
-				hwlib::wait_us(50);
+		newCharacter = keypad.getc();
+		keyPressPeriod = hwlib::now_us() - lastKeyPress;
+		lastKeyPress = hwlib::now_us();
+		lastKey = newCharacter;
+		lastCharacter = (((newCharacter - '0') - 2) * 3) + 97;
+		hwlib::wait_ms(200);
+		while(hwlib::now_us() - lastKeyPress < 500'000){
+			if(keypad.char_available()){
+				newCharacter = keypad.getc();
+				if(newCharacter != '\0' && letterIncrements < 2 && newCharacter == lastKey && newCharacter < '7'){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '7' && letterIncrements < 3 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '8' && letterIncrements < 2 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '9' && letterIncrements < 3 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else {
+					break; 
+				}
 			}
 		}
-	}
-}
-
-char keyboard::readChar(){
-	return keypad.getc();
-}
-
-bool keyboard::charAvailable(){
-	return keypad.char_available();
-}
-
-unsigned int keyboard::currentBufferSize(){
-	return bufferLength;
-}
-
-char keyboard::getBufferElement(const int position){
-	if(position >= 0 && position < 10){
-		return characterBuffer[position];
+		letterIncrements = 0;
+		return lastCharacter;
 	} else {
 		return 0;
 	}
 }
 
-void keyboard::clearBuffer(){
-	bufferLength = 0;
+/// \brief
+/// Read Key
+/// \details
+/// This function returns the character of the pressed key equal to the one drawn on the numpad.
+char keyboard::readKey(){
+	return keypad.pressed();
 }
 
+/// \brief
+/// Debug
+/// \details
+/// This function can be used for debugging. It prints the amount of presses that have been done
+/// and the pressed key.
 void keyboard::debug(){
    	int n = 0;
    	for(;;){
