@@ -1,6 +1,6 @@
-SOURCES :=
+SOURCES := reciever.cpp
 
-HEADERS :=
+HEADERS := reciever.hpp
 
 SEARCH  := 
 
