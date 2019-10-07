@@ -18,22 +18,39 @@ keyboard::keyboard(keyboard & existingKeyboard):
 /// to the pressed key, we can increment the char with one if it hasn't been done so for three times
 /// already.
 char keyboard::readChar(){
-	newCharacter = keypad.pressed();
-	if(newCharacter != '\0'){
+	if(keypad.char_available()){
+		newCharacter = keypad.getc();
 		keyPressPeriod = hwlib::now_us() - lastKeyPress;
 		lastKeyPress = hwlib::now_us();
 		lastKey = newCharacter;
 		lastCharacter = (((newCharacter - '0') - 2) * 3) + 97;
 		hwlib::wait_ms(200);
-		while(hwlib::now_us() - lastKeyPress < 1'000'000){
-			newCharacter = keypad.pressed();
-			if(newCharacter != '\0' && letterIncrements < 2 && newCharacter == lastKey){
-				lastCharacter++;
-				letterIncrements++;
-				lastKeyPress = hwlib::now_us();
-				hwlib::wait_ms(200);
-			} else {
-				break; 
+		while(hwlib::now_us() - lastKeyPress < 500'000){
+			if(keypad.char_available()){
+				newCharacter = keypad.getc();
+				if(newCharacter != '\0' && letterIncrements < 2 && newCharacter == lastKey && newCharacter < '7'){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '7' && letterIncrements < 3 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '8' && letterIncrements < 2 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else if(newCharacter == '9' && letterIncrements < 3 && newCharacter == lastKey){
+					lastCharacter++;
+					letterIncrements++;
+					lastKeyPress = hwlib::now_us();
+					hwlib::wait_ms(100);
+				} else {
+					break; 
+				}
 			}
 		}
 		letterIncrements = 0;
