@@ -12,14 +12,15 @@ class keyboard {
 		uint_fast64_t keyPressPeriod;
 
 		char lastCharacter;
+		char lastKey;
 		char newCharacter;
+		unsigned int letterIncrements;
 	public:
 		keyboard(hwlib::keypad<16> & keypad);
 		keyboard(keyboard & existingKeyboard);
 
-		void update();
 		char readChar();
-		bool charAvailable();
+		char readKey();
 
 		void debug();
 };

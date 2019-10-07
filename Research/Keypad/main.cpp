@@ -2,15 +2,7 @@
 #include "keyboard.hpp"
 
 int main( void ){	
-   
    namespace target = hwlib::target;  
-
-      // wait for the PC console to start
-   hwlib::wait_ms( 500 );
-   hwlib::cout << "Keypad demo\n";
-
-   auto led = target::pin_out( target::pins::led );
-   (void)led;
 
    auto out0 = target::pin_oc( target::pins::a0 );
    auto out1 = target::pin_oc( target::pins::a1 );
@@ -28,9 +20,12 @@ int main( void ){
    auto numpad   = hwlib::keypad< 16 >( matrix, "123A456B789C*0#D" );
 
    keyboard keypad = keyboard(numpad);
+   char readChar;
    
    while(true){
-      keypad.update();
+      readChar = keypad.readChar();
+      if(readChar != '\0'){
+         hwlib::cout << readChar << hwlib::endl;
+      }
    }
-
 }
