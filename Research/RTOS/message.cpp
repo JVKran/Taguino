@@ -3,7 +3,9 @@
 messageDecoder::messageDecoder(messageListener & listener):
 	listener(listener),
 	pauses(this, "Pause Channel")
-{}
+{
+	state = states::idle;
+}
 
 void messageDecoder::pauseDetected(const uint_fast64_t pause){
 	int miliSec = pause /1000;
@@ -15,23 +17,25 @@ void messageDecoder::main(){
 	for(;;){
 		auto event = wait(pauses);
 		if(event == pauses){
-			hwlib::cout<<pauses<<"First cout\n";
-			auto readDuration = pauses.read();
-			hwlib::cout<<pauses<<"Second cout\n";
+			auto readDuration = pauses.read()/1000;		//Convert readDuration to miliseconds
+			hwlib::cout<<"ReadDuration: "<<readDuration<<hwlib::endl;
 			switch(state){
 				case states::idle:
 					if(readDuration > 4000 && readDuration < 5000){
-						hwlib::cout<<"pause 4000-5000\n";
+						hwlib::cout<<"Idle correcte timing\n";
 						state = states::message;
 						n = 0;
 						m = 0;
+					}else{
+						hwlib::cout<<"In de else loop van IDLE\n";
 					}
 					break;
 				case states::message:
 					if(readDuration > 200 && readDuration < 2000){
 						state = states::idle;
-						hwlib::cout<<"pause 200-2000\n";
+						hwlib::cout<<"Message correcte timing\n";
 					} else {
+						hwlib::cout<<"In de else loop van MESSAGE\n";
 						n++;
 						m = m << 1;
 						m|=(readDuration > 1000)?1:0;
