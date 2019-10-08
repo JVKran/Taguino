@@ -15,7 +15,9 @@ void messageDecoder::main(){
 	for(;;){
 		auto event = wait(pauses);
 		if(event == pauses){
+			hwlib::cout<<pauses<<"First cout\n";
 			auto readDuration = pauses.read();
+			hwlib::cout<<pauses<<"Second cout\n";
 			switch(state){
 				case states::idle:
 					if(readDuration > 4000 && readDuration < 5000){
