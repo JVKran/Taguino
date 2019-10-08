@@ -6,8 +6,9 @@ messageDecoder::messageDecoder(messageListener & listener):
 {}
 
 void messageDecoder::pauseDetected(const uint_fast64_t pause){
+	int miliSec = pause /1000;
+	hwlib::cout<<"pauseDetected "<<miliSec<<" Mili Seconden\n";
 	pauses.write(pause);
-	hwlib::cout<<"pauseDetected "<<pause<<"";
 }
 
 void messageDecoder::main(){

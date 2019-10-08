@@ -12,14 +12,10 @@ void pauseDetector::main(){
 	for(;;){
 		auto event = wait(sampleClock);
 		if(event == sampleClock){
-			hwlib::cout<<"---\neven == sampleClock";
 			measuredDuration = getPauseDuration();
 			if(measuredDuration > 50){
-				hwlib::cout<<"---\nmeasuredDuration > 50";
 				listener.pauseDetected(measuredDuration);
 				measuredDuration = 0;
-			}else{
-				hwlib::cout<<"---\nmeasuredDuration < 50";
 			}
 		}
 	}	
