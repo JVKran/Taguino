@@ -7,6 +7,7 @@ messageDecoder::messageDecoder(messageListener & listener):
 
 void messageDecoder::pauseDetected(const uint_fast64_t pause){
 	pauses.write(pause);
+	hwlib::cout<<"pauseDetected "<<pause<<"";
 }
 
 void messageDecoder::main(){
@@ -17,6 +18,7 @@ void messageDecoder::main(){
 			switch(state){
 				case states::idle:
 					if(readDuration > 4000 && readDuration < 5000){
+						hwlib::cout<<"pause 4000-5000\n";
 						state = states::message;
 						n = 0;
 						m = 0;
@@ -25,6 +27,7 @@ void messageDecoder::main(){
 				case states::message:
 					if(readDuration > 200 && readDuration < 2000){
 						state = states::idle;
+						hwlib::cout<<"pause 200-2000\n";
 					} else {
 						n++;
 						m = m << 1;
@@ -32,6 +35,7 @@ void messageDecoder::main(){
 						if(n == 0){
 							state = states::idle;
 							listener.messageReceived(m);
+							hwlib::cout<<"messageRecieved\n";
 						}
 						break;
 					}
