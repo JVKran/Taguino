@@ -118,7 +118,7 @@ bool receiver::readBit(){
       irReceiver.refresh();
    }
    highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > 800) ? true : false;
+   return (highDuration > 550) ? true : false;
 }
 
 /// \brief

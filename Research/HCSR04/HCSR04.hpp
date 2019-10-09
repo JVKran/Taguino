@@ -11,7 +11,7 @@ public:
 	HCSR04(hwlib::pin_out & triggerPin, hwlib::pin_in & echoPin);
 	HCSR04(HCSR04 & existingSensor);
 
-	const unsigned int getDistance();
+	const unsigned int getDistance(const bool resultInInches = false);
 };
 
 

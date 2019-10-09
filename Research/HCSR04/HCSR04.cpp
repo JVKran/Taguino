@@ -29,10 +29,10 @@ HCSR04::HCSR04(HCSR04 & existingSensor):
 /// low to be sure a clean signal is made when it is made high 5us later. The datasheet
 /// specifies the signal has to be high for at least 10us. The speed of sound is equal to
 /// 1 cm per 29us hence the distance can be calculated as implemented.
-const unsigned int HCSR04::getDistance(){
+const unsigned int HCSR04::getDistance(const bool resultInInches){
 	triggerPin.write(0);
 	triggerPin.flush();
-	hwlib::wait_us(5);
+	hwlib::wait_us(2);
 	triggerPin.write(1);
 	triggerPin.flush();
 	hwlib::wait_us(10);
@@ -42,6 +42,9 @@ const unsigned int HCSR04::getDistance(){
 	while(!echoPin.read()){
 		echoPin.refresh();
 	}
+	while(echoPin.read()){
+		echoPin.refresh();
+	}
 	echoEndTime = (hwlib::now_us() - echoStartTime);
-	return ((echoEndTime / 2) / 29);
+	return (resultInInches) ? ((echoEndTime*0.0133)/2) : ((echoEndTime*0.034)/2);
 }
