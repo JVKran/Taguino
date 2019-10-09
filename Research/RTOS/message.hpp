@@ -33,6 +33,9 @@ class messageLogger : public rtos::task<>, public messageListener {
 	private:
 		rtos::channel<int, 1024> messages;
 		rtos::timer clearDisplayTimer;
+
+		enum class states {idle, showmessage};
+		states state = states::idle;
 	public:
 		messageLogger(const char * name);
 

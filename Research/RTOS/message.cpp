@@ -24,18 +24,16 @@ void messageDecoder::main(){
 					break;
 				case states::message:
 					if(readDuration > 200 && readDuration < 2000){
-						state = states::idle;
-					} else {
 						n++;
 						m = m << 1;
-						//m|(readDuration > 1000)?1:0;
+						m|=(readDuration > 1000) ? 1 : 0;
 						if(n == 15){
 							state = states::idle;
-							listener.messageReceived(m);
-							hwlib::cout << m << hwlib::endl;
 						}
-						break;
+					} else {
+						state = states::idle;
 					}
+					break;
 			}
 		}
 	}

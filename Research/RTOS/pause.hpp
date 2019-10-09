@@ -12,12 +12,14 @@ class pauseDetector : public rtos::task<> {
 	private:
 		hwlib::target::pin_in & irReceiver;
 		pauseListener & listener;
+
 		rtos::clock sampleClock;
 		rtos::channel<int, 1024> detectedPauses;
 
-		uint_fast64_t measuredDuration;
+		enum class states {idle, signal};
+		states state = states::idle;
+
 		uint_fast64_t pauseDuration;
-		uint_fast64_t getPauseDuration();
 	public:
 		pauseDetector(hwlib::target::pin_in & irReceiver, pauseListener & listener, long long duration, const char * name);
 

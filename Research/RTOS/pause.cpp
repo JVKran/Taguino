@@ -12,21 +12,21 @@ void pauseDetector::main(){
 	for(;;){
 		auto event = wait(sampleClock);
 		if(event == sampleClock){
-			measuredDuration = getPauseDuration();
-			if(measuredDuration > 50){
-				listener.pauseDetected(measuredDuration);
-				measuredDuration = 0;
+			switch(state){
+				case states::idle:
+					if(!irReceiver.read()){	//If the transmit pin is high
+						listener.pauseDetected(pauseDuration);
+						state = states::signal;
+					} else {
+						pauseDuration+=100;
+					}
+					break;
+				case states::signal:
+					if(irReceiver.read()){
+						state = states::idle;
+					}
+					break;
 			}
-		}
-	}	
-}
-
-uint_fast64_t pauseDetector::getPauseDuration(){
-	pauseDuration = hwlib::now_us();
-	while(irReceiver.read()){
-		irReceiver.refresh();
-		hwlib::wait_us(50);
+		}		
 	}
-	pauseDuration = hwlib::now_us() - pauseDuration;
-	return pauseDuration;
-}
+}	
