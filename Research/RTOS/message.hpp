@@ -5,7 +5,7 @@
 
 class messageListener {
 	public:
-		virtual void messageReceived(const int m) = 0;
+		virtual void messageReceived(const int m) = 0;	
 };
 
 //<<<<<<<<<<<<<<<<<<<------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>
@@ -40,7 +40,9 @@ class messageLogger : public rtos::task<>, public messageListener {
 		messageLogger(const char * name);
 
 		void messageReceived(const int m) override {
+			hwlib::cout<<"Writing message in channel\n";
 			messages.write(m);
+
 		}
 		void main() override;
 };
