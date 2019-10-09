@@ -16,6 +16,7 @@ void pauseDetector::main(){
 				case states::idle:
 					if(!irReceiver.read()){	//If the transmit pin is high
 						listener.pauseDetected(pauseDuration);
+						//hwlib::cout << "listener.pauseDetected(" << pauseDuration << ");" << hwlib::endl;
 						state = states::signal;
 					} else {
 						pauseDuration+=100;
@@ -24,6 +25,7 @@ void pauseDetector::main(){
 				case states::signal:
 					if(irReceiver.read()){
 						state = states::idle;
+						pauseDuration = 0;
 					}
 					break;
 			}
