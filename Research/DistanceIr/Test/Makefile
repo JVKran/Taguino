@@ -19,5 +19,5 @@ SEARCH  :=
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there
-RELATIVE := ../../../..
+RELATIVE := ../../..
 include $(RELATIVE)/Makefile.due
