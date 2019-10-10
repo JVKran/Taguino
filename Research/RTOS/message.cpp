@@ -28,7 +28,7 @@ void messageDecoder::main(){
 					if(readDuration > 200 && readDuration < 2000){
 						n++;
 						m = m << 1;
-						m|=(readDuration > 1200) ? 1 : 0;
+						m|=(readDuration > 800) ? 1 : 0;
 						if(n == 15){
 							state = states::idle;
 							listener.messageReceived(m);
@@ -63,7 +63,6 @@ void messageLogger::main(){
 			clearDisplayTimer.set(5'000'000);
 		} else {
 			messageTerminal << "\f     " << hwlib::flush;
-			messageTerminal.clear();
 		}
 	}
 }
