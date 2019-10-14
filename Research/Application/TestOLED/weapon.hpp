@@ -4,15 +4,18 @@
 #include "hwlib.hpp"
 
 class weapon{
-private:
+protected:
 	int damageFactor;
-	hwlib::xy & position;
+	hwlib::window & weaponWindow;
 public:
-	weapon(damageFactor):
-		damageFactor(damageFactor)
-	{}
+	weapon(int damageFactor, hwlib::window & weaponWindow):
+		damageFactor(damageFactor),
+		weaponWindow(weaponWindow)
+	{
+		damageFactor = 10;
+	}
 
-	void drawWeapon(hwlib::xy & position)=0;
+	virtual void drawWeapon()=0;
 };
 
 #endif /*weapon.hpp*/
