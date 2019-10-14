@@ -9,6 +9,7 @@ void shotgun::drawWeapon(){
 	hwlib::line(hwlib::xy(12,5), hwlib::xy(40,5)).draw(weaponWindow); 	//barrelMid
 	hwlib::line(hwlib::xy(12,6), hwlib::xy(40,6)).draw(weaponWindow); 	//barrelBottom
 	hwlib::line(hwlib::xy(22,7), hwlib::xy(35,7)).draw(weaponWindow); 	//foreEnd
-	
+	// rectangle(weaponWindow, hwlib::xy(12,5), hwlib::xy(40,7)).draw();
+
 	weaponWindow.flush();
 }

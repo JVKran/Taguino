@@ -3,16 +3,21 @@
 
 #include "hwlib.hpp"
 #include "weapon.hpp"
+#include "shapes.hpp"
 
 class shotgun : public weapon{
+private:
+	size_t bullets;
 public:
 	shotgun(hwlib::window & weaponWindow):
 		weapon(damageFactor, weaponWindow)
 	{
-		damageFactor=20;
+		damageFactor=40;
+		bullets=8;
 	}
 
 	void drawWeapon();
+	void drawBullets();
 };
 
 #endif /*shotgun.hpp*/
