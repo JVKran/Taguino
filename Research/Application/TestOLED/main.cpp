@@ -1,6 +1,7 @@
 #include "hwlib.hpp"
 #include "weapon.hpp"
 #include "shotgun.hpp"
+#include "pistol.hpp"
 
 int main(){
 	auto scl = hwlib::target::pin_oc(hwlib::target::pins::scl);
@@ -13,13 +14,14 @@ int main(){
 	auto upperWindowFont = hwlib::font_default_8x8();
 	auto upperConsole = hwlib::terminal_from(upperWindow, upperWindowFont);
 
-	auto weaponWindow = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(40, 15));
+	auto weaponWindow = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(40, 17));
 	// auto weaponFont = hwlib::font_default_8x8();
 	// auto weaponConsole = hwlib::terminal_from(weaponWindow, weaponFont);
 
 	
-	shotgun shottie = shotgun(weaponWindow);
-
+	// shotgun shottie = shotgun(weaponWindow);
+	pistol handGun = pistol(weaponWindow);
 	oled.clear();
-	shottie.drawWeapon();
+	// shottie.drawWeapon();
+	handGun.drawWeapon();
 }

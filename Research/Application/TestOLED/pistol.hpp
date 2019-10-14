@@ -4,9 +4,9 @@
 #include "hwlib.hpp"
 #include "weapon.hpp"
 
-class assaultRifle : public weapon{
+class pistol : public weapon{
 public:
-	shotgun(hwlib::window & weaponWindow):
+	pistol(hwlib::window & weaponWindow):
 		weapon(damageFactor, weaponWindow)
 	{
 		damageFactor=15;
