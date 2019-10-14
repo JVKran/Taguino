@@ -8,16 +8,16 @@
 # 
 #############################################################################
 
-# source files in this project (main.cpp is automatically assumed)
-SOURCES := NRF24L01.cpp
+# source & header files in this project (main.cpp is automatically assumed)
 
-# header files in this project
-HEADERS := NRF24L01.hpp
+HEADERS += NRF24.hpp NRF24_register.hpp
+SOURCES += NRF24.cpp
 
-# other places to look for files for this project
+#other places to look for files for this project
 SEARCH  := 
 
-# set RELATIVE to the next higher directory 
-# and defer to the Makefile.* there
-RELATIVE := ../..
-include $(RELATIVE)/Makefile.due
+# set REATIVE to the next higher directory 
+# and defer to the Makefile.due there
+RELATIVE := $(RELATIVE)../
+include $(RELATIVE)Makefile.due
+
