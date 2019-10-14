@@ -23,7 +23,6 @@ int main( void ){
 
   for(;;){
   	if(irReceiver.dataAvailable()){
-      hwlib::cout << irReceiver.readData() << hwlib::endl;
   		receivedCharacter = irReceiver.readChar();
      	timeField << "\f" << receivedCharacter  << hwlib::endl;
      	if(receivedCharacter == 'j' || receivedCharacter == 'a' || receivedCharacter == 'w' || receivedCharacter == 'o' || receivedCharacter == 'e' || receivedCharacter == 'l'){
