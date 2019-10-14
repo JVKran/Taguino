@@ -14,15 +14,15 @@ void NRF24::start(){
    set_ce( 0 );
    set_csn( 1 );
 
-   hwlib::wait_ms( 200 );
+   hwlib::wait_ms( 200 );                                                                                         //wait till the nrf chip is done
 
    write_register( STATUS, 0x0c );
 
-   write_register( SETUP_RETR, (5 & 0xF) << ARD | (15 & 0xF) << ARC );												//sets the retries to 15 with a delay of 5
+   write_register( SETUP_RETR, (5 & 0xF) << ARD | (15 & 0xF) << ARC );									                  //sets the retries to 15 with a delay of 5
 
-   write_register( RF_SETUP,  read_register(RF_SETUP) & ~( ( 1 << RF_DR_LOW  )  | ( 1 << RF_DR_HIGH ) ) );			//sets the data rate to 1 Mbps
+   write_register( RF_SETUP,  read_register(RF_SETUP) & ~( ( 1 << RF_DR_LOW  )  | ( 1 << RF_DR_HIGH ) ) );	      //sets the data rate to 1 Mbps
 
-   setAddressWidth( addr_width );																					//sets the width of the address, by default it will be 5 bytes long
+   setAddressWidth( addr_width );																					                  //sets the width of the address, by default it will be 5 bytes long
 
    write_register( RF_SETUP, read_register( RF_SETUP ) | ( 1 <<  RF_PWR_HIGH | 1 << RF_PWR_LOW ) );					//sets power output to low
 
@@ -32,8 +32,8 @@ void NRF24::start(){
 
    setChannel( 100 ); 			//default
 
-   flush_rx();
-   flush_tx();
+   flush_rx();                //make the read pipe empty
+   flush_tx();                //make the write pipe empty
 
    powerup();
 
@@ -66,7 +66,6 @@ void NRF24::read_register( uint8_t reg, uint8_t* value, uint8_t len){
 }
 
 void NRF24::write_register( uint8_t reg, uint8_t value ){
-
    set_csn( 0 );                                                                      //starts the transaction
    bus.transaction( hwlib::pin_out_dummy ).write( ( W_REGISTER | ( 0x1F & reg ) ) );  //uses the write command to write values to certain registers
    bus.transaction( hwlib::pin_out_dummy ).write(value);                              //writes a value of 8 bits to the register
@@ -74,14 +73,14 @@ void NRF24::write_register( uint8_t reg, uint8_t value ){
 }
 
 void NRF24::write_register( uint8_t reg, uint8_t* value, uint8_t len ){
-   set_csn( 0 );                                                                     
-   bus.transaction( hwlib::pin_out_dummy ).write( ( W_REGISTER | ( 0x1F & reg ) ) );  
+   set_csn( 0 );                                                                      //start the transaction                                                           
+   bus.transaction( hwlib::pin_out_dummy ).write( ( W_REGISTER | ( 0x1F & reg ) ) );  //writes a value to a register
 
-   while( len-- ){
-      bus.transaction( hwlib::pin_out_dummy ).write( *value++ );                      
+   while( len-- ){                                                                    //loop through every byte
+      bus.transaction( hwlib::pin_out_dummy ).write( *value++ );                      //write every byte
    }
 
-   set_csn( 1 );                                                                      
+   set_csn( 1 );                                                                      //stop the transaction
 }
 
 void NRF24::setChannel( uint8_t channel ){
