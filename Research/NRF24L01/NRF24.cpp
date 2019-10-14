@@ -11,12 +11,12 @@ NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, u
 {}
 
 void NRF24::start(){
-   set_ce( 0 );
-   set_csn( 1 );
+   set_ce( 0 );                                                                                                   //set the transmit/receive pin to 0
+   set_csn( 1 );                                                                                                  //set csn to 1, to make sure we do not send accidently something
 
    hwlib::wait_ms( 200 );                                                                                         //wait till the nrf chip is done
 
-   write_register( STATUS, 0x0c );
+   write_register( STATUS, 0x0c );                                                                                //write to the status register a certain value
 
    write_register( SETUP_RETR, (5 & 0xF) << ARD | (15 & 0xF) << ARC );									                  //sets the retries to 15 with a delay of 5
 
@@ -26,9 +26,9 @@ void NRF24::start(){
 
    write_register( RF_SETUP, read_register( RF_SETUP ) | ( 1 <<  RF_PWR_HIGH | 1 << RF_PWR_LOW ) );					//sets power output to low
 
-   write_register( FEATURE, 0 );
-   write_register( DYNPD, 0 );
-   write_register( STATUS, ( 1 << RX_DR ) |( 1 << TX_DS ) | ( 1 << MAX_RT ) );
+   write_register( FEATURE, 0 );                                                                                  //set al features to 0
+   write_register( DYNPD, 0 );                                                                                    //turn dynamic payload off
+   write_register( STATUS, ( 1 << RX_DR ) |( 1 << TX_DS ) | ( 1 << MAX_RT ) );                                    //set certain values in the status register
 
    setChannel( 100 ); 			//default
 
@@ -37,11 +37,11 @@ void NRF24::start(){
 
    powerup();
 
-   write_register( CONFIG, read_register( CONFIG ) & ~( 1 << PRIM_RX ) ); 
+   write_register( CONFIG, read_register( CONFIG ) & ~( 1 << PRIM_RX ) );                                         
 }
 
-void NRF24::transfer( uint8_t reg ){                                              
-   bus.transaction( csn ).write( reg );                                                     
+void NRF24::transfer( uint8_t reg ){                                                //simple function to tranfser a single byte
+   bus.transaction( csn ).write( reg );                                             //to transfer a single byte                                           
 }
 
 uint8_t NRF24::read_register( uint8_t reg ){
@@ -56,10 +56,10 @@ uint8_t NRF24::read_register( uint8_t reg ){
 
 void NRF24::read_register( uint8_t reg, uint8_t* value, uint8_t len){
    set_csn( 0 );                                                                      
-   bus.transaction( hwlib::pin_out_dummy ).write( ( R_REGISTER | ( 0x1F & reg ) ) );  
+   bus.transaction( hwlib::pin_out_dummy ).write( ( R_REGISTER | ( 0x1F & reg ) ) );   //read a certain register
 
    while( len-- ){
-      *value++ = bus.transaction( hwlib::pin_out_dummy ).read_byte();               
+      *value++ = bus.transaction( hwlib::pin_out_dummy ).read_byte();                  //read the bytes out of the register
    }
 
    set_csn( 1 );                                                                      
@@ -84,38 +84,38 @@ void NRF24::write_register( uint8_t reg, uint8_t* value, uint8_t len ){
 }
 
 void NRF24::setChannel( uint8_t channel ){
-   channel = ( channel < 125 ) ? channel : 125;            
-   write_register( RF_CH, channel );                        
+   channel = ( channel < 125 ) ? channel : 125;                   //a ternary operator to check if the channel is not bigger than 125     
+   write_register( RF_CH, channel );                              //write the channel to the RF_CH register
 }
 
-void NRF24::set_csn( bool x ){
-   csn.write( x );                         
+void NRF24::set_csn( bool x ){                                    //a function that changes if the csn pin is 0 or 1
+   csn.write( x );                           
    csn.flush();                             
 }
 
-void NRF24::set_ce( bool x ){
+void NRF24::set_ce( bool x ){                                     //a function that changes the ce pin to 0 or 1
    ce.write( x );                          
    ce.flush();                              
 }
 
-void NRF24::write_pipe( uint8_t *address ){
+void NRF24::write_pipe( uint8_t *address ){                    
 
-   write_register( RX_ADDR_P0, address, addr_width );          
-   write_register( TX_ADDR, address, addr_width );          
+   write_register( RX_ADDR_P0, address, addr_width );             //write to receive address which address we are going to use
+   write_register( TX_ADDR, address, addr_width );                //write to the transmit address the same address
 
-   write_register( RX_PW_P0, payload_size );                    
+   write_register( RX_PW_P0, payload_size );                      //set the size of the payload
 }
 
 void NRF24::read_pipe( uint8_t *address ){
 
-   write_register( RX_ADDR_P0, address, addr_width );                            
-   write_register( RX_PW_P0, payload_size );                                   
-   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << ERX_P0 ) );    
+   write_register( RX_ADDR_P0, address, addr_width );                               //write the address and the address size to the receive address
+   write_register( RX_PW_P0, payload_size );                                        //set the payload size of the receiver
+   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << ERX_P0 ) );       //enable the receive address
 }
 
-void NRF24::rx_mode(){
+void NRF24::rx_mode(){                                                              //set to rx_mode
 
-   powerup();                                                                   
+   powerup();                                                                       
    set_ce( 0 );                                                                  
    write_register( CONFIG, read_register( CONFIG ) | ( 1 << PRIM_RX ) );         
    write_register( STATUS, ( 1 << RX_DR ) | ( 1 << TX_DS ) | ( 1 << MAX_RT ) );  
@@ -123,7 +123,7 @@ void NRF24::rx_mode(){
                             
 }
 
-void NRF24::tx_mode(){
+void NRF24::tx_mode(){                                                              //set to tx_mode
 
    set_ce( 0 );
 
