@@ -23,7 +23,7 @@ int main( void ){
 		health-=10;
 
 		hwlib::cout << "Distance: " << (data & 255) << hwlib::endl << "Health: " << ((data & 0xFF00) >> 8) << hwlib::endl << hwlib::endl;
-		transmitter.sendData(data);
+		irTransmitter.sendData(data);
 
 		hwlib::wait_ms(1000);
 		
