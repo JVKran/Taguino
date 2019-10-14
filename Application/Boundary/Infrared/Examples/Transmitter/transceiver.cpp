@@ -26,9 +26,9 @@ void transmitter::startCondition(){
 /// is transmitting the receiver reads a low signal.
 void transmitter::sendBit(const bool bit){
       transmitter.write(1);
-      hwlib::wait_us(750 * (1 + bit));
+      hwlib::wait_us(600 * (1 + bit));
       transmitter.write(0);
-      hwlib::wait_us(750 * (1 + !bit));
+      hwlib::wait_us(600 * (1 + !bit));
    }
 
 /// \brief
@@ -116,10 +116,9 @@ bool receiver::readBit(){
    highDuration = hwlib::now_us();
    while(!irReceiver.read()){
       irReceiver.refresh();
-      hwlib::wait_us(50);
    }
    highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > 800) ? true : false;
+   return (highDuration > 550) ? true : false;
 }
 
 /// \brief
