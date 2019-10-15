@@ -118,18 +118,22 @@ void NRF24::write_pipe( uint8_t child, uint8_t *address ){
       }else{                                                            //else we can only write 1 byte of the address
          write_register( pipe[child], address, 1 );
       }
-   } 
-
-   hwlib::cout << pipe[child] << "\n";               
+   }             
 
    write_register( TX_ADDR, address, addr_width );                //write to the transmit address the same address
-
    write_register( pipe_payload[child], payload_size );           //set the size of the payload
 }
 
 void NRF24::read_pipe( uint8_t child, uint8_t *address ){
 
-   write_register( pipe[child], address, addr_width );                                       //write the address and the address size to the receive address
+   if(child < 6){
+      if(child < 2){
+         write_register( pipe[child], address, addr_width );  
+      }else{
+         write_register( pipe[child], address, 1 );  
+      }
+   }
+
    write_register( pipe_payload[child], payload_size );                                      //set the payload size of the receiver
    write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << pipe_enable[child] ) );    //enable the receive address
 }
