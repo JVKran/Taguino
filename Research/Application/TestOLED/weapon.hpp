@@ -5,12 +5,12 @@
 
 class weapon{
 protected:
-	unsigned int ID;
-	unsigned int magSize;
-	unsigned int amountOfMags;
-	unsigned int damageFactor;
-	hwlib::window & weaponWindow;
-	hwlib::window & bulletsWindow;
+	unsigned int ID;															//Weapon ID
+	unsigned int magSize;														//Amount of bullets per magazine
+	unsigned int amountOfMags;													//Amount of magazines available
+	unsigned int damageFactor;													//Damagefactor per shot
+	hwlib::window & weaponWindow;												//Window to print weapon
+	hwlib::window & bulletsWindow;												//Window to print bullets
 public:
 	weapon(unsigned int ID, unsigned int magSize, unsigned int amountOfMags, unsigned int damageFactor, hwlib::window & weaponWindow, hwlib::window & bulletsWindow):
 		ID(ID),
@@ -22,9 +22,8 @@ public:
 		damageFactor = 10;
 	}
 
-	virtual void drawWeapon()=0;
-	virtual void drawBullets();
-	void upBullets();
+	virtual void drawWeapon()=0;												//Virtual abstract function so every weapon gets to draw it's own image
+	virtual void drawBullets();													//Function that draws amount of bullets up to 10, adds a "+" sign if it's more then 10
 };
 
 class shotgun : public weapon{
