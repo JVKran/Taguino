@@ -26,14 +26,19 @@ KY040::KY040(hwlib::pin_in & CLK, hwlib::pin_in & DT, hwlib::pin_in & SW, const 
 void KY040::update(){
 	CLK.refresh();
 	curPos = CLK.read();
-	if(curPos != lastPos){
-		DT.refresh();
-		if(DT.read() != curPos){
-			posCounter++;
-		} else {
-			posCounter--;
-		}
-	}
+	if( CLK.read() == 1 && DT.read() == 1){
+   	  	for(;;){
+   	  		if( CLK.read() == 0 && DT.read() == 1){
+   	  			posCounter--;
+   	  			break;
+   	  		}else if( CLK.read() == 1 && DT.read() == 0){
+   	  			posCounter++;
+   	  			break;
+   	  		}else if( CLK.read() == 0 && DT.read() == 0){
+   	  			break;
+   	  		}
+   	  	}
+   	}
 	SW.refresh();
 	swPress = !SW.read();
 	lastPos = curPos;
