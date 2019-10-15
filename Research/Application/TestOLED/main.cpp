@@ -12,7 +12,6 @@ int main(){
 	auto bulletsWindow = hwlib::window_part(oled, hwlib::xy(0,14), hwlib::xy(41,24));
 
 	shotgun shottie = shotgun(weaponWindow, bulletsWindow);
-	pistol handGun = pistol(weaponWindow, bulletsWindow);
 
 	oled.clear();
 	shottie.drawWeapon();
