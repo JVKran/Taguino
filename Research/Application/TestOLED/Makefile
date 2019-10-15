@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := weapon.cpp pistol.cpp shapes.cpp shotgun.cpp 
+SOURCES := weapon.cpp 
 
 # header files in this project
-HEADERS := weapon.hpp pistol.hpp shapes.hpp shotgun.hpp 
+HEADERS := weapon.hpp 
 
 # other places to look for files for this project
 SEARCH  := 
