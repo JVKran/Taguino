@@ -19,9 +19,9 @@ int main(){
 	// auto weaponConsole = hwlib::terminal_from(weaponWindow, weaponFont);
 
 	
-	// shotgun shottie = shotgun(weaponWindow);
+	shotgun shottie = shotgun(weaponWindow);
 	pistol handGun = pistol(weaponWindow);
 	oled.clear();
-	// shottie.drawWeapon();
-	handGun.drawWeapon();
+	shottie.drawWeapon();
+	// handGun.drawWeapon();
 }

@@ -14,7 +14,8 @@ public:
 		startRectangle(startRectangle),
 		endRectangle(endRectangle)
 	{}
-	void draw();
+
+	void print();
 };
 
 #endif /*shapes.hpp*/

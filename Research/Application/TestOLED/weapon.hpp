@@ -2,7 +2,7 @@
 #define __WEAPON_HPP
 
 #include "hwlib.hpp"
-
+#include "shapes.hpp"
 class weapon{
 protected:
 	int damageFactor;
