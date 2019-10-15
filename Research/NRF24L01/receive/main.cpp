@@ -21,7 +21,7 @@ int main( void ){
 
    auto nrf = NRF24( spi_bus, ce, csn );                             //create a object of NRF24 with default constructor
    nrf.start();                                                      //initialize default things
-   nrf.read_pipe( address );                                         //on which pipe we are going to listen
+   nrf.read_pipe( 0, address );                                         //on which pipe we are going to listen
    nrf.rx_mode();                                                    //go into rx_mode to be able to receive data
 
    uint8_t value[5] = {};                                            //the array in which we will put the data

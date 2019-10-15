@@ -21,8 +21,8 @@ int main( void ){
 
    auto nrf = NRF24( spi_bus, ce, csn );                              //create a object from NRF24 with the default constructor
    nrf.start();                                                       //initialize the default values that are needed
-   nrf.write_pipe( address );                                         //set the address of default 5 bytes to send it to the right user
-   nrf.tx_mode();                                                     //we need to be in tx_mode to be able to transmit
+   nrf.write_pipe( 0, address );                                      //set the address of default 5 bytes to send it to the right user
+   nrf.tx_mode( 0 );                                                  //we need to be in tx_mode to be able to transmit
 
    uint8_t value[5] = {1, 2, 3, 4, 5};                                //the data we are going to transmit
    uint8_t len = 5;                                                   //the amount of bytes we are sending

@@ -34,13 +34,13 @@ public:
 
    void set_ce( bool x );
 
-   void write_pipe( uint8_t *address );
+   void write_pipe( uint8_t child, uint8_t *address );
 
-   void read_pipe( uint8_t *address );
+   void read_pipe( uint8_t child, uint8_t *address );
 
    void rx_mode();
 
-   void tx_mode();
+   void tx_mode( uint8_t child );
 
    void powerup();
 
@@ -63,6 +63,8 @@ public:
    void setRetries( uint8_t delay, uint8_t count );
 
    bool checkRXfifo();
+
+   void readPipeAddress( uint8_t *value, uint8_t child );            //for testing purpose only (to check if the address is right)
 
 };
 

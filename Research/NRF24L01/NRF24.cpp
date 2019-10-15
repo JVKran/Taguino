@@ -10,6 +10,18 @@ NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, u
    bus( bus ), ce( ce ), csn( csn ), payload_size( payload_size ), addr_width( addr_width )
 {}
 
+static const uint8_t pipe[] = {
+   RX_ADDR_P0, RX_ADDR_P1, RX_ADDR_P2, RX_ADDR_P3, RX_ADDR_P4, RX_ADDR_P5
+};
+
+static const uint8_t pipe_enable[] = {
+   ERX_P0, ERX_P1, ERX_P2, ERX_P3, ERX_P4, ERX_P5
+};
+
+static const uint8_t pipe_payload[] = {
+   RX_PW_P0, RX_PW_P1, RX_PW_P2, RX_PW_P3, RX_PW_P4, RX_PW_P5
+};
+
 void NRF24::start(){
    set_ce( 0 );                                                                                                   //set the transmit/receive pin to 0
    set_csn( 1 );                                                                                                  //set csn to 1, to make sure we do not send accidently something
@@ -98,19 +110,28 @@ void NRF24::set_ce( bool x ){                                     //a function t
    ce.flush();                              
 }
 
-void NRF24::write_pipe( uint8_t *address ){                    
+void NRF24::write_pipe( uint8_t child, uint8_t *address ){ 
 
-   write_register( RX_ADDR_P0, address, addr_width );             //write to receive address which address we are going to use
+   if(child < 6){                                                       //check if the child is smaller than 6
+      if(child < 2){                                                    //if the child is smaller than 2, we can write all 5 bytes of the address
+         write_register( pipe[child], address, addr_width );            //write to receive address which address we are going to use
+      }else{                                                            //else we can only write 1 byte of the address
+         write_register( pipe[child], address, 1 );
+      }
+   } 
+
+   hwlib::cout << pipe[child] << "\n";               
+
    write_register( TX_ADDR, address, addr_width );                //write to the transmit address the same address
 
-   write_register( RX_PW_P0, payload_size );                      //set the size of the payload
+   write_register( pipe_payload[child], payload_size );           //set the size of the payload
 }
 
-void NRF24::read_pipe( uint8_t *address ){
+void NRF24::read_pipe( uint8_t child, uint8_t *address ){
 
-   write_register( RX_ADDR_P0, address, addr_width );                               //write the address and the address size to the receive address
-   write_register( RX_PW_P0, payload_size );                                        //set the payload size of the receiver
-   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << ERX_P0 ) );       //enable the receive address
+   write_register( pipe[child], address, addr_width );                                       //write the address and the address size to the receive address
+   write_register( pipe_payload[child], payload_size );                                      //set the payload size of the receiver
+   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << pipe_enable[child] ) );    //enable the receive address
 }
 
 void NRF24::rx_mode(){                                                              //set to rx_mode
@@ -123,7 +144,7 @@ void NRF24::rx_mode(){                                                          
                             
 }
 
-void NRF24::tx_mode(){                                                              //set to tx_mode
+void NRF24::tx_mode( uint8_t child ){                                                              //set to tx_mode
 
    set_ce( 0 );
 
@@ -131,7 +152,7 @@ void NRF24::tx_mode(){                                                          
 
    write_register( CONFIG, read_register( CONFIG ) & ~( 1 << PRIM_RX ) );         
    powerup();                                                                     
-   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << ERX_P0 ) );     
+   write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << pipe_enable[child] ) );     
 }
 
 void NRF24::powerup(){
@@ -193,7 +214,7 @@ void NRF24::write_payload( uint8_t* value, uint8_t len ){
    }
 
    set_csn( 1 );
-   set_ce( 1 );               //start transmitting                                               
+   set_ce( 1 );                                                                   //start transmitting                                               
 }
 
 void NRF24::read_payload( uint8_t* value, uint8_t len ){
@@ -229,4 +250,16 @@ bool NRF24::checkRXfifo(){
    }else{
       return 0;                                                               //returns 0 if RX fifo is empty
    }
+}
+
+void NRF24::readPipeAddress( uint8_t* value, uint8_t child ){
+   int len = 5;
+
+   read_register( pipe[child], value, len );
+
+   while( len-- ){
+      hwlib::cout << *value++ << " ";
+   }
+
+   hwlib::cout << "\n";
 }
