@@ -1,7 +1,7 @@
 #include "weapon.hpp"
 
 void shotgun::drawWeapon(){															//Finished image of a shotgun
-		hwlib::line(hwlib::xy(0,10),hwlib::xy(12,5)).draw(weaponWindow); 				//recoilPadTop
+	hwlib::line(hwlib::xy(0,10),hwlib::xy(12,5)).draw(weaponWindow); 				//recoilPadTop
 	hwlib::line(hwlib::xy(0,11),hwlib::xy(12,6)).draw(weaponWindow); 				//recoilPadMid
 	hwlib::line(hwlib::xy(0,12),hwlib::xy(12,6)).draw(weaponWindow); 				//recoilPadBottom
 

@@ -9,9 +9,9 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := 
+SOURCES := display.cpp
 # header files in this project
-HEADERS := weapon.hpp
+HEADERS := display.hpp weapon.hpp
 # other places to look for files for this project
 SEARCH  := 
 

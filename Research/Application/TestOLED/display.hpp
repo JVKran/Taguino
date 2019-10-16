@@ -4,28 +4,39 @@
 #include "hwlib.hpp"
 
 class display{
-private:
+protected:
 	hwlib::glcd_oled & oled;
 	hwlib::window_part weaponWindow;
 	hwlib::window_part bulletWindow;
+	hwlib::window_part magazineWindow;
+	hwlib::terminal_from magazineTerminal;
 	hwlib::window_part healthWindow;
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
 	hwlib::terminal_from scoreTerminal;
+
+	void drawUnknown();
+	void drawShotgun();
+	void drawPistol();
+	// void assaultRifle();
+	
 public:
 	display(hwlib::glcd_oled & oled):
 		oled(oled),
 		weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
-		bulletWindow(oled, hwlib::xy(0,14), hwlib::xy(41,24)),
-		healthWindow(oled, hwlib::xy(0,25), hwlib::xy(40,30)),
+		bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
+		magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
+		magazineTerminal(magazineWindow, hwlib::font_default_8x8()),
+		healthWindow(oled, hwlib::xy(0,40), hwlib::xy(40,46)),
 		timeWindow(oled, hwlib::xy(78,0), hwlib::xy(128,39)),
 		powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 		scoreTerminal(oled, hwlib::font_default_8x8())
-		
 	{}
-	// void showBullets(int amountOfBullets);
-	// void showHealth(int health);
-	// void showWeapon(int weaponID);
+	void showBullets(int amountOfBullets);
+	void showHealthBar();
+	void updateHealth(const unsigned int prevHealth, const unsigned int health);
+	void showMagazines(int amountOfMagazines);
+	void showWeapon(int weaponID);
 	// void showScore(scoreboard & scoreBoard);
 
 };

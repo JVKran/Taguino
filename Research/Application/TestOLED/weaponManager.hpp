@@ -39,6 +39,7 @@ public:
 			hwlib::terminal_from & scoreTerminal;	
 		*/
 	}
+	void setNewWeapon(int weaponID);
 };
 
 #endif /* weaponManager.hpp */
