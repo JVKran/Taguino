@@ -17,10 +17,15 @@ int main( void ){
    auto out_port = hwlib::port_oc_from_pins_t( out0, out1, out2, out3 );
    auto in_port  = hwlib::port_in_from_pins_t( in0,  in1,  in2,  in3  );
    auto matrix   = hwlib::matrix_of_switches( out_port, in_port );
-   auto numpad   = hwlib::keypad< 16 >( matrix, "123A456B789C*0#D" );
+   auto numpad   = hwlib::keypad< 16 >( matrix, "147*2580369#ABCD" );
+   //auto numpad   = hwlib::keypad< 16 >( matrix, "47258" );
+  //auto numpad   = hwlib::keypad< 16 >( matrix, "A47B2458B369C*0#D" );
+
 
    keyboard keypad = keyboard(numpad);
    char readChar;
+   
+   
    
    while(true){
       readChar = keypad.readChar();
@@ -28,4 +33,5 @@ int main( void ){
          hwlib::cout << readChar << hwlib::endl;
       }
    }
+   
 }
