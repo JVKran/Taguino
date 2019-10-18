@@ -1,5 +1,9 @@
 #include "display.hpp"
 
+void display::terminal(){
+	magazineTerminal <<3;
+}
+
 void display::showBullets(int amountOfBullets){
 	bulletWindow.clear();
 	for(int i=0; i<10 && i<amountOfBullets; i++){										//Line for every bullet up to 10 bullets
@@ -29,7 +33,7 @@ void display::showHealthBar(){
 }
 
 void display::updateHealth(const unsigned int prevHealth, const unsigned int health){
-	//ADD CODE TO MAKE health prevhealth
+	//VOEG CODE TOE DIE HEALTH DE PREVHEALTH MAAKT ZODAT DIE AUTOMATISCH WEER DOORGEPAKT KAN WORDEN.
 	int amountOfBlack = 27-((100-health)*0.27);
 	int amountOfWhite = (100-health)*0.27;
 	if(prevHealth < health){
@@ -51,7 +55,6 @@ void display::showMagazines(int amountOfMagazines){
 	hwlib::line(hwlib::xy(0,7), hwlib::xy(6,7)).draw(magazineWindow);					//botMagazine
 	hwlib::line(hwlib::xy(6,7), hwlib::xy(10,0)).draw(magazineWindow);					//rightMagazine
 	magazineWindow.flush();
-	// magazineTerminal << "\f" <<amountOfMagazines;
 }
 
 void display::showWeapon(int weaponID){

@@ -32,6 +32,7 @@ public:
 		powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 		scoreTerminal(oled, hwlib::font_default_8x8())
 	{}
+	void terminal();
 	void showBullets(int amountOfBullets);
 	void showHealthBar();
 	void updateHealth(const unsigned int prevHealth, const unsigned int health);

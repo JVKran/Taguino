@@ -20,6 +20,7 @@ int main(){
 		Display.updateHealth(i+1,i);
 	}
 
+	// Display.terminal();
 	// weapon wapen = weapon();
 	
 }
