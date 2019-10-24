@@ -30,7 +30,7 @@ private:
 public:
 	receiver( hwlib::pin_in & received );
 	
-	uint8_t readByte();
+	uint8_t readByte( bool state );
 	
 	unsigned int readUint( bool wait );
 };
