@@ -24,11 +24,11 @@ void transmitter::startCondition(){
 /// 1600us and a low signal for 800us. A low bit is represented as a high signal
 /// for 800us and a low signal for 1600us. The signal is active low; when the transmitter
 /// is transmitting the receiver reads a low signal.
-void transmitter::sendBit(const bool bit){
+void transmitter::sendBit(const bool bit, const uint16_t duration){
       transmitter.write(1);
-      hwlib::wait_us(500 * (1 + bit));
+      hwlib::wait_us(duration * (1 + bit));
       transmitter.write(0);
-      hwlib::wait_us(500 * (1 + !bit));
+      hwlib::wait_us(duration * (1 + !bit));
    }
 
 /// \brief
@@ -105,7 +105,7 @@ bool receiver::dataAvailable(){
 /// It does that since only the duration of the high signal is of interest; that duration determines
 /// if the transmitter sent a 1 or 0.
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
-bool receiver::readBit(){
+bool receiver::readBit(const uint16_t duration){
    lowDuration = hwlib::now_us();
    while(irReceiver.read()){
       irReceiver.refresh();
@@ -118,7 +118,7 @@ bool receiver::readBit(){
       irReceiver.refresh();
    }
    highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > 550) ? true : false;
+   return (highDuration > duration) ? true : false;
 }
 
 /// \brief
