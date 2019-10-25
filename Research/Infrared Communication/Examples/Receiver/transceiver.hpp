@@ -5,14 +5,17 @@
 
 class transmitter {
 private:
-   	//hwlib::target::d2_36kHz transmitter = hwlib::target::d2_36kHz();
    	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
+
+   	uint8_t controlBits;
 public:
 	void startCondition();
 
    	void sendBit(const bool bit, const uint16_t duration = 700);
    	void sendChar(const char character);
    	void sendData(const uint16_t data);
+
+   	uint8_t calculateControlBits(const uint16_t data);
 };
 
 class receiver {
@@ -24,6 +27,9 @@ private:
 
 	char receivedChar;
 	uint16_t receivedData;
+
+	uint8_t controlBits;
+	uint8_t receivedControlBits;
 public:
 	receiver(hwlib::target::pin_in & irReceiver);
 
@@ -34,6 +40,8 @@ public:
 	uint16_t readData();
 
 	void debugTerminal();
+
+	uint8_t calculateControlBits(const uint16_t data);
 };
 
 #endif //__TRANSCEIVER_HPP

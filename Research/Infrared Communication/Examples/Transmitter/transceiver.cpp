@@ -47,12 +47,30 @@ void transmitter::sendChar(const char character){
 /// Send uint16_t
 /// \details
 /// This function transmits the passed uint16_t. It does that by calling startCondition() once and
-/// sendBit() sixteen times.
+/// sendBit() sixteen times. After the data has been send, another transaction is started with the
+/// calculated control bits.
 void transmitter::sendData(const uint16_t data){
    startCondition();
+   controlBits = calculateControlBits(data);
    for(int i = 15; i >= 0; i--){
       sendBit((data >> i) & 1UL);
    }
+   for(int i = 8; i >= 0; i--){
+      sendBit((controlBits >> i) & 1UL);
+   }
+}
+
+/// \brief
+/// Calculate Control Bits
+/// \details
+/// This function calculates the control bits based on the passed data. It consists of 8 bits whose
+/// value is equal to the xor of bit 0 and bit 7, bit 1 and bit 8, etc.
+uint8_t transmitter::calculateControlBits(const uint16_t data){
+   controlBits = 0;
+   for(unsigned int i = 0; i < 8; i++){
+      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
+   }
+   return controlBits;
 }
 
 /// \brief
@@ -144,7 +162,23 @@ uint16_t receiver::readData(){
    for(int i = 15; i >= 0; i--){
       receivedData |= (readBit() << i);
    }
-   return receivedData;
+   for(int i = 8; i >= 0; i--){
+      receivedControlBits |= (readBit() << i);
+   }
+   return (calculateControlBits(receivedData) == receivedControlBits) ? receivedData : 0;
+}
+
+/// \brief
+/// Calculate Control Bits
+/// \details
+/// This function calculates the control bits based on the passed data. It consists of 8 bits whose
+/// value is equal to the xor of bit 0 and bit 7, bit 1 and bit 8, etc.
+uint8_t receiver::calculateControlBits(const uint16_t data){
+   controlBits = 0;
+   for(unsigned int i = 0; i < 8; i++){
+      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
+   }
+   return controlBits;
 }
 
 /// \brief
