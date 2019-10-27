@@ -17,6 +17,8 @@ class button {
 		const char id;
 	public:
 		button(buttonListener * listener, const char id, hwlib::target::pin_in buttonPin);
+
+		char getId();
 		void update();
 };
 

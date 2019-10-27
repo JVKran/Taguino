@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := entities.cpp input.cpp weapon.cpp
+SOURCES := entities.cpp input.cpp weapon.cpp HCSR04.cpp game.cpp
 
 # header files in this project
-HEADERS := entities.hpp input.hpp weapon.hpp
+HEADERS := entities.hpp input.hpp weapon.hpp HCSR04.hpp game.hpp
 
 # other places to look for files for this project
 SEARCH  := Boundary/Infrared Boundary/HCSR04 Entity Boundary Control
