@@ -1,18 +1,15 @@
 #include "hwlib.hpp"
-#include "transceiver.hpp"
+#include "entities.hpp"
 
 int main( void ){	
    hwlib::wait_ms( 500 );
 
-   auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
-   auto irReceiver = receiver(irReceiverPin);
+   const char * playerName = "Jochem";
+   playerData player = playerData(playerName, 1, 1);
+   weaponData weapon = weaponData(4);
 
-   irReceiver.debugTerminal();
+   hwlib::cout << player << hwlib::endl;
 
-   for(;;){
-      if(irReceiver.dataAvailable()){
-         hwlib::cout << irReceiver.readData() << hwlib::endl;
-      }
-   }
+   hwlib::cout << weapon << hwlib::endl;
 
 }
