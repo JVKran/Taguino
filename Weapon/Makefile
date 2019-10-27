@@ -9,13 +9,13 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := entities.cpp
+SOURCES := entities.cpp input.cpp weapon.cpp
 
 # header files in this project
-HEADERS := entities.hpp
+HEADERS := entities.hpp input.hpp weapon.hpp
 
 # other places to look for files for this project
-SEARCH  := Boundary/Infrared Boundary/HCSR04 Entity
+SEARCH  := Boundary/Infrared Boundary/HCSR04 Entity Boundary Control
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there

@@ -1,5 +1,7 @@
 #include "hwlib.hpp"
 #include "entities.hpp"
+#include "input.hpp"
+#include "weapon.hpp"
 
 int main( void ){	
    hwlib::wait_ms( 500 );
@@ -11,5 +13,10 @@ int main( void ){
    hwlib::cout << player << hwlib::endl;
 
    hwlib::cout << weapon << hwlib::endl;
+
+   inputHandler handler = inputHandler();
+   weaponManager gunManager = weaponManager(handler);
+
+   rtos::run();
 
 }
