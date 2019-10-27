@@ -27,21 +27,24 @@ HCSR04::HCSR04(HCSR04 & existingSensor):
 /// \details
 /// This function returns the distance in centimeters. The triggerpin is first made
 /// low to be sure a clean signal is made when it is made high 5us later. The datasheet
-/// specifies the signal has to be high for at least 10us. The speed of sound is equal to
+/// specifies the signal has to be high for at least 10us. But before a signal
+/// can be measured, we first have to wait for the bin to become high. Then the timing is started
+/// and stopped when the pin becomes low. The speed of sound is equal to
 /// 1 cm per 29us hence the distance can be calculated as implemented.
 const unsigned int HCSR04::getDistance(const bool resultInInches){
 	triggerPin.write(0);
 	triggerPin.flush();
-	hwlib::wait_us(2);
+	hwlib::wait_us(5);
 	triggerPin.write(1);
 	triggerPin.flush();
 	hwlib::wait_us(10);
 	triggerPin.write(0);
 	triggerPin.flush();
-	echoStartTime = hwlib::now_us();
+	echoPin.refresh();
 	while(!echoPin.read()){
 		echoPin.refresh();
 	}
+	echoStartTime = hwlib::now_us();
 	while(echoPin.read()){
 		echoPin.refresh();
 	}
