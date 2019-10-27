@@ -7,37 +7,35 @@ messageDecoder::messageDecoder(messageListener & listener):
 	state = states::idle;
 }
 
-void messageDecoder::pauseDetected(const uint_fast64_t pause){
-	pauses.write(pause);
+void messageDecoder::pauseDetected(const int n){
+	pauses.write(n);
 }
 
 void messageDecoder::main(){
 	for(;;){
-		auto event = wait(pauses);
-		if(event == pauses){
-			auto readDuration = pauses.read();
-			switch(state){
-				case states::idle:
-					if(readDuration > 4000 && readDuration < 5000){
-						state = states::message;
-						n = 0;
-						m = 0;
-					}
-					break;
-				case states::message:
-					if(readDuration > 200 && readDuration < 2000){
-						n++;
-						m = m << 1;
-						m|=(readDuration > 800) ? 1 : 0;
-						if(n == 15){
-							state = states::idle;
-							listener.messageReceived(m);
-						}
-					} else {
+		wait(pauses);
+		auto p = pauses.read();
+		switch(state){
+			case states::idle:
+				if(p > 4000 && p < 5000){
+					state = states::message;
+					n = 0;
+					m = 0;
+				}
+				break;
+			case states::message:
+				if(p > 200 && p < 2000){
+					n++;
+					m = m << 1;
+					m|=(p > 1000) ? 1 : 0;
+					if(n == 15){
 						state = states::idle;
+						listener.messageReceived(m);
 					}
-					break;
-			}
+				} else {
+					state = states::idle;
+				}
+				break;
 		}
 	}
 }

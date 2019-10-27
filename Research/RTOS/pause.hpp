@@ -5,7 +5,7 @@
 
 class pauseListener {
 	public:
-		virtual void pauseDetected(const uint_fast64_t pause) = 0;
+		virtual void pauseDetected(const int pause) = 0;
 };
 
 class pauseDetector : public rtos::task<> {
@@ -17,9 +17,9 @@ class pauseDetector : public rtos::task<> {
 		rtos::channel<int, 1024> detectedPauses;
 
 		enum class states {idle, signal};
-		states state = states::idle;
+		states state;
 
-		uint_fast64_t pauseDuration;
+		int n;
 	public:
 		pauseDetector(hwlib::target::pin_in & irReceiver, pauseListener & listener, long long duration, const char * name);
 

@@ -13,7 +13,7 @@ class messageListener {
 class messageDecoder : public rtos::task<>, public pauseListener {
 	private:
 		messageListener & listener;
-		rtos::channel< uint_fast64_t, 1024 > pauses;
+		rtos::channel< int, 1024 > pauses;
 
 		enum class states {idle, message};
 		states state;
@@ -23,7 +23,7 @@ class messageDecoder : public rtos::task<>, public pauseListener {
 	public:
 		messageDecoder(messageListener & listener);
 
-		void pauseDetected(const uint_fast64_t pause) override;
+		void pauseDetected(const int n) override;
 		void main() override;
 };
 
@@ -48,7 +48,6 @@ class messageLogger : public rtos::task<>, public messageListener {
 
 		void messageReceived(const int m) override {
 			messages.write(m);
-			hwlib::cout << "Message: " << m << hwlib::endl;
 		}
 		void main() override;
 };

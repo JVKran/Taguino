@@ -13,7 +13,7 @@ int main(){
 
    auto receiver = hwlib::target::pin_in( hwlib::target::pins::d5 );  
 
-   auto logger = messageLogger(i2c_bus, "Message Logger"); 
+   auto logger = messageLogger(i2c_bus, "Message logging task"); 
 
    auto decoder = messageDecoder(logger);  
    
