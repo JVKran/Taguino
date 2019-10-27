@@ -7,13 +7,10 @@ int main( void ){
 	hwlib::wait_ms( 500 );
 
 	auto irTransmitter = transmitter();
-
-	std::array<char, 6> word = {'j', 'a', 'w', 'o', 'e', 'l'};
+	const uint16_t data = 43695;
 
    	for(;;){
-   		for(const auto & character : word){
-   			irTransmitter.sendChar(character);
-   			hwlib::wait_ms(500);
-   		}
+   		irTransmitter.sendData(data);
+   		hwlib::wait_ms(500);
    	}
 }

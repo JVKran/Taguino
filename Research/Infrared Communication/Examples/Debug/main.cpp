@@ -3,8 +3,6 @@
 
 int main( void ){	
 
-  hwlib::wait_ms(500);
-
   auto scl      = hwlib::target::pin_oc{ hwlib::target::pins::scl };
   auto sda      = hwlib::target::pin_oc{ hwlib::target::pins::sda };
    
@@ -20,13 +18,14 @@ int main( void ){
   auto irReceiver = receiver(irReceiverPin);
   auto receptionPin = hwlib::target::pin_out(hwlib::target::pins::d7);
 
-  char receivedNumber;
+  char receivedCharacter;
   uint_fast64_t howLongAgo = hwlib::now_us();
 
   for(;;){
   	if(irReceiver.dataAvailable()){
-  		receivedNumber = irReceiver.readData();
-     	if(receivedNumber == 43695 || receivedNumber == 0){
+  		receivedCharacter = irReceiver.readChar();
+     	timeField << "\f" << receivedCharacter  << hwlib::endl;
+     	if(receivedCharacter == 'j' || receivedCharacter == 'a' || receivedCharacter == 'w' || receivedCharacter == 'o' || receivedCharacter == 'e' || receivedCharacter == 'l'){
 			  receptionPin.write(1);
 			  howLongAgo = hwlib::now_us();
     	}
