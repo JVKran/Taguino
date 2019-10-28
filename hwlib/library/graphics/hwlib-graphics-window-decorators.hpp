@@ -30,11 +30,11 @@ private:
       w.write( start + pos, col );
    }      
 
+   
+public:      
    void flush() override {
       w.flush();
    }      
-   
-public:      
 
    /// create a window_part from a larger window, its origin and its size
    /// 

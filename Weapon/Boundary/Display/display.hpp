@@ -2,6 +2,7 @@
 #define __DISPLAY_HPP
 
 #include "hwlib.hpp"
+#include "entities.hpp"
 
 class display{
 protected:
@@ -18,7 +19,6 @@ protected:
 	void drawUnknown();
 	void drawShotgun();
 	void drawPistol();
-	// void assaultRifle();
 	
 public:
 	display(hwlib::glcd_oled & oled):
@@ -31,14 +31,15 @@ public:
 		timeWindow(oled, hwlib::xy(78,0), hwlib::xy(128,39)),
 		powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 		scoreTerminal(oled, hwlib::font_default_8x8())
-	{}
+	{
+		oled.clear();
+	}
 	void terminal();
 	void showBullets(int amountOfBullets);
 	void showHealthBar();
 	void updateHealth(const unsigned int prevHealth, const unsigned int health);
 	void showMagazines(int amountOfMagazines);
 	void showWeapon(int weaponID);
-	// void showScore(scoreboard & scoreBoard);
 
 };
 
