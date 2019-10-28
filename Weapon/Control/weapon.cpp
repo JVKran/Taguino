@@ -32,7 +32,8 @@ void weaponManager::main(){
 					lastShot = hwlib::now_us();
 				}
 				dataToSend |= measuredDistance;
-				transmitter.sendData(dataToSend);
+				irTransmitter.sendData(dataToSend);
+				hwlib::cout << "Shot fired! Distance: " << measuredDistance << hwlib::endl;
 				break;
 			case 'A':
 				hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
