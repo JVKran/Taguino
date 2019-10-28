@@ -3,12 +3,14 @@
 
 int main(){
    
-   	hwlib::color kleur(255, 255, 255);
+   	hwlib::color kleur(80, 17, 90);
 
 	//Wait for terminal
 	hwlib::wait_ms(500);
     RGBLed Leeeed(kleur);
-	for(;;){
+	/*
+    for(;;){
+        
         hwlib::wait_ms(1000);
         kleur.red =0;
         kleur.green=0;
@@ -24,9 +26,15 @@ int main(){
         kleur.green=255;
         kleur.blue =0;
         Leeeed.setColor(kleur);
+        
+       kleur.red = 255; //235 70
+       kleur.blue = 255;
+       kleur.green = 70;
+       Leeeed.setColor(kleur);
+       hwlib::wait_ms(400);
 	}
 
-   /*
+ 
      // PWM Set-up on pin: DAC1
   PMC-> PMC_PCER1 |= PMC_PCER1_PID36;                     // Enable PWM
   PIOA->PIO_ABSR |= PIO_ABSR_P19;                        // Set PWM pin perhipheral type A or B, in this case B
@@ -54,20 +62,27 @@ PWM->PWM_CH_NUM[3].PWM_CMR = PWM_CMR_CPRE_CLKA;
    for(;;){
        for(int i=0; i<254; i++){
        hwlib::wait_ms(10);
-      PWM->PWM_CH_NUM[2].PWM_CDTY = i; 
-
+      //PWM->PWM_CH_NUM[2].PWM_CDTY = i; 
+        kleur.red =i;
+        Leeeed.setColor(kleur);
        }
-              for(int i=0; i<254; i++){
+        for(int i=0; i<254; i++){
        hwlib::wait_ms(10);
-      PWM->PWM_CH_NUM[1].PWM_CDTY = i; 
+      //PWM->PWM_CH_NUM[1].PWM_CDTY = i; 
+        kleur.green =i;
+        Leeeed.setColor(kleur);
 
        }
-                     for(int i=0; i<254; i++){
+        for(int i=0; i<254; i++){
        hwlib::wait_ms(10);
-      PWM->PWM_CH_NUM[3].PWM_CDTY = i; 
+      //PWM->PWM_CH_NUM[3].PWM_CDTY = i; 
+        kleur.blue =i;
+        Leeeed.setColor(kleur);
 
        }
-   */    
+      
 
 
+}
+*/
 }
