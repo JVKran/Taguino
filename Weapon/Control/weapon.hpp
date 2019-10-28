@@ -11,6 +11,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 	private:
 		button triggerButton;
 		button autoButton;
+		button manualButton;
 		inputHandler handler;
 
 		runGame & game;

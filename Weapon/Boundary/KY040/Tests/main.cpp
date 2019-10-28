@@ -10,9 +10,9 @@
 int main( void ){
     namespace target = hwlib::target; 
 
-	auto CLK = hwlib::target::pin_in( hwlib::target::pins::d36 );
+	auto CLK = hwlib::target::pin_in( hwlib::target::pins::d40 );
 	auto DT = hwlib::target::pin_in( hwlib::target::pins::d38 );
-	auto SW = hwlib::target::pin_in( hwlib::target::pins::d40 );
+	auto SW = hwlib::target::pin_in( hwlib::target::pins::d36 );
 	auto button = KY040(CLK, DT, SW);
 
 	hwlib::wait_ms(2000);

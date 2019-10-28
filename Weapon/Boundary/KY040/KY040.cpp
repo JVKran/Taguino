@@ -1,6 +1,5 @@
 /// @file
 
-#include "hwlib.hpp"
 #include "KY040.hpp"
 
 /// \brief
@@ -9,7 +8,11 @@
 /// This constructor has two mandatory parameters; the CLK and DT pin. Without these pins
 /// it is impossible to determine the position of the rotary encoder. The SW doesn't have
 /// to be connected; it then always returns 0. 
-KY040::KY040(hwlib::pin_in & CLK, hwlib::pin_in & DT, hwlib::pin_in & SW, const int posCounter, const bool swPress): CLK(CLK), DT(DT), SW(SW), posCounter(posCounter), swPress(swPress) {
+KY040::KY040(encoderListener * listener, const int posCounter, const bool swPress): 
+	posCounter(posCounter), 
+	swPress(swPress),
+	listener(listener)
+{
 	CLK.refresh();
 	lastPos = CLK.read();
 	curPos = lastPos;
@@ -26,21 +29,20 @@ KY040::KY040(hwlib::pin_in & CLK, hwlib::pin_in & DT, hwlib::pin_in & SW, const 
 void KY040::update(){
 	CLK.refresh();
 	curPos = CLK.read();
-	if( CLK.read() == 1 && DT.read() == 1){
-   	  	for(;;){
-   	  		if( CLK.read() == 0 && DT.read() == 1){
-   	  			posCounter--;
-   	  			break;
-   	  		}else if( CLK.read() == 1 && DT.read() == 0){
-   	  			posCounter++;
-   	  			break;
-   	  		}else if( CLK.read() == 0 && DT.read() == 0){
-   	  			break;
-   	  		}
-   	  	}
-   	}
+	if(curPos != lastPos){
+		DT.refresh();
+		if(DT.read() != curPos){
+			posCounter++;
+		} else {
+			posCounter--;
+		}
+		listener->encoderTurned(posCounter);
+	}
 	SW.refresh();
 	swPress = !SW.read();
+	if(swPress){
+		listener->buttonPressed();
+	}
 	lastPos = curPos;
 }
 

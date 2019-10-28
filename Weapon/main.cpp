@@ -1,5 +1,6 @@
 #include "hwlib.hpp"
 #include "entities.hpp"
+#include "interface.hpp"
 #include "input.hpp"
 #include "weapon.hpp"
 #include "game.hpp"
@@ -18,6 +19,7 @@ int main( void ){
    runGame game = runGame(player);
    inputHandler handler = inputHandler();
    weaponManager gunManager = weaponManager(handler, game);
+   interfaceManager interface = interfaceManager(handler);
 
    rtos::run();
 
