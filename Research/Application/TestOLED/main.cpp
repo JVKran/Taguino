@@ -11,7 +11,7 @@ int main(){
 	auto Display = display(oled);
 	oled.clear();
 	
-	Display.showWeapon(0);
+	Display.showWeapon(1);
 	Display.showBullets(4);
 	Display.showMagazines(3);
 	Display.showHealthBar();
