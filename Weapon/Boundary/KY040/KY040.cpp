@@ -37,6 +37,7 @@ void KY040::update(){
 			posCounter--;
 		}
 		listener->encoderTurned(posCounter);
+		hwlib::wait_ms(5);
 	}
 	SW.refresh();
 	swPress = !SW.read();

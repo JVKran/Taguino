@@ -26,10 +26,11 @@ int main( void ){
   for(;;){
   	if(irReceiver.dataAvailable()){
   		receivedNumber = irReceiver.readData();
-     	if(receivedNumber == 43695 || receivedNumber == 0){
+     	if(receivedNumber == 43695){
 			  receptionPin.write(1);
 			  howLongAgo = hwlib::now_us();
     	}
+      hwlib::cout << int(receivedNumber) << hwlib::endl;
   	}
   	if(hwlib::now_us() - howLongAgo > 500'000){
   		receptionPin.write(0);
@@ -37,3 +38,6 @@ int main( void ){
   	}
   }
 }
+//1010101010101111
+//        10101111
+//101010101011110

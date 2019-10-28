@@ -52,7 +52,7 @@ void transmitter::sendChar(const char character){
 void transmitter::sendData(const uint16_t data){
    startCondition();
    controlBits = calculateControlBits(data);
-   for(int i = 15; i >= 0; i--){
+   for(int i = 16; i >= 0; i--){
       sendBit((data >> i) & 1UL);
    }
    for(int i = 7; i >= 0; i--){
@@ -71,6 +71,7 @@ uint8_t transmitter::calculateControlBits(const uint16_t data){
    for(unsigned int i = 0; i < 8; i++){
       controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
    }
+   hwlib::cout << "Calculated Controlbits: " << controlBits << hwlib::endl;
    return controlBits;
 }
 
@@ -160,12 +161,15 @@ char receiver::readChar(){
 /// times since a uint16_t consists of sixteen bits.
 uint16_t receiver::readData(){
    receivedData = 0;
+   receivedControlBits = 0;
    for(int i = 15; i >= 0; i--){
       receivedData |= (readBit() << i);
    }
-   for(int i = 7; i >= 0; i--){
+   for(int i = 8; i >= 0; i--){
       receivedControlBits |= (readBit() << i);
    }
+   hwlib::cout << "Received Controlbits: " << receivedControlBits << hwlib::endl;
+   hwlib::cout << receivedData << hwlib::endl;
    return (calculateControlBits(receivedData) == receivedControlBits) ? receivedData : 0;
 }
 
@@ -179,7 +183,7 @@ uint8_t receiver::calculateControlBits(const uint16_t data){
    for(unsigned int i = 0; i < 8; i++){
       controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
    }
-   hwlib::cout << "Control: " << controlBits << hwlib::endl;
+   hwlib::cout << "Caluclated Controlbits " << controlBits << hwlib::endl;
    return controlBits;
 }
 

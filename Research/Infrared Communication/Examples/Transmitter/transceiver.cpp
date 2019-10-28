@@ -57,8 +57,9 @@ void transmitter::sendData(const uint16_t data){
    }
    for(int i = 8; i >= 0; i--){
       sendBit((controlBits >> i) & 1UL);
+      //hwlib::cout << ((controlBits >> i) & 1UL);
    }
-   hwlib::cout << controlBits << hwlib::endl;
+   //hwlib::cout << "Calculated ControlBits " << controlBits << hwlib::endl;
 }
 
 /// \brief
@@ -163,10 +164,11 @@ uint16_t receiver::readData(){
    for(int i = 15; i >= 0; i--){
       receivedData |= (readBit() << i);
    }
-   for(int i = 0; i < 8; i++){
+   for(int i = 7; i >= 0; i--){
       receivedControlBits |= (readBit() << i);
+      hwlib::cout << readBit();
    }
-   hwlib::cout << receivedControlBits << hwlib::endl;
+   hwlib::cout << "Received Controlbits: " << receivedControlBits << hwlib::endl;
    return (calculateControlBits(receivedData) == receivedControlBits) ? receivedData : 0;
 }
 
