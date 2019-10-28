@@ -24,7 +24,15 @@ void weaponManager::main(){
 		readButton = buttonsChannel.read();
 		switch(readButton){
 			case 'T':
-				hwlib::cout << "Distance: " << distanceSensor.getDistance() << "cm" << hwlib::endl;
+				dataToSend = 0;
+				dataToSend |= (player.getPlayerNumber() << 10);
+				dataToSend |= (weapon.getId() << 6);
+				if(hwlib::now_us() - lastShot > 1'000'000){
+					measuredDistance = distanceSensor.getDistance();
+					lastShot = hwlib::now_us();
+				}
+				dataToSend |= measuredDistance;
+				transmitter.sendData(dataToSend);
 				break;
 			case 'A':
 				hwlib::cout << "Autofire-Mode selected" << hwlib::endl;

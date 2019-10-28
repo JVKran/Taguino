@@ -24,11 +24,11 @@ void transmitter::startCondition(){
 /// 1600us and a low signal for 800us. A low bit is represented as a high signal
 /// for 800us and a low signal for 1600us. The signal is active low; when the transmitter
 /// is transmitting the receiver reads a low signal.
-void transmitter::sendBit(const bool bit){
+void transmitter::sendBit(const bool bit, const uint16_t duration){
       transmitter.write(1);
-      hwlib::wait_us(500 * (1 + bit));
+      hwlib::wait_us(duration * (1 + bit));
       transmitter.write(0);
-      hwlib::wait_us(500 * (1 + !bit));
+      hwlib::wait_us(duration * (1 + !bit));
    }
 
 /// \brief
@@ -47,12 +47,31 @@ void transmitter::sendChar(const char character){
 /// Send uint16_t
 /// \details
 /// This function transmits the passed uint16_t. It does that by calling startCondition() once and
-/// sendBit() sixteen times.
+/// sendBit() sixteen times. After the data has been send, another transaction is started with the
+/// calculated control bits.
 void transmitter::sendData(const uint16_t data){
    startCondition();
+   controlBits = calculateControlBits(data);
    for(int i = 15; i >= 0; i--){
       sendBit((data >> i) & 1UL);
    }
+   for(int i = 7; i >= 0; i--){
+      sendBit((controlBits >> i) & 1UL);
+   }
+}
+
+/// \brief
+/// Calculate Control Bits
+/// \details
+/// This function calculates the control bits based on the passed data. It consists of 8 bits whose
+/// value is equal to the xor of bit 0 and bit 7, bit 1 and bit 8, etc.
+uint8_t transmitter::calculateControlBits(const uint16_t data){
+   controlBits = 0;
+   for(unsigned int i = 0; i < 8; i++){
+      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
+   }
+   //hwlib::cout << "Calculated Controlbits: " << controlBits << hwlib::endl;
+   return controlBits;
 }
 
 /// \brief
@@ -105,7 +124,7 @@ bool receiver::dataAvailable(){
 /// It does that since only the duration of the high signal is of interest; that duration determines
 /// if the transmitter sent a 1 or 0.
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
-bool receiver::readBit(){
+bool receiver::readBit(const uint16_t duration){
    lowDuration = hwlib::now_us();
    while(irReceiver.read()){
       irReceiver.refresh();
@@ -118,7 +137,7 @@ bool receiver::readBit(){
       irReceiver.refresh();
    }
    highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > 550) ? true : false;
+   return (highDuration > duration) ? true : false;
 }
 
 /// \brief
@@ -141,10 +160,29 @@ char receiver::readChar(){
 /// times since a uint16_t consists of sixteen bits.
 uint16_t receiver::readData(){
    receivedData = 0;
+   receivedControlBits = 0;
    for(int i = 15; i >= 0; i--){
       receivedData |= (readBit() << i);
    }
-   return receivedData;
+   for(int i = 7; i >= 0; i--){
+      receivedControlBits |= (readBit() << i);
+   }
+   //hwlib::cout << "Received Controlbits: " << receivedControlBits << hwlib::endl;
+   //hwlib::cout << "Received Data: " << receivedData << hwlib::endl << hwlib::endl;
+   return (calculateControlBits(receivedData) == receivedControlBits) ? receivedData : 0;
+}
+
+/// \brief
+/// Calculate Control Bits
+/// \details
+/// This function calculates the control bits based on the passed data. It consists of 8 bits whose
+/// value is equal to the xor of bit 0 and bit 7, bit 1 and bit 8, etc.
+uint8_t receiver::calculateControlBits(const uint16_t data){
+   controlBits = 0;
+   for(unsigned int i = 0; i < 8; i++){
+      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
+   }
+   return controlBits;
 }
 
 /// \brief
