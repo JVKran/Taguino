@@ -19,29 +19,22 @@ Buttoninterrupter::Buttoninterrupter(){
     PIOB->PIO_FELLSR= mask;                 //mode :: falling edge
     //return (( PIOC->PIO_ISR & mask ) != 0 );
 }
-void Buttoninterrupter::getregister(){
-    registercont = PIOB->PIO_ISR;
+void Buttoninterrupter::refreshregister(){
+    registercont = PIOB->PIO_ISR;                   //take content of the interrupt status register and store it in registercont, needed because the registers clears on read
 }
 
 
-bool Buttoninterrupter::getinterrupt1(){
-
-    //return (( PIOB->PIO_ISR & 0x1U << 17 ) != 0 );          // read interrupt register for button
-    return (( registercont & 0x1U << 17 ) != 0 );          // read interrupt register for button
+bool Buttoninterrupter::read(uint8_t pin){
+    
+    
+    if(pin<21&&pin>16){                                     //check if button is within range
+    return (( registercont & 0x1U << pin ) != 0 );          // read stored copy of the register for given button
+    }
+    else{
+    return(0);
+    hwlib::cout<<"nein";
+    }
 }
-bool Buttoninterrupter::getinterrupt2(){
-
-    return (( registercont & 0x1U << 18 ) != 0 );          // read interrupt register for button
-}
-bool Buttoninterrupter::getinterrupt3(){
-
-    return (( registercont & 0x1U << 19 ) != 0 );          // read interrupt register for button
-}
-bool Buttoninterrupter::getinterrupt4(){
-
-    return (( registercont & 0x1U << 20 ) != 0 );          // read interrupt register for button
-}
-
 
 
 

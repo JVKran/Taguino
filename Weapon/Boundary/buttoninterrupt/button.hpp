@@ -12,11 +12,9 @@ private:
 
 
 public:
-    void getregister();
-    bool getinterrupt1();           //read the interrupt register
-    bool getinterrupt2();          // read interrupt register for button
-    bool getinterrupt3();          // read interrupt register for button
-    bool getinterrupt4();          // read interrupt register for button    
+    void refreshregister();            //store a copy of the register content, needed because the register clears on read
+    bool read(uint8_t pin);           //read the stored copy of the interrupt register for pin i
+
     Buttoninterrupter();           // constructor
 
 	
