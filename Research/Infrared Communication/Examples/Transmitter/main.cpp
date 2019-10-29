@@ -7,7 +7,7 @@ int main( void ){
 	hwlib::wait_ms( 500 );
 
 	auto irTransmitter = transmitter();
-	const uint16_t data = 43695;
+	const uint16_t data = 43643;
 
    	for(;;){
    		irTransmitter.sendData(data);

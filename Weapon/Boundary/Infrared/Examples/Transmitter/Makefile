@@ -15,7 +15,7 @@ SOURCES := transceiver.cpp
 HEADERS := transceiver.hpp
 
 # other places to look for files for this project
-SEARCH  := 
+SEARCH  := ../..
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there

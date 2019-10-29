@@ -1,15 +1,16 @@
 #include "hwlib.hpp"
 #include "transceiver.hpp"
 
+#include <array>
+
 int main( void ){	
 	hwlib::wait_ms( 500 );
 
 	auto irTransmitter = transmitter();
-
-	const uint16_t data = 65333;
+	const uint16_t data = 43643;
 
    	for(;;){
-    	irTransmitter.sendData(data);
-		hwlib::wait_ms(2000);
+   		irTransmitter.sendData(data);
+   		hwlib::wait_ms(500);
    	}
 }

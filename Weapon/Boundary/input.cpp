@@ -27,11 +27,16 @@ void inputHandler::addButton(button * b){
 	addedButtons++;
 }
 
+void inputHandler::addEncoder(KY040 * e){
+	encoder = e;
+}
+
 void inputHandler::main(){
 	for(;;){
 		wait(updateClock);
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
+		encoder->update();
 	}
 }
