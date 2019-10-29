@@ -10,10 +10,10 @@
 
 # source files in this project (main.cpp is automatically assumed)
 
-SOURCES := entities.cpp input.cpp KY040.cpp weapon.cpp HCSR04.cpp game.cpp interface.cpp transceiver.cpp display.cpp
+SOURCES := entities.cpp input.cpp KY040.cpp weapon.cpp HCSR04.cpp game.cpp interface.cpp transceiver.cpp display.cpp scoreboard.cpp
 
 # header files in this project
-HEADERS := entities.hpp input.hpp KY040.hpp weapon.hpp HCSR04.hpp game.hpp interface.hpp transceiver.hpp display.hpp
+HEADERS := entities.hpp input.hpp KY040.hpp weapon.hpp HCSR04.hpp game.hpp interface.hpp transceiver.hpp display.hpp scoreboard.hpp
 
 # other places to look for files for this project
 SEARCH  := Boundary/Infrared Boundary/HCSR04 Boundary/KY040 Entity Boundary Control Boundary/Infrared Boundary/Display
