@@ -1,9 +1,9 @@
 #include "weapon.hpp"
 
 weaponManager::weaponManager(inputHandler & handler, runGame & game):
-	triggerButton(button(this, 'T', hwlib::target::pin_in(hwlib::target::pins::d12))),
-	autoButton(button(this, 'A', hwlib::target::pin_in(hwlib::target::pins::d11))),
-	manualButton(button(this, 'M', hwlib::target::pin_in(hwlib::target::pins::d10))),
+	triggerButton(button(17, &handler, this, 'T')),
+	autoButton(button(18, &handler, this, 'A')),
+	manualButton(button(19, &handler, this, 'M')),
 	handler(handler),
 	game(game),
 	player(game.getPlayerData()),

@@ -1,14 +1,14 @@
 #include "input.hpp"
 
-button::button(buttonListener * listener, const char id, hwlib::target::pin_in buttonPin):
-	buttonPin(buttonPin),
+button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id):
+	pinNumber(pinNumber),
 	listener(listener),
+	handler(handler),
 	id(id)
 {}
 
 void button::update(){
-	buttonPin.refresh();
-	if(!buttonPin.read()){
+	if(handler->buttonInterrupter.read(pinNumber)){
 		listener->buttonPressed(id);
 	}
 }
@@ -34,9 +34,11 @@ void inputHandler::addEncoder(KY040 * e){
 void inputHandler::main(){
 	for(;;){
 		wait(updateClock);
+		buttonInterrupter.refreshregister();
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
 		encoder->update();
+		buttonInterrupter.refreshregister();
 	}
 }
