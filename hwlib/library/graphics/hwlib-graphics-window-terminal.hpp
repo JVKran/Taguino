@@ -45,6 +45,9 @@ private:
       cursor.x += image.size.x;
    }
 
+
+public:
+
    void clear() override {
       w.clear();
       cursor_set( xy( 0, 0 ) );
@@ -53,9 +56,6 @@ private:
    void flush() override {
       w.flush();
    }
-
-public:
-
    /// construct a terminal from a window and a font
    terminal_from( window & w, const font &f ):
       terminal( size_in_chars( w, f ) ), 
