@@ -521,7 +521,7 @@ class d5_38kHz : public hwlib::pin_out {
    public:
 
    /// create the 36kHz output
-   d5_38Hz(){
+   d5_38kHz(){
       
       // this sets the main clock to 84 MHz 
       hwlib::wait_ms( 1 );      
