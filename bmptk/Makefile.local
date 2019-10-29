@@ -80,13 +80,9 @@ else
    GCC-MSP430      ?= 
    
    # serial port defaults
-<<<<<<< HEAD
-   #SERIAL_PORT_DUE      := /dev/ttyUSB0
-	SERIAL_PORT_DUE      := /dev/ttyACM0
-=======
    SERIAL_PORT_DUE      := /dev/ttyUSB0
-   #SERIAL_PORT_DUE      := /dev/ttyACM0
->>>>>>> scoreboard
+	#SERIAL_PORT_DUE      := /dev/ttyACM0
+
    SERIAL_PORT_UNO      := /dev/ttyUSB0
 
    ifeq ($(TARGET),arduino_due)
