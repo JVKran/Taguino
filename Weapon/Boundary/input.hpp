@@ -26,6 +26,7 @@ class button {
 		const int pinNumber;
 		buttonListener * listener;
 		inputHandler * handler;
+		Buttoninterrupter * buttonRegister;
 
 		const char id;
 	public:
@@ -41,6 +42,7 @@ class inputHandler : public rtos::task<> {
 		int addedButtons = 0;
 
 		std::array<button*, 5> buttons;
+		Buttoninterrupter buttonInterrupter;
 
 		rtos::clock updateClock;
 	public:
@@ -49,7 +51,7 @@ class inputHandler : public rtos::task<> {
 		void addButton(button * b);
 		void addEncoder(KY040 * e);
 
-		Buttoninterrupter buttonInterrupter;
+		Buttoninterrupter * getRegister();
 
 		void main() override;
 };

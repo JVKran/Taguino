@@ -5,10 +5,12 @@ button::button(const int pinNumber, inputHandler* handler, buttonListener * list
 	listener(listener),
 	handler(handler),
 	id(id)
-{}
+{
+	buttonRegister = handler->getRegister();
+}
 
 void button::update(){
-	if(handler->buttonInterrupter.read(pinNumber)){
+	if(buttonRegister->read(pinNumber)){
 		listener->buttonPressed(id);
 	}
 }
@@ -29,6 +31,10 @@ void inputHandler::addButton(button * b){
 
 void inputHandler::addEncoder(KY040 * e){
 	encoder = e;
+}
+
+Buttoninterrupter * inputHandler::getRegister(){
+	return &buttonInterrupter;
 }
 
 void inputHandler::main(){

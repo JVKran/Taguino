@@ -4,16 +4,9 @@ class RGBLed{
 private:
     hwlib::color currentcolor;
     uint32_t mask;
-
-
-
-
 public:
-	RGBLed(hwlib::color color);
+	RGBLed(hwlib::color color = hwlib::color(0, 0, 0));
     void setColor(hwlib::color color);
-
-	
-
 };
 
 

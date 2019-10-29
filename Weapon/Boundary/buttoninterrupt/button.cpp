@@ -18,7 +18,7 @@ Buttoninterrupter::Buttoninterrupter(){
     PIOB->PIO_IER = mask;                   //enable interrupts on pins
     PIOB->PIO_ESR = mask;                   //use edge detection
     PIOB->PIO_AIMER = mask;                 //use FELLSR for mode
-    PIOB->PIO_FELLSR= mask;                 //mode :: falling edge
+    //PIOB->PIO_REHLSR= mask;                 //mode :: falling edge
     //return (( PIOC->PIO_ISR & mask ) != 0 );
 }
 void Buttoninterrupter::refreshregister(){

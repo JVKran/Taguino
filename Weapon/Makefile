@@ -10,13 +10,13 @@
 
 # source files in this project (main.cpp is automatically assumed)
 
-SOURCES := entities.cpp input.cpp KY040.cpp weapon.cpp HCSR04.cpp game.cpp interface.cpp transceiver.cpp display.cpp scoreboard.cpp button.cpp
+SOURCES := entities.cpp input.cpp KY040.cpp weapon.cpp HCSR04.cpp game.cpp interface.cpp transceiver.cpp display.cpp scoreboard.cpp button.cpp RGBLed.cpp
 
 # header files in this project
-HEADERS := entities.hpp input.hpp KY040.hpp weapon.hpp HCSR04.hpp game.hpp interface.hpp transceiver.hpp display.hpp scoreboard.hpp button.hpp
+HEADERS := entities.hpp input.hpp KY040.hpp weapon.hpp HCSR04.hpp game.hpp interface.hpp transceiver.hpp display.hpp scoreboard.hpp button.hpp RGBLed.hpp
 
 # other places to look for files for this project
-SEARCH  := Boundary/Infrared Boundary/HCSR04 Boundary/KY040 Entity Boundary Control Boundary/Infrared Boundary/Display Boundary/buttoninterrupt
+SEARCH  := Boundary/Infrared Boundary/HCSR04 Boundary/KY040 Entity Boundary Control Boundary/Infrared Boundary/Display Boundary/buttoninterrupt Boundary/RGBLed
 
 
 # set RELATIVE to the next higher directory 
