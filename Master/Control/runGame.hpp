@@ -1,7 +1,12 @@
-#include <iostream>
+#include "hwlib.hpp"
+#include "rtos.hpp"
+
+enum keypadID = {};
 
 class runGame : public rtos::task<>{
 private:
+	enum state_t = {};
+
 	rtos::channel toetsChannel;
 	rtos::channel receiveMessageChannel;
 
@@ -13,8 +18,8 @@ public:
 	runGame();
 
 	void damageDone(uint8_t damage);
-	bool keyPressed();
-	bool encoderPressed();
+	void keyPressed();
+	void encoderPressed();
 	void encoderTurnedToPos(int pos);
 	void startGame();
 	void decodeMessage();
