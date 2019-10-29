@@ -5,19 +5,19 @@
 
 class Buttoninterrupter{
 private:
-    hwlib::color currentcolor;
+    uint32_t registercont;
     uint32_t mask;
 
 
 
 
 public:
-
-    bool getinterrupt1();
-    bool getinterrupt2();
-    bool getinterrupt3();
-    bool getinterrupt4();    
-    Buttoninterrupter();
+    void getregister();
+    bool getinterrupt1();           //read the interrupt register
+    bool getinterrupt2();          // read interrupt register for button
+    bool getinterrupt3();          // read interrupt register for button
+    bool getinterrupt4();          // read interrupt register for button    
+    Buttoninterrupter();           // constructor
 
 	
 
