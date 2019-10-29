@@ -18,12 +18,9 @@ Buttoninterrupter::Buttoninterrupter(){
     PIOB->PIO_IER = mask;                   //enable interrupts on pins
     PIOB->PIO_ESR = mask;                   //use edge detection
     PIOB->PIO_AIMER = mask;                 //use FELLSR for mode
-    //PIOB->PIO_REHLSR= mask;                 //mode :: falling edge
-    //return (( PIOC->PIO_ISR & mask ) != 0 );
 }
 void Buttoninterrupter::refreshregister(){
     registercont = PIOB->PIO_ISR;                   //take content of the interrupt status register and store it in registercont, needed because the registers clears on read
-    //registercont = PIOB->PIO_AIMMR;
 }
 
 
