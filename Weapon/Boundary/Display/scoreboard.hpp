@@ -2,20 +2,16 @@
 #define __SCOREBOARD_HPP
 
 #include "hwlib.hpp"
+#include "entities.hpp"
+#include <array>
 
 class scoreboard{
 private:
 	hwlib::window & window;
 	hwlib::glcd_oled & oled;
+	std::array<playerData, 5> & players;
 public:
-	scoreboard(hwlib::window & window, hwlib::glcd_oled & oled);
+	scoreboard(hwlib::window & window, hwlib::glcd_oled & oled, std::array<playerData, 5> players);
 };
 
-class scoreboardLine{
-private:
-	hwlib::window & nameWindow;
-	hwlib::window & scoreWindow;
-public:
-	scoreboardLine(hwlib::window & nameWindow, hwlib::window & scoreWindow);
-};
 #endif /* scoreboard.hpp */
