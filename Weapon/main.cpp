@@ -32,7 +32,7 @@ int main( void ){
    // hwlib::cout << weapon << hwlib::endl;
 
    runGame game = runGame(player);
-   inputHandler handler = inputHandler();
+   inputHandler handler = inputHandler(100'000);
    weaponManager gunManager = weaponManager(handler, game);
    interfaceManager interface = interfaceManager(handler);
 
