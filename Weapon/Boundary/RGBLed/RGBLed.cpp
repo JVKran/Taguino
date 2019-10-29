@@ -44,7 +44,26 @@ void RGBLed::setColor(hwlib::color color){
     PWM->PWM_CH_NUM[2].PWM_CDTY = color.red;                //Takes red value and puses it to the output register
     PWM->PWM_CH_NUM[3].PWM_CDTY = color.blue;               //Takes blue value and puses it to the output register
     PWM->PWM_CH_NUM[1].PWM_CDTY = color.green;              //Takes green value and puses it to the output register
+}
 
+/*
+void RGBLed::startinterrupt(){
+    auto inputpin = hwlib::target::pin_in(hwlib::target::pins::a9);
+    auto inputpin2 = hwlib::target::pin_in(hwlib::target::pins::a10);
+    auto inputpin3 = hwlib::target::pin_in(hwlib::target::pins::a11);
+    mask = 0x1U << 17;
+    mask |= 0x1U << 18;
+    mask |= 0x1U << 19;
+    PIOB->PIO_IER = mask;
+    PIOB->PIO_ESR = mask;
+    PIOB->PIO_AIMER = mask;
+    PIOB->PIO_REHLSR= mask;
+    //return (( PIOC->PIO_ISR & mask ) != 0 );
+}
+bool RGBLed::getinterrupt(uint32_t masker){
+
+    return (( PIOB->PIO_ISR & masker ) != 0 );
 }
 
 
+*/

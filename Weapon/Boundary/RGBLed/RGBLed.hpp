@@ -1,21 +1,23 @@
-#ifndef __RGB_LED_HPP
-#define __RGB_LED_HPP
+#ifndef __BUTTON_INTERRUPTER_HPP
+#define __BUTTON_INTERRUPTER_HPP
 
 class RGBLed{
 private:
     hwlib::color currentcolor;
-	hwlib::target::pin_out redpin = hwlib::target::pin_out(hwlib::target::pins::d30);
-	hwlib::target::pin_out bluepin = hwlib::target::pin_out(hwlib::target::pins::d31);
-    hwlib::target::pin_out greenpin = hwlib::target::pin_out(hwlib::target::pins::d32);
+    uint32_t mask;
+    //hwlib::target::pin_in inputpin;
+
 
 
 public:
 	RGBLed(hwlib::color color);
     void setColor(hwlib::color color);
+    //bool getinterrupt(uint32_t masker);
+    //void startinterrupt();
 
 	
 
 };
 
 
-#endif //__RGB_LED_HPP
+#endif //__BUTTON_INTERRUPTER_HPP
