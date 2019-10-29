@@ -18,7 +18,7 @@ public:
    	uint8_t calculateControlBits(const uint16_t data);
 };
 
-class receiver {
+class receiver : public rtos::task<> {
 private:
 	hwlib::target::pin_in irReceiver;
 
@@ -30,18 +30,22 @@ private:
 
 	uint8_t controlBits;
 	uint8_t receivedControlBits;
+
+	bool readBit(const uint16_t duration = 800);
+
+	rtos::clock;
 public:
 	receiver(hwlib::target::pin_in & irReceiver);
 
 	bool dataAvailable();
-
-	bool readBit(const uint16_t duration = 800);
 	char readChar();
 	uint16_t readData();
 
 	void debugTerminal();
 
 	uint8_t calculateControlBits(const uint16_t data);
+
+	void main() override;
 };
 
 #endif //__TRANSCEIVER_HPP
