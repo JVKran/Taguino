@@ -28,14 +28,12 @@ private:
    
    void write_implementation( xy pos, color col ) override {
       w.write( start + pos, col );
-   }      
-
+   }          
    
 public:      
    void flush() override {
       w.flush();
-   }      
-
+   }
    /// create a window_part from a larger window, its origin and its size
    /// 
    /// This call constructs a subwindow from a window, the start 

@@ -3,6 +3,7 @@
 
 #include "hwlib.hpp"
 #include "entities.hpp"
+#include "scoreboard.hpp"
 
 class display{
 protected:
