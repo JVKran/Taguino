@@ -16,7 +16,6 @@ int main( void ){
 
   auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
   auto irReceiver = receiver(irReceiverPin);
-  auto receptionPin = hwlib::target::pin_out(hwlib::target::pins::d7);
 
   char receivedCharacter;
   uint_fast64_t howLongAgo = hwlib::now_us();
@@ -26,7 +25,6 @@ int main( void ){
   		receivedCharacter = irReceiver.readChar();
      	timeField << "\f" << receivedCharacter  << hwlib::endl;
      	if(receivedCharacter == 'j' || receivedCharacter == 'a' || receivedCharacter == 'w' || receivedCharacter == 'o' || receivedCharacter == 'e' || receivedCharacter == 'l'){
-			  receptionPin.write(1);
 			  howLongAgo = hwlib::now_us();
     	}
   	}

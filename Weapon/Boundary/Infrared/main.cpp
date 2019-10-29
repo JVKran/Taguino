@@ -7,11 +7,9 @@ int main( void ){
    auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
    auto irReceiver = receiver(irReceiverPin);
 
-   irReceiver.debugTerminal();
-
    for(;;){
       if(irReceiver.dataAvailable()){
-         hwlib::cout << irReceiver.readData() << hwlib::endl;
+         hwlib::cout << int(irReceiver.readData()) << hwlib::endl;
       }
    }
 
