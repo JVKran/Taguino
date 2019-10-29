@@ -6,11 +6,12 @@ int main(){
 
     hwlib::wait_ms(500);
     for(;;){
-        knoppen.getregister();
-        hwlib::cout<<"a9  "<<knoppen.getinterrupt1()<<hwlib::endl;
-        hwlib::cout<<"a10  "<<knoppen.getinterrupt2()<<hwlib::endl;
-        hwlib::cout<<"a11  "<<knoppen.getinterrupt3()<<hwlib::endl;
-        hwlib::cout<<"a12  "<<knoppen.getinterrupt4()<<hwlib::endl;
+        knoppen.refreshregister();
+        hwlib::cout<<hwlib::endl<<"a9  "<<knoppen.read(17)<<hwlib::endl;
+        hwlib::cout<<hwlib::endl<<"a10 "<<knoppen.read(18)<<hwlib::endl;
+        hwlib::cout<<hwlib::endl<<"a11 "<<knoppen.read(19)<<hwlib::endl;
+        hwlib::cout<<hwlib::endl<<"a12 "<<knoppen.read(20)<<hwlib::endl;
+
         hwlib::wait_ms(1000);
     }
 }
