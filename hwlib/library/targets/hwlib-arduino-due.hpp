@@ -517,49 +517,49 @@ public:
 /// This class provides a 36 kHz output on chip pin PB25 
 /// (Arduino pin D2) that can be enabled or disabled by calling
 /// set( 1 ) resp. set( 0 ).
-class d2_36kHz : public hwlib::pin_out {
+class d5_38kHz : public hwlib::pin_out {
    public:
 
    /// create the 36kHz output
-   d2_36kHz(){
+   d5_38Hz(){
       
       // this sets the main clock to 84 MHz 
       hwlib::wait_ms( 1 );      
       
       // enable the clock to port B
-      PMC->PMC_PCER0 = 1 << ID_PIOB;
+      PMC->PMC_PCER0 = 1 << ID_PIOC;
 	
       // disable PIO Control on PB25 and set up for Peripheral B TIOA0
-	  PIOB->PIO_PDR = PIO_PB25; 
-	  PIOB->PIO_ABSR |= PIO_PB25; 
+	  PIOC->PIO_PDR = PIO_PC25; 
+	  PIOC->PIO_ABSR |= PIO_PC25; 
 	
 	  // enable output on B25
-	  PIOB->PIO_OER = PIO_PB25; 
+	  PIOC->PIO_OER = PIO_PC25; 
    
       // enable the clock to the TC0 (peripheral # 27)
-      PMC->PMC_PCER0 = 1 << ID_TC0;
+      PMC->PMC_PCER0 = 1 << 29;
    
       // configure TC0 channel 0 for WAVSEL=10 mode 
       // using the main clock / 2 as source
       // and reset on C match 
-      TC0->TC_CHANNEL[ 0 ].TC_CMR =  
+      TC2->TC_CHANNEL[ 1 ].TC_CMR =  
          TC_CMR_WAVE 
          | TC_CMR_TCCLKS_TIMER_CLOCK1 
          | TC_CMR_WAVSEL_UP_RC;   
 
       // configure pin A match clear
-      TC0->TC_CHANNEL[ 0 ].TC_CMR |= TC_CMR_ACPC_SET | TC_CMR_ACPA_CLEAR; 
+      TC2->TC_CHANNEL[ 1 ].TC_CMR |= TC_CMR_ACPC_SET | TC_CMR_ACPA_CLEAR; 
    
 	   // set C match/clear for 36 kHz  
-	   TC0->TC_CHANNEL[ 0 ].TC_RC = 41'000'000 / 36'000;
+	   TC2->TC_CHANNEL[ 1 ].TC_RC = 41'000'000 / 38'000;
       
       // set 50% duty cycle
-	   TC0->TC_CHANNEL[ 0 ].TC_RA = TC0->TC_CHANNEL[ 0 ].TC_RC / 2;
+	   TC2->TC_CHANNEL[ 1 ].TC_RA = TC2->TC_CHANNEL[ 1 ].TC_RC / 2;
    
        write( 0 );
    
 	   // enable and start 
-	   TC0->TC_CHANNEL[ 0 ].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;      
+	   TC2->TC_CHANNEL[ 1 ].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;      
    }
    
    /// enable or disable the 36 kHz output
@@ -581,7 +581,7 @@ class d2_36kHz : public hwlib::pin_out {
    }
    
 }; // class d2_36kHz
-
+/*
 class d2_38kHz : public hwlib::pin_out {
    public:
 
@@ -646,7 +646,7 @@ class d2_38kHz : public hwlib::pin_out {
    }
    
 }; // class d2_38kHz
-
+*/
 #ifdef NONO
 /// pin_adc implementation for a ATSAM3X8E
 class pin_adc_try single : public hwlib::adc {
