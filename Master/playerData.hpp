@@ -24,7 +24,7 @@ public:
 	uint8_t getTeamNumber() const;
 
 	uint8_t getHealth() const;
-	void setHealth(uint8_t damageDone);
+	void setHealth(uint8_t newHealth);
 
 	uint16_t getShots() const;
 	void setShots();
@@ -39,7 +39,7 @@ public:
 	void setDeaths();
 
 	uint16_t getScore() const;
-	void setScore(uint8_t newShot);
+	void setScore(uint8_t addScore);
 
 	friend hwlib::ostream& operator<<(hwlib::ostream & stream, const playerData & player){
 		stream << hwlib::left << "Statistics of player " << player.getName() << hwlib::endl;
