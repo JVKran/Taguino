@@ -6,7 +6,7 @@ int main(){
 
     hwlib::wait_ms(500);
     for(;;){
- 
+        knoppen.getregister();
         hwlib::cout<<"a9  "<<knoppen.getinterrupt1()<<hwlib::endl;
         hwlib::cout<<"a10  "<<knoppen.getinterrupt2()<<hwlib::endl;
         hwlib::cout<<"a11  "<<knoppen.getinterrupt3()<<hwlib::endl;
