@@ -1,11 +1,13 @@
-#ifndef __RGB_LED_HPP
-#define __RGB_LED_HPP
+
+#ifndef __BUTTON_INTERRUPTER_HPP
+#define __BUTTON_INTERRUPTER_HPP
+
 
 class Buttoninterrupter{
 private:
     hwlib::color currentcolor;
     uint32_t mask;
-    //hwlib::target::pin_in inputpin;
+
 
 
 
@@ -21,5 +23,4 @@ public:
 
 };
 
-
-#endif //__RGB_LED_HPP
+#endif //__BUTTON_INTERRUPTER_HPP
