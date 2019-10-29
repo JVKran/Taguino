@@ -1,5 +1,10 @@
 #include <iostream>
 
-int main(){
-	std::cout << "Well... It's not much, but it's a start." << std::endl;
+class runGame : public rtos::task<>{
+private:
+	rtos::channel toetsChannel;
+	rtos::channel receiveMessageChannel;
+
+	std::array<playerData, 32> players = {};
+
 }
