@@ -2,6 +2,12 @@
 #define __TRANSCEIVER_HPP
 
 #include "hwlib.hpp"
+#include "rtos.hpp"
+
+class receiverListener {
+	public:
+		virtual void dataReceived(const uint16_t data) = 0;
+};
 
 class transmitter {
 private:
@@ -18,9 +24,11 @@ public:
    	uint8_t calculateControlBits(const uint16_t data);
 };
 
-class receiver {
+class receiver : public rtos::task<> {
 private:
+	rtos::clock pollClock;
 	hwlib::target::pin_in irReceiver;
+	receiverListener * listener;
 
 	uint_fast64_t highDuration = 0;
 	uint_fast64_t lowDuration = 0;
@@ -30,18 +38,19 @@ private:
 
 	uint8_t controlBits;
 	uint8_t receivedControlBits;
+
+	uint8_t calculateControlBits(const uint16_t data);
+	bool readBit(const uint16_t duration = 800);
 public:
-	receiver(hwlib::target::pin_in & irReceiver);
+	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener);
 
 	bool dataAvailable();
-
-	bool readBit(const uint16_t duration = 800);
 	char readChar();
 	uint16_t readData();
 
 	void debugTerminal();
 
-	uint8_t calculateControlBits(const uint16_t data);
+	void main() override;
 };
 
 #endif //__TRANSCEIVER_HPP
