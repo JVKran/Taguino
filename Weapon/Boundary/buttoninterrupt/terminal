@@ -1,0 +1,1 @@
+sudo /home/joshua/Taguino//bmptk/tools/lpc21isp_197/lpc21isp_hr_linux.exe -termonly -term main.hex /dev/ttyUSB0 2400 12000
