@@ -5,7 +5,7 @@
 #include "entities.hpp"
 #include "scoreboard.hpp"
 
-class display{
+class display {
 protected:
 	hwlib::glcd_oled & oled;
 	hwlib::window_part weaponWindow;
@@ -16,6 +16,9 @@ protected:
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
 	hwlib::terminal_from scoreTerminal;
+
+	displayedData lastData;
+	bool maxBulletsDrawn = false;		
 
 	void drawUnknown();
 	void drawShotgun();

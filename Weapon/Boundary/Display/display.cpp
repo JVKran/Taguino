@@ -5,15 +5,19 @@ void display::terminal(){
 }
 
 void display::showBullets(int amountOfBullets){
-	bulletWindow.clear();
-	for(int i=0; i<10 && i<amountOfBullets; i++){										//Line for every bullet up to 10 bullets
-		hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7)).draw(bulletWindow);			
+	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
+		bulletWindow.clear();
+		for(int i=0; i<10 && i<amountOfBullets; i++){										//Line for every bullet up to 10 bullets
+			hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7)).draw(bulletWindow);			
+		}
+		if(amountOfBullets>10){																	//If mag has more then 10 bullets in it/ left
+			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			//Vertical line for "+" sign
+			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			//Horizontal line for "+" sign
+			maxBulletsDrawn = true;														//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
+		}
+		bulletWindow.flush();
+		lastData.lastBullets = amountOfBullets;
 	}
-	if(amountOfBullets>10){																	//If mag has more then 10 bullets in it/ left
-		hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			//Vertical line for "+" sign
-		hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			//Horizontal line for "+" sign
-	}
-	bulletWindow.flush();
 }
 
 void display::showHealthBar(){

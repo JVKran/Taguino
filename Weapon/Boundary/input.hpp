@@ -4,6 +4,7 @@
 #include "hwlib.hpp"
 #include "rtos.hpp"
 #include "KY040.hpp"
+#include "button.hpp"
 
 class KY040;
 
@@ -18,14 +19,18 @@ class encoderListener {
 		virtual void encoderTurned(const int pos) = 0;
 };
 
+class inputHandler;
+
 class button {
 	private:
-		hwlib::target::pin_in buttonPin;
+		const int pinNumber;
 		buttonListener * listener;
+		inputHandler * handler;
+		Buttoninterrupter * buttonRegister;
 
 		const char id;
 	public:
-		button(buttonListener * listener, const char id, hwlib::target::pin_in buttonPin);
+		button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id);
 
 		char getId();
 		void update();
@@ -33,9 +38,11 @@ class button {
 
 class inputHandler : public rtos::task<> {
 	private:
-		std::array<button*, 5> buttons;
 		KY040* encoder;
 		int addedButtons = 0;
+
+		std::array<button*, 5> buttons;
+		Buttoninterrupter buttonInterrupter;
 
 		rtos::clock updateClock;
 	public:
@@ -43,6 +50,8 @@ class inputHandler : public rtos::task<> {
 
 		void addButton(button * b);
 		void addEncoder(KY040 * e);
+
+		Buttoninterrupter * getRegister();
 
 		void main() override;
 };

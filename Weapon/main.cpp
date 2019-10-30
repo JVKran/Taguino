@@ -44,13 +44,9 @@ int main( void ){
    scoreboard bord = scoreboard(window, oled, players);
    oled.flush();
 
-   // hwlib::cout << player << hwlib::endl;
-
-   // hwlib::cout << weapon << hwlib::endl;
-
    runGame game = runGame(player1);
-   inputHandler handler = inputHandler();
-   weaponManager gunManager = weaponManager(handler, game);
+   inputHandler handler = inputHandler(100'000);
+   weaponManager gunManager = weaponManager(Display, handler, game);
    interfaceManager interface = interfaceManager(handler);
 
    rtos::run();

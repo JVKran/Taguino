@@ -3,6 +3,7 @@
 
 #include "input.hpp"
 #include "entities.hpp"
+#include "display.hpp"
 #include "HCSR04.hpp"
 #include "rtos.hpp"
 #include "game.hpp"
@@ -10,6 +11,7 @@
 
 class weaponManager : public buttonListener, public rtos::task<> {
 	private:
+		display & Display;
 		button triggerButton;
 		button autoButton;
 		button manualButton;
@@ -33,7 +35,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
 	public:
-		weaponManager(inputHandler & handler, runGame & game);
+		weaponManager(display & Display, inputHandler & handler, runGame & game);
 
 		virtual void buttonPressed(const char id) override;
 
