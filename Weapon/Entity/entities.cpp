@@ -96,7 +96,7 @@ void weaponData::setAmountOfMags(const int newAmount){
 	amountOfMags = newAmount;
 }
 
-int weaponData::getAmountOfBullets() const {
+unsigned int weaponData::getAmountOfBullets() const {
 	return bulletAmount;
 }
 
@@ -112,7 +112,7 @@ const int weaponData::getDamage(const int distance) const {
 	return weapons.getDamage(id, distance);
 }
 
-const int weaponData::maxShotsPerTenSeconds() const {
+const unsigned int weaponData::maxShotsPerTenSeconds() const {
 	return weapons.maxShotsPerTime(id);
 }
 

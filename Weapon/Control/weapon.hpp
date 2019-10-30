@@ -14,7 +14,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		display & Display;
 		button triggerButton;
 		button autoButton;
-		button manualButton;
+		button semiButton;
 		inputHandler handler;
 
 		transmitter irTransmitter = transmitter();
@@ -23,14 +23,17 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		runGame & game;
 		const playerData & player;
 
+		bool autoFireMode;
+		bool semiFireMode;
+
 		hwlib::target::pin_in echoPin = hwlib::target::pin_in(hwlib::target::pins::d9);
 		hwlib::target::pin_out triggerPin = hwlib::target::pin_out(hwlib::target::pins::d8);
 
 		HCSR04 distanceSensor = HCSR04(triggerPin, echoPin);
-		uint_fast64_t lastShot;
+		uint_fast64_t lastShot = 0;
 		int measuredDistance = 0;
 
-		weaponData weapon = weaponData(0, 2, 17);
+		weaponData weapon = weaponData(1, 2, 17);
 
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
@@ -38,6 +41,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		weaponManager(display & Display, inputHandler & handler, runGame & game);
 
 		virtual void buttonPressed(const char id) override;
+		void newWeaponSelected(const int id);
 
 		void main() override;
 };
