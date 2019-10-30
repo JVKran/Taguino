@@ -8,8 +8,10 @@ Buttoninterrupter::Buttoninterrupter(){
     auto inputpin = hwlib::target::pin_in(hwlib::target::pins::a8);             //make pins input to prevent shorting arduino
     auto inputpin2 = hwlib::target::pin_in(hwlib::target::pins::a9);
     auto inputpin3 = hwlib::target::pin_in(hwlib::target::pins::a10);
-    auto inputpin4 = hwlib::target::pin_in(hwlib::target::pins::a11);   
-    mask = 0x1U << 17;                      // create mask to cover all pins
+    auto inputpin4 = hwlib::target::pin_in(hwlib::target::pins::a11);
+    auto inputpin5 = hwlib::target::pin_in(hwlib::target::pins::dac0);    
+    mask = 0x1U << 15;
+    mask |= 0x1U << 17;                      // create mask to cover all pins
     mask |= 0x1U << 18;
     mask |= 0x1U << 19;
     mask |= 0x1U << 20;
@@ -27,7 +29,7 @@ void Buttoninterrupter::refreshregister(){
 bool Buttoninterrupter::read(uint8_t pin){
     
     
-    if(pin<21&&pin>16){                                     //check if button is within range
+    if((pin<21&&pin>16)||(pin==15)){                                     //check if button is within range
     return (( registercont & 0x1U << pin ) != 0 );          // read stored copy of the register for given button
     }
     else{
