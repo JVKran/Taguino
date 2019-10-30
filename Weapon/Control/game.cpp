@@ -10,6 +10,7 @@ runGame::runGame(display & Display, const playerData & player, const int playSec
 	gameSeconds = playSeconds;
 	remainingSeconds = playSeconds;
 	Display.showTime(remainingSeconds, gameSeconds);
+	Display.showHealthBar();
 }
 
 playerData runGame::getPlayerData(){
@@ -28,6 +29,7 @@ void runGame::main(){
 			hwlib::cout << "Received " << receivedDataChannel.read() << "!!!";
 		} else if (event == secondClock) {
 			remainingSeconds--;
+			Display.drawHealth(remainingSeconds / 10);
 		} else {
 			Display.showTime(remainingSeconds, gameSeconds);
 			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);

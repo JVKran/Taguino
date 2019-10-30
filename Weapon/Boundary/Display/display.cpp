@@ -61,6 +61,10 @@ void display::updateHealth(const unsigned int prevHealth, const unsigned int hea
 	healthWindow.flush();
 }
 
+void display::drawHealth(const int health){
+	updateHealth(lastData.lastHealth, health);
+}
+
 void display::showMagazines(int amountOfMagazines){
 	hwlib::line(hwlib::xy(0,0),hwlib::xy(10,0)).draw(magazineWindow);					//topMagazine
 	hwlib::line(hwlib::xy(0,0), hwlib::xy(0,7)).draw(magazineWindow);					//leftMagazine

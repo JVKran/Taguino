@@ -46,6 +46,7 @@ public:
 	}
 	void showBullets(int amountOfBullets);
 	void showHealthBar();
+	void drawHealth(const int health);
 	void updateHealth(const unsigned int prevHealth, const unsigned int health);
 	void showMagazines(int amountOfMagazines);
 	void showWeapon(int weaponID);
