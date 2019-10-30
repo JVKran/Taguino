@@ -37,6 +37,27 @@ bool Buttoninterrupter::read(uint8_t pin){
     hwlib::cout<<"nein";
     }
 }
+    Encoder::Encoder(){
+           
+    // activate peripheral functions for quad pins
+    PIOB->PIO_PDR = 1 << 25;     // activate peripheral function 
+    PIOB->PIO_ABSR |= 1<<25;   // choose peripheral option B   
+    PIOB->PIO_PDR = 1<<27;     // activate peripheral function 
+    PIOB->PIO_ABSR |= 1<<27;   // choose peripheral option B
+   
+    // activate clock for TC0
+     PMC->PMC_PCER0 = (1 << 27);
+    // select XC0 as clock source and set capture mode
+    TC0->TC_CHANNEL[0].TC_CMR = 5;
+    // activate quadrature encoder and position measure mode, no filters
+    TC0->TC_BMR = (1<<9)|(1<<8);
+    // enable the clock (C) and reset the counter ()
+    // SWTRG = 1 starts clock
+    TC0->TC_CHANNEL[0].TC_CCR = 5;  
+    }
+int32_t Encoder::read(){
+    return(int32_t(TC0->TC_CHANNEL[0].TC_CV));
+}
 
 
 

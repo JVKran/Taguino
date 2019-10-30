@@ -4,6 +4,7 @@
 int main(){
     
     Buttoninterrupter knoppen;
+    Encoder draaier;
 
     hwlib::wait_ms(500);
     for(;;){
@@ -13,7 +14,7 @@ int main(){
         hwlib::cout<<hwlib::endl<<"a11 "<<knoppen.read(19)<<hwlib::endl;
         hwlib::cout<<hwlib::endl<<"a12 "<<knoppen.read(20)<<hwlib::endl;
         hwlib::cout<<hwlib::endl<<"b15 "<<knoppen.read(15)<<hwlib::endl;
-
+          hwlib::cout<<hwlib::endl<<"enc "<<draaier.read()<<hwlib::endl;    
         hwlib::wait_ms(1000);
     }
     /*
