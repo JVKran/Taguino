@@ -1,9 +1,5 @@
 #include "display.hpp"
 
-void display::terminal(){
-	magazineTerminal <<3;
-}
-
 void display::showBullets(int amountOfBullets){
 	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
 		for(int i=0; i<10 && i<amountOfBullets; i++){									
@@ -133,9 +129,6 @@ void display::drawPistol(){
 
 // }
 
-void display::showTime(const int remainingSeconds, const int totalSeconds){
-	hwlib::cout << remainingSeconds << " seconds remaining." << hwlib::endl;
-}
 
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
@@ -155,3 +148,16 @@ void display::selectedSetting(const int setting){
 	}
 }
 
+void display::showTime(const double remainingSeconds, const double totalSeconds){
+	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
+	double LocationToBeFilled = (1-(remainingSeconds/ totalSeconds)) * 360;
+	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
+    for(int i=0;i<LocationToBeFilled;i++){
+        if(i<=180){
+           hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+180) + 10, yCoordinates.get(i+180) + 10)).draw(timeWindow);
+        }else{
+           hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-180) + 10, yCoordinates.get(i-180) + 10)).draw(timeWindow);
+        } 
+    }
+    timeWindow.flush();
+}
