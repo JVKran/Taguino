@@ -18,6 +18,7 @@ int main( void ){
    auto Display = display(oled);
    oled.clear();   
    oled.flush();
+   
 
    const char * playerName1 = "Jochem";	//This would usually be received from the master...
    playerData player1 = playerData(playerName1, 1, 1);
@@ -39,10 +40,10 @@ int main( void ){
    playerData player5 = playerData(playerName5, 1, 1);
    weaponData weapon5 = weaponData(2);
 
-   std::array<playerData,5> players = {player1, player2, player3, player4, player5};
-   auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
-   scoreboard bord = scoreboard(window, oled, players);
-   oled.flush();
+   // std::array<playerData,5> players = {player1, player2, player3, player4, player5};
+   // auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
+   // scoreboard bord = scoreboard(window, oled, players);
+   // oled.flush();
 
    runGame game = runGame(player1);
    inputHandler handler = inputHandler(100'000);
