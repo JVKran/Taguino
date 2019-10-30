@@ -128,12 +128,13 @@ void NRF24::read_pipe( uint8_t child, uint8_t *address ){
 
    if(child < 6){
       if(child < 2){
-         write_register( pipe[child], address, addr_width );  
+         write_register( pipe[child], address, addr_width );                  //if the pipe is 0 or 1 it can hold up to 5 bytes of address
       }else{
-         write_register( pipe[child], address[0] );  
+         write_register( pipe[child], address[0] );                           //only the first byte is writen to the pipe
+         write_register( pipe[1], address, addr_width );                      //set pipe 1 to the total address, because pipe 2-5 have 1 byte and the rest is from pipe 1 (see datasheet) 
       }
    }
-   
+
    write_register( TX_ADDR, address, addr_width );  
    write_register( pipe_payload[child], payload_size );                                      //set the payload size of the receiver
    write_register( EN_RXADDR, read_register( EN_RXADDR ) | ( 1 << pipe_enable[child] ) );    //enable the receive address
