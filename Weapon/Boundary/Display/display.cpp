@@ -14,6 +14,8 @@ void display::showBullets(int amountOfBullets){
 			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			//Vertical line for "+" sign
 			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			//Horizontal line for "+" sign
 			maxBulletsDrawn = true;														//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
+		} else {
+			maxBulletsDrawn = false;
 		}
 		bulletWindow.flush();
 		lastData.lastBullets = amountOfBullets;
@@ -105,7 +107,7 @@ void display::drawPistol(){
 	hwlib::line(hwlib::xy(2,2),hwlib::xy(19,2)).draw(weaponWindow);					//topBarrel
 	hwlib::line(hwlib::xy(2,6),hwlib::xy(19,6)).draw(weaponWindow);					//botBarrel
 	hwlib::line(hwlib::xy(2,3),hwlib::xy(2,7)).draw(weaponWindow);					//leftBarrel
-	hwlib::line(hwlib::xy(19,1),hwlib::xy(19,7)).draw(weaponWindow);				//rightBarrel
+		hwlib::line(hwlib::xy(19,1),hwlib::xy(19,7)).draw(weaponWindow);				//rightBarrel
 	hwlib::line(hwlib::xy(13,5), hwlib::xy(19,5)).draw(weaponWindow);					//lineInBarrel
 
 	hwlib::line(hwlib::xy(3,5),hwlib::xy(7,5)).draw(weaponWindow);					//topGrip
@@ -120,4 +122,26 @@ void display::drawPistol(){
 // void display::drawAssaultRifle(){
 
 // }
+
+void display::showTime(const int remainingSeconds, const int totalSeconds){
+	hwlib::cout << remainingSeconds << " seconds remaining." << hwlib::endl;
+}
+
+void display::selectedSetting(const int setting){
+	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
+	switch(setting){
+		case 0:
+			//Selected to change weapon
+			hwlib::cout << "Setting weapon." << hwlib::endl;
+			break;
+		case 1:
+			//Selected to activate powerups
+			hwlib::cout << "Setting setting." << hwlib::endl;
+			break;
+		case -1:
+			//Selected to quit setting
+			hwlib::cout << "Finished setting." << hwlib::endl;
+			break;
+	}
+}
 

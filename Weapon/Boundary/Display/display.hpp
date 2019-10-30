@@ -44,6 +44,8 @@ public:
 	void updateHealth(const unsigned int prevHealth, const unsigned int health);
 	void showMagazines(int amountOfMagazines);
 	void showWeapon(int weaponID);
+	void showTime(const int remainingSeconds, const int totalSeconds);
+	void selectedSetting(const int setting);
 
 };
 

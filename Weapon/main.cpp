@@ -23,18 +23,16 @@ int main( void ){
    scoreboard bord = scoreboard(window, oled);
    oled.flush();
 
-   const char * playerName = "Jochem";	//This would usually be received from the master...
+   //These values would usually be received from the master...
+   const char * playerName = "Jochem";
+   const int gameTime = 1000;
+
    playerData player = playerData(playerName, 1, 1);
    weaponData weapon = weaponData(2);
-
-   // hwlib::cout << player << hwlib::endl;
-
-   // hwlib::cout << weapon << hwlib::endl;
-
-   runGame game = runGame(player);
+   runGame game = runGame(Display, player, gameTime);
    inputHandler handler = inputHandler(100'000);
    weaponManager gunManager = weaponManager(Display, handler, game);
-   interfaceManager interface = interfaceManager(handler);
+   interfaceManager interface = interfaceManager(Display, handler);
 
    rtos::run();
 }

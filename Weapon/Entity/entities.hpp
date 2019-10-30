@@ -40,14 +40,16 @@ class playerData {
 
 class weaponSettings {
 	private:
-		std::array<const char *, 5> weaponNames = 	{	"Pistol", "Shotgun", 	"Sniper", 	"AK-47", 	"M16"	};
-		std::array<int, 5> damageFactors = 			{		1,		10, 		5, 			6, 			6		};
-		std::array<int, 5> maxShotsPerTenSeconds = 	{		20,		4, 			3, 			40, 		50		};
+		std::array<const char *, 5> weaponNames = 	{	"Shotgun", "Pistol", 	"Sniper", 	"AK-47", 	"M16"	};
+		std::array<int, 5> damageFactors = 			{		10,		1, 			5, 			6, 			6		};
+		std::array<int, 5> bulletsPerMag = 			{		6,		17, 		5, 			30, 		30		};
+		std::array<int, 5> maxShotsPerTenSeconds = 	{		4,		20, 		3, 			40, 		50		};
 		std::array<bool, 5> autoAllowed = 			{		false, 	false, 		false, 		true, 		true	};
 		std::array<bool, 5> semiAllowed = 			{		false, 	false, 		false, 		true, 		true	};
 	public:
 		const char * getName(const int weaponId) const;
 		const int getDamage(const int weaponId, const int distance) const;
+		const int getBulletsPerMag(const int weaponId) const;
 		const int maxShotsPerTime(const int weaponId) const;
 		const bool autoAllowedForWeapon(const int weaponId) const;
 		const bool semiAllowedForWeapon(const int weaponId) const;
@@ -61,7 +63,7 @@ class weaponData {
 
 		weaponSettings weapons;
 	public:
-		weaponData(const int id, const int amountOfMags = 0, const int bulletAmount = 0);
+		weaponData(const int id = 0, const int amountOfMags = 0, const int bulletAmount = 0);
 
 		int getId() const ;
 		void setId(const int newId);
@@ -74,6 +76,7 @@ class weaponData {
 
 		const char * getName() const;
 		const int getDamage(const int distance = 0) const;
+		const int bulletsPerMag() const;
 		const int maxShotsPerTenSeconds() const;
 		const bool autoAllowed() const;
 		const bool semiAllowed() const;

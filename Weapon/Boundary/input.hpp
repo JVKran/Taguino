@@ -46,7 +46,7 @@ class inputHandler : public rtos::task<> {
 
 		rtos::clock updateClock;
 	public:
-		inputHandler(unsigned long long int period = 100, const char * name = "Input Handler");
+		inputHandler(unsigned long long int period = 100'000, const char * name = "Input Handler");
 
 		void addButton(button * b);
 		void addEncoder(KY040 * e);

@@ -30,7 +30,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		uint_fast64_t lastShot;
 		int measuredDistance = 0;
 
-		weaponData weapon = weaponData(0);
+		weaponData weapon = weaponData(0, 2, 17);
 
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;

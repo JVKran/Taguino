@@ -1,6 +1,7 @@
 #include "interface.hpp"
 
-interfaceManager::interfaceManager(inputHandler & handler):
+interfaceManager::interfaceManager(display & Display, inputHandler & handler):
+	Display(Display),
 	handler(handler),
 	rotaryEncoder(KY040(this)),
 	encoderPressedFlag(this),
@@ -24,9 +25,18 @@ void interfaceManager::main(){
 	for(;;){
 		auto event = wait(newPositionFlag+encoderPressedFlag);
 		if(event == newPositionFlag){
-			hwlib::cout << "Encoder Turned to position " << positionPool.read() << "." << hwlib::endl;
+			currentPosition = positionPool.read();
+			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
+
 		} else {
-			hwlib::cout << "Encoder Pressed!" << hwlib::endl;
+			if(currentlyInSetting){
+				Display.selectedSetting(-1);
+				rotaryEncoder.setPos(inWhichSetting);
+			} else {
+				Display.selectedSetting(currentPosition);
+				inWhichSetting = currentPosition;
+			}
+			currentlyInSetting = !currentlyInSetting;
 		}
 	}
 

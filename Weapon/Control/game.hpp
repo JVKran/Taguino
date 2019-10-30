@@ -4,10 +4,12 @@
 #include "entities.hpp"
 #include "transceiver.hpp"
 #include "RGBLed.hpp"
+#include "display.hpp"
 #include "rtos.hpp"
 
 class runGame : public receiverListener, public rtos::task<> {
 	private:
+		display & Display;
 		playerData player;
 
     	RGBLed Led = RGBLed();
@@ -16,9 +18,12 @@ class runGame : public receiverListener, public rtos::task<> {
   		receiver irReceiver = receiver(irReceiverPin, this);
 
   		rtos::clock secondClock;
+  		int gameSeconds;
+  		int remainingSeconds;
   		rtos::channel<uint16_t, 10> receivedDataChannel;
+  		rtos::timer updateClockTimer;
 	public:
-		runGame(const playerData & player);
+		runGame(display & Display, const playerData & player, const int playSeconds);
 		playerData getPlayerData();
 
 		virtual void dataReceived(const uint16_t data);

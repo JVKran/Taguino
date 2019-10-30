@@ -54,6 +54,10 @@ const int weaponSettings::getDamage(const int weaponId, const int distance) cons
 	return damageFactors[weaponId] * distance;
 }
 
+const int weaponSettings::getBulletsPerMag(const int weaponId) const {
+	return bulletsPerMag[weaponId];
+}
+
 const int weaponSettings::maxShotsPerTime(const int weaponId) const {
 	return maxShotsPerTenSeconds[weaponId];
 }
@@ -118,6 +122,10 @@ const bool weaponData::autoAllowed() const {
 
 const bool weaponData::semiAllowed() const {
 	return weapons.semiAllowedForWeapon(id);
+}
+
+const int weaponData::bulletsPerMag() const {
+	return weapons.getBulletsPerMag(id);
 }
 
 
