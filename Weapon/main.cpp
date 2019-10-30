@@ -25,7 +25,7 @@ int main( void ){
 
    //These values would usually be received from the master...
    const char * playerName = "Jochem";
-   const int gameTime = 1000;
+   const int gameTime = 1001;
 
    playerData player = playerData(playerName, 1, 1);
    weaponData weapon = weaponData(2);

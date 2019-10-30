@@ -56,6 +56,9 @@ void weaponManager::main(){
 				break;
 			case 'A':
 				hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
+				if(weapon.autoAllowed()){
+					
+				}
 				break;
 			case 'M':
 				hwlib::cout << "Manual-Mode selected" << hwlib::endl;
