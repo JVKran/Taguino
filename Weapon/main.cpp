@@ -33,7 +33,7 @@ int main( void ){
 
    runGame game = runGame(player);
    inputHandler handler = inputHandler(100'000);
-   weaponManager gunManager = weaponManager(handler, game);
+   weaponManager gunManager = weaponManager(Display, handler, game);
    interfaceManager interface = interfaceManager(handler);
 
    rtos::run();

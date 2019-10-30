@@ -1,6 +1,7 @@
 #include "weapon.hpp"
 
-weaponManager::weaponManager(inputHandler & handler, runGame & game):
+weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game):
+	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
 	autoButton(button(18, &handler, this, 'A')),
 	manualButton(button(19, &handler, this, 'M')),
