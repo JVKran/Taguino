@@ -17,7 +17,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 
 		rtos::flag encoderPressedFlag;
 		int inWhichSetting;
-		bool currentlyInSetting = false;
+		bool currentlyInSetting = true;
 
 		rtos::flag resetPositionFlag;
 		rtos::flag newPositionFlag;

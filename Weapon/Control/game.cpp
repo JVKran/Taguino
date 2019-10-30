@@ -9,6 +9,7 @@ runGame::runGame(display & Display, const playerData & player, const int playSec
 {
 	gameSeconds = playSeconds;
 	remainingSeconds = playSeconds;
+	Display.showTime(remainingSeconds, gameSeconds);
 }
 
 playerData runGame::getPlayerData(){
