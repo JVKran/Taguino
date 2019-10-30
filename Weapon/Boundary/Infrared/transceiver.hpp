@@ -40,7 +40,10 @@ private:
 	uint8_t receivedControlBits;
 
 	uint8_t calculateControlBits(const uint16_t data);
+
 	bool readBit(const uint16_t duration = 800);
+
+	rtos::clock;
 public:
 	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener);
 

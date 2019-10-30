@@ -1,14 +1,11 @@
 #include "scoreboard.hpp"
 
-scoreboard::scoreboard(hwlib::window & window, hwlib::glcd_oled & oled):
+scoreboard::scoreboard(hwlib::window & window, hwlib::glcd_oled & oled, std::array<playerData, 5> players):
 	window(window),
-	oled(oled)
+	oled(oled),
+	players(players)
 {
-	// auto windowFont 			= hwlib::font_default_8x8();
-	// auto windowName 			= hwlib::window_part(window, hwlib::xy(114, 3), hwlib::xy(128, 12));
-	// hwlib::circle nameCircle	= hwlib::circle(hwlib::xy(117, 6), 5);
-	// nameCircle.draw(oled);
-	// auto windowNameTerminal 	= hwlib::terminal_from(windowName, windowFont);
+
 
 	// auto windowPartFirstPlace 	= hwlib::window_part(window, hwlib::xy(0,10), hwlib::xy(124, 20));
 	// auto windowPartSecondPlace 	= hwlib::window_part(window, hwlib::xy(0,21), hwlib::xy(124, 31));
@@ -21,7 +18,6 @@ scoreboard::scoreboard(hwlib::window & window, hwlib::glcd_oled & oled):
 	// auto terminalThirdPlace 	= hwlib::terminal_from(windowPartThirdPlace, windowFont);
 	// auto terminalFourthPlace 	= hwlib::terminal_from(windowPartFourthPlace, windowFont);
 	// auto terminalFifthPlace 	= hwlib::terminal_from(windowPartFifthPlace, windowFont);
-
 
 	// terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) <<"Kapitein" << 59;
 	// terminalSecondPlace << hwlib::left <<hwlib::setw(11) << "Dr Iglo" << 35;
@@ -36,5 +32,13 @@ scoreboardLine::scoreboardLine(hwlib::window & nameWindow, hwlib::window & score
 	nameWindow(nameWindow),
 	scoreWindow(scoreWindow)
 {
+	// terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) << players[0].getName() << players[0].getScore();
+	// terminalSecondPlace << hwlib::left <<hwlib::setw(11) << players[1].getName() << players[1].getScore();
+	// terminalThirdPlace 	<< hwlib::left <<hwlib::setw(11) << players[2].getName() << players[2].getScore();
+	// terminalFourthPlace << hwlib::left <<hwlib::setw(11) << players[3].getName() << players[3].getScore();
+	// terminalFifthPlace 	<< hwlib::left <<hwlib::setw(11) << players[4].getName() << players[4].getScore();
 	
+	// windowNameTerminal 	<< 'B';
+	// windowNameTerminal.flush();
+	// nameCircle.draw(oled);
 }

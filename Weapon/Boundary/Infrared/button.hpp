@@ -18,11 +18,14 @@ public:
     Buttoninterrupter();           // constructor
 
 
-};
-class Encoder{
-    public:
-    int32_t read();
-    Encoder();
+
+
+
+
+ 
+
+	
+
 };
 
 #endif //__BUTTON_INTERRUPTER_HPP
