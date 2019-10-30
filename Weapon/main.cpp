@@ -53,7 +53,7 @@ int main( void ){
    runGame game = runGame(Display, player, gameTime);
    inputHandler handler = inputHandler(100'000);
    weaponManager gunManager = weaponManager(Display, handler, game);
-   interfaceManager interface = interfaceManager(Display, handler);
+   interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
    rtos::run();
 }

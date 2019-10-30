@@ -5,6 +5,7 @@
 #include "KY040.hpp"
 #include "rtos.hpp"
 #include "display.hpp"
+#include "weapon.hpp"
 
 class interfaceManager : public encoderListener, public rtos::task<> {
 	private:
@@ -12,6 +13,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 
 		inputHandler handler;
 		KY040 rotaryEncoder;
+		weaponManager & weapon;
 
 		rtos::flag encoderPressedFlag;
 		int inWhichSetting;
@@ -23,7 +25,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 
 		rtos::pool<int> positionPool;
 	public:
-		interfaceManager(display & Display, inputHandler & handler);
+		interfaceManager(display & Display, inputHandler & handler, weaponManager & weapon);
 
 		void buttonPressed() override;
 		void encoderTurned(const int pos) override;

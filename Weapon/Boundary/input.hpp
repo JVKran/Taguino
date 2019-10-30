@@ -3,8 +3,8 @@
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
-#include "KY040.hpp"
 #include "button.hpp"
+#include "KY040.hpp"
 
 class KY040;
 

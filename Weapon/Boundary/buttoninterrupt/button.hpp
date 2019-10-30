@@ -19,10 +19,11 @@ public:
 
 
 };
-class Encoder{
+
+class rotaryEncoder{
     public:
     int32_t read();
-    Encoder();
+    rotaryEncoder();
 };
 
 #endif //__BUTTON_INTERRUPTER_HPP

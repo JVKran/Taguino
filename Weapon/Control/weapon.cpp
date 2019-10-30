@@ -4,6 +4,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	task("Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
+	triggerReleaseButton(button(20, &handler, this, 'S')),
 	autoButton(button(18, &handler, this, 'A')),
 	semiButton(button(19, &handler, this, 'S')),
 	handler(handler),
@@ -25,6 +26,7 @@ void weaponManager::buttonPressed(const char id){
 
 void weaponManager::newWeaponSelected(const int id){
 	weapon.setId(id);
+	Display.showWeapon(id);
 	autoFireMode = false;
 	semiFireMode = false;
 }	

@@ -1,9 +1,10 @@
 #include "interface.hpp"
 
-interfaceManager::interfaceManager(display & Display, inputHandler & handler):
+interfaceManager::interfaceManager(display & Display, inputHandler & handler, weaponManager & weapon):
 	Display(Display),
 	handler(handler),
-	rotaryEncoder(KY040(this)),
+	rotaryEncoder(KY040(15, this, &handler)),
+	weapon(weapon),
 	encoderPressedFlag(this),
 	resetPositionFlag(this),
 	newPositionFlag(this),
@@ -31,6 +32,7 @@ void interfaceManager::main(){
 		} else {
 			if(currentlyInSetting){
 				Display.selectedSetting(-1);
+				weapon.newWeaponSelected(currentPosition / 2);
 				rotaryEncoder.setPos(inWhichSetting);
 			} else {
 				Display.selectedSetting(currentPosition);

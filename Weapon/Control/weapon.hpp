@@ -13,6 +13,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 	private:
 		display & Display;
 		button triggerButton;
+		button triggerReleaseButton;
 		button autoButton;
 		button semiButton;
 		inputHandler handler;

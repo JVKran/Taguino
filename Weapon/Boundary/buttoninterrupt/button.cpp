@@ -37,7 +37,7 @@ bool Buttoninterrupter::read(uint8_t pin){
     hwlib::cout<<"nein";
     }
 }
-    Encoder::Encoder(){
+rotaryEncoder::rotaryEncoder(){
            
     // activate peripheral functions for quad pins
     PIOB->PIO_PDR = 1 << 25;     // activate peripheral function 
@@ -55,7 +55,7 @@ bool Buttoninterrupter::read(uint8_t pin){
     // SWTRG = 1 starts clock
     TC0->TC_CHANNEL[0].TC_CCR = 5;  
     }
-int32_t Encoder::read(){
+int32_t rotaryEncoder::read(){
     return(int32_t(TC0->TC_CHANNEL[0].TC_CV));
 }
 
