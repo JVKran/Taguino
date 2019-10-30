@@ -14,11 +14,15 @@ int main( void ){
    auto sda = hwlib::target::pin_oc(hwlib::target::pins::sda);
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
    auto oled = hwlib::glcd_oled(i2cBus);
+   constexpr auto xCoordinates = lookup< int, 360>(scaled_sine_from_degrees);
+   constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
 
-   auto Display = display(oled);
-   oled.clear();   
+   auto Display = display(oled, xCoordinates, yCoordinates);
+   oled.clear();  
+   oled.flush(); 
+   Display.showTime(15, 60);
+   Display.showTime(10,60);
    oled.flush();
-   
 
    const char * playerName1 = "Jochem";	//This would usually be received from the master...
    playerData player1 = playerData(playerName1, 1, 1);
@@ -44,6 +48,7 @@ int main( void ){
    // auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
    // scoreboard bord = scoreboard(window, oled, players);
    // oled.flush();
+
 
    runGame game = runGame(player1);
    inputHandler handler = inputHandler(100'000);
