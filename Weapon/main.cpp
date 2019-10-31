@@ -20,8 +20,8 @@ int main( void ){
    auto Display = display(oled, xCoordinates, yCoordinates);
    oled.clear();  
    oled.flush(); 
-   Display.showTime(15, 60);
-   Display.showTime(10,60);
+   Display.showTime(30, 60);
+
    oled.flush();
 
    const char * playerName1 = "Jochem";	//This would usually be received from the master...
