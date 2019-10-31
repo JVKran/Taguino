@@ -15,7 +15,9 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		button triggerButton;
 		button triggerReleaseButton;
 		button autoButton;
-		button semiButton;
+		button burstButton;
+		button leftManualButton;
+		button rightManualButton;
 		inputHandler handler;
 
 		transmitter irTransmitter = transmitter();

@@ -28,9 +28,10 @@ class button {
 		inputHandler * handler;
 		Buttoninterrupter * buttonRegister;
 
+		const int buttonNotToBeSet;
 		const char id;
 	public:
-		button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id);
+		button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id, const int buttonNotToBeSet = 0);
 
 		char getId();
 		void update();
@@ -41,7 +42,7 @@ class inputHandler : public rtos::task<> {
 		KY040* encoder;
 		int addedButtons = 0;
 
-		std::array<button*, 5> buttons;
+		std::array<button*, 10> buttons;
 		Buttoninterrupter buttonInterrupter;
 
 		rtos::clock updateClock;

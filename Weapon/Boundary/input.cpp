@@ -1,16 +1,17 @@
 #include "input.hpp"
 
-button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id):
+button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id, const int buttonNotToBeSet):
 	pinNumber(pinNumber),
 	listener(listener),
 	handler(handler),
+	buttonNotToBeSet(buttonNotToBeSet),
 	id(id)
 {
 	buttonRegister = handler->getRegister();
 }
 
 void button::update(){
-	if(buttonRegister->read(pinNumber)){
+	if(buttonRegister->read(pinNumber) && (buttonNotToBeSet == 0 || !buttonRegister->read(buttonNotToBeSet))){
 		listener->buttonPressed(id);
 	}
 }

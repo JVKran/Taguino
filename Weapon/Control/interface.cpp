@@ -19,9 +19,13 @@ void interfaceManager::buttonPressed(){
 
 void interfaceManager::encoderTurned(const int pos){
 	if(pos%2==0){
-newPositionFlag.set();
-	positionPool.write(pos);
-}
+		newPositionFlag.set();
+		if(pos != 0){
+			positionPool.write(pos / 2);
+		} else {
+			positionPool.write(pos);
+		}
+	}
 }
 
 void interfaceManager::main(){
@@ -34,7 +38,7 @@ void interfaceManager::main(){
 		} else {
 			if(currentlyInSetting){
 				Display.selectedSetting(-1);
-				weapon.newWeaponSelected(currentPosition / 2);
+				weapon.newWeaponSelected(currentPosition);
 				rotaryEncoder.setPos(inWhichSetting);
 			} else {
 				Display.selectedSetting(currentPosition);
