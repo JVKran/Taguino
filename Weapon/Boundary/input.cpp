@@ -22,7 +22,9 @@ void button::update(){
 inputHandler::inputHandler(unsigned long long int period, const char * name):
 	task(name),
 	updateClock(this, period, "Update Clock")
-{}
+{
+	buttonInterrupter.refreshregister();
+}
 
 void inputHandler::addButton(button * b){
 	buttons[addedButtons] = b;

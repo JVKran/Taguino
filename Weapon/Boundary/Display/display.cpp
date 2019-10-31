@@ -24,8 +24,8 @@ void display::showBullets(int amountOfBullets){
 			maxBulletsDrawn = false;
 		}
 		lastData.lastBullets = amountOfBullets;
+		bulletWindow.flush();
 	}
-	bulletWindow.flush();
 }
 
 void display::showHealthBar(){
