@@ -5,7 +5,7 @@
 #include "entities.hpp"
 #include <array>
 
-class scoreboard{
+class scoreboard {
 private:
 	hwlib::window & window;
 	hwlib::glcd_oled & oled;

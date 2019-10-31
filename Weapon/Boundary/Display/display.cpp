@@ -1,6 +1,40 @@
 #include "display.hpp"
 
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, const int gameTime):
+	oled(oled),
+	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
+	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
+	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
+	healthWindow(oled, hwlib::xy(0,40), hwlib::xy(40,46)),
+	timeWindow(oled, hwlib::xy(107,0), hwlib::xy(128,21)),
+	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
+	scoreTerminal(oled, hwlib::font_default_8x8()),
+	xCoordinates(xCoordinates),
+	yCoordinates(yCoordinates),
+	newBulletFlag(this),
+	newBulletPool("New Bullet Pool"),
+	newMagazineFlag(this),
+	newMagazinePool("New Magazine Pool"),
+	newHealthFlag(this),
+	newHealthPool("New Health Pool"),
+	//newScoreBoardFlag(this),
+	//newScoreBoardPool("New Scoreboard Pool"),
+	newTimeFlag(this),
+	newTimePool("New Time Pool"),
+	totalGameTime(gameTime),
+	newPowerUpFlag(this),
+	newPowerUpPool("New Powerup Pool")
+{
+	oled.clear();
+}
+
 void display::showBullets(int amountOfBullets){
+	newBulletFlag.set();
+	newBulletPool.write(amountOfBullets);
+}
+
+void display::drawBullets(){
+	amountOfBullets = newBulletPool.read();
 	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
 		for(int i=0; i<10 && i< amountOfBullets; i++){									
 			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);			
@@ -44,10 +78,11 @@ void display::showHealthBar(){
 	healthWindow.flush();
 }
 
-void display::updateHealth(const unsigned int prevHealth, const unsigned int health){
+void display::updateHealth(){
+	health = newHealthPool.read();
 	int amountOfBlack = 27-((100 - health) * 0.27);
 	int amountOfWhite = (100 - health) * 0.27;
-	if(prevHealth < health){
+	if(lastData.lastHealth < health){
 		hwlib::line(hwlib::xy(12,2), hwlib::xy(amountOfWhite,2)).draw(healthWindow);						//White line
 		hwlib::line(hwlib::xy(12,3), hwlib::xy(amountOfWhite,3)).draw(healthWindow);						//White line
 		hwlib::line(hwlib::xy(12,4), hwlib::xy(amountOfWhite,4)).draw(healthWindow);						//White line
@@ -61,11 +96,18 @@ void display::updateHealth(const unsigned int prevHealth, const unsigned int hea
 	lastData.lastHealth = health;
 }
 
-void display::drawHealth(const int health){
-	updateHealth(lastData.lastHealth, health);
+void display::showHealth(const int health){
+	newHealthFlag.set();
+	newHealthPool.write(health);
 }
 
 void display::showMagazines(int amountOfMagazines){
+	newMagazineFlag.set();
+	newMagazinePool.write(amountOfMagazines);
+}
+
+void display::drawMagazines(){
+	amountOfMagazines = newMagazinePool.read();
 	if(amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 3 || !maxMagazinesDrawn)){
 		for(int i = 0; i < 3 && i < amountOfMagazines; i++){
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13+10,0)).draw(magazineWindow);						//topMagazine
@@ -154,9 +196,15 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
-void display::showTime(const double remainingSeconds, const double totalSeconds){
+void display::showTime(const double remainingSeconds){
+	newTimeFlag.set();
+	newTimePool.write(remainingSeconds);
+}
+
+void display::drawTime(){
+	remainingSeconds = newTimePool.read();
 	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
-	double LocationToBeFilled = (1-(remainingSeconds/ totalSeconds)) * 360;
+	double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
 	for(int i = 0;i <LocationToBeFilled; i++){
 		if(i < 181){
 			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
@@ -168,6 +216,12 @@ void display::showTime(const double remainingSeconds, const double totalSeconds)
 }
 
 void display::showPowerUp(int powerUpID){
+	newPowerUpFlag.set();
+	newPowerUpPool.write(powerUpID);
+}
+
+void display::drawPowerUp(){
+	powerUpID = newPowerUpPool.read();
 	if(powerUpID == 0){
 		drawMaxAmmo();
 	}
@@ -246,5 +300,24 @@ void display::selectedSetting(const int setting){
 			hwlib::circle(hwlib::xy(90,45), 2, hwlib::black).draw(oled);
 			oled.flush();
 			break;
+	}
+}
+
+void display::main(){
+	for(;;){
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
+		if(event == newBulletFlag){
+			drawBullets();
+		} else if (event == newMagazineFlag){
+			drawMagazines();
+		} else if (event == newHealthFlag){
+			updateHealth();
+		} else if (event == newTimeFlag){
+			drawTime();
+		} else if (event == newPowerUpFlag){
+			drawPowerUp();
+		} /*else if (event == newScoreBoardFlag){
+
+		} */
 	}
 }

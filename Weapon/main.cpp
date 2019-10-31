@@ -19,18 +19,17 @@ int main( void ){
    constexpr auto xCoordinates = lookup< int, 360>(scaled_sine_from_degrees);
    constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
 
-   auto Display = display(oled, xCoordinates, yCoordinates);
-
    //These values would usually be received from the master...
    const char * playerName = "Jochem";
    const int gameTime = 1001;
    const uint8_t playerNumber = 1;
    const uint8_t teamNumber = 1;
 
+   display Display = display(oled, xCoordinates, yCoordinates, gameTime);
    playerData player = playerData(playerName, playerNumber, teamNumber);
    weaponData weapon = weaponData(2);
    runGame game = runGame(Display, player, gameTime);
-   inputHandler handler = inputHandler(50'000);
+   inputHandler handler = inputHandler(100'000);
    weaponManager gunManager = weaponManager(Display, handler, game, player);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 

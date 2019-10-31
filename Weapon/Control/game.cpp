@@ -9,7 +9,7 @@ runGame::runGame(display & Display, const playerData & player, const int playSec
 {
 	gameSeconds = playSeconds;
 	remainingSeconds = playSeconds;
-	Display.showTime(remainingSeconds, gameSeconds);
+	Display.showTime(remainingSeconds);
 	Display.showHealthBar();
 }
 
@@ -33,9 +33,9 @@ void runGame::main(){
 			hwlib::cout << "Weapon: " << ((receivedData & 0x1C0) >> 6);
 		} else if (event == secondClock) {
 			remainingSeconds--;
-			Display.drawHealth(remainingSeconds / 10);
+			Display.showHealth(remainingSeconds / 10);
 		} else {
-			Display.showTime(remainingSeconds, gameSeconds);
+			Display.showTime(remainingSeconds);
 			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 		}
 	}
