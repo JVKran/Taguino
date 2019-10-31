@@ -24,7 +24,6 @@ void interfaceManager::encoderTurned(const int pos){
 
 void interfaceManager::main(){
 	for(;;){
-		hwlib::cout << "InterfaceManaging Task" << hwlib::endl;
 		auto event = wait(newPositionFlag+encoderPressedFlag);
 		if(event == newPositionFlag){
 			currentPosition = positionPool.read();

@@ -25,20 +25,16 @@ void runGame::dataReceived(const uint16_t data){
 void runGame::main(){
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	for(;;){
-		hwlib::cout << "RunGame Task" << hwlib::endl;
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
-			hwlib::cout << "Infrared Message Received" << hwlib::endl;
 			receivedData = receivedDataChannel.read();
 			hwlib::cout << "Data Received: " << int(receivedData) << hwlib::endl;
 			hwlib::cout << "Distance: " << (receivedData & 0x3F) * 10 << "cm. "<< hwlib::endl;
 			hwlib::cout << "Playernumber: " << (receivedData >> 10) << hwlib::endl;
 			hwlib::cout << "Weapon: " << ((receivedData & 0x1C0) >> 6);
 		} else if (event == secondClock) {
-			hwlib::cout << "Second Passed" << hwlib::endl;
 			remainingSeconds--;
 		} else {
-			hwlib::cout << "Update Time on Display" << hwlib::endl;
 			Display.showTime(remainingSeconds);
 			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 		}

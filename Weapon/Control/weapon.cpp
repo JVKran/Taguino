@@ -33,7 +33,6 @@ void weaponManager::newWeaponSelected(const int id){
 
 void weaponManager::main(){
 	for(;;){
-		hwlib::cout << "WeaponManaging Task" << hwlib::endl;
 		wait(buttonsChannel);
 		readButton = buttonsChannel.read();
 		switch(readButton){
@@ -48,19 +47,19 @@ void weaponManager::main(){
 					}
 					dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
 					irTransmitter.sendData(dataToSend);
-					hwlib::cout << "Shot fired! Distance: " << measuredDistance << ", Player: " << player.getPlayerNumber() << hwlib::endl;
+					//hwlib::cout << "Shot fired! Distance: " << measuredDistance << ", Player: " << player.getPlayerNumber() << hwlib::endl;
 					weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
-					//Display.showBullets(weapon.getAmountOfBullets());
+					Display.showBullets(weapon.getAmountOfBullets());
 				} else/* if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)))*/{
-					hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
+					//hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
 					if(weapon.getAmountOfMags() > 0){
 						weapon.setAmountOfMags(weapon.getAmountOfMags() - 1);
 						Display.showMagazines(weapon.getAmountOfMags());
 						weapon.setAmountOfBullets(weapon.bulletsPerMag());
 						Display.showBullets(weapon.getAmountOfBullets());
-						hwlib::cout << "Reloaded Weapon!" << hwlib::endl;
+						//hwlib::cout << "Reloaded Weapon!" << hwlib::endl;
 					} else {
-						hwlib::cout << "No magazines left. Weapon unloaded..." << hwlib::endl;
+						//hwlib::cout << "No magazines left. Weapon unloaded..." << hwlib::endl;
 					}
 				}
 				break;

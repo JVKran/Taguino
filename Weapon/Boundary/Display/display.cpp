@@ -305,7 +305,6 @@ void display::selectedSetting(const int setting){
 
 void display::main(){
 	for(;;){
-		hwlib::cout << "Display Task" << hwlib::endl;
 		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
 		if(event == newBulletFlag){
 			drawBullets();
