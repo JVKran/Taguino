@@ -23,7 +23,8 @@ private:
 	hwlib::pin_out & mp3Write;
 public:
 	send( hwlib::pin_out & mp3Reset, hwlib::pin_out & mp3Write );
-	void reset(){ mp3Reset.write(1); };
+	void init();
+	void reset();
 	void write();
 };
 

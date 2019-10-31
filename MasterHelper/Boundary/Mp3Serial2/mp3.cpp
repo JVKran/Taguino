@@ -3,7 +3,7 @@
 send::send(hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive):
 	mp3Transmit( mp3Transmit ),
 	mp3Receive( mp3Receive )
-{}
+{ hwuart();}
 
 hwuart::hwuart(){
 
@@ -27,7 +27,7 @@ hwuart::hwuart(){
 	    USART0->US_BRGR = 567; 
 
 	    // No parity, normal channel mode.
-	    USART0->US_MR = US_MR_PAR_NO | US_MR_NBSTOP_2_BIT | US_MR_CHRL_8_BIT ;
+	    USART0->US_MR = US_MR_PAR_NO /*| US_MR_NBSTOP_1_BIT | US_MR_CHRL_8_BIT*/ ;
 
 	    // Disable all interrupts.	  
 	    USART0->US_IDR = 0xFFFFFFFF;   
@@ -57,41 +57,29 @@ hwuart::hwuart(){
 	}
 
 
-bool send::readUart(){ bool b = hwlib::uart_getc_bit_banged_pin( mp3Receive ); return b;  }
-
-//void send::sendBit( bool b ){ mp3Transmit.write( b );}
-
-//void send::sendByte( uint8_t c ){
-//	unsigned int mask = 1u << 7;
-//	hwlib::cout<<"Start\n";
-//	for( int i=0; i<8;i++){	
-//			bool bit = ( (c & mask ) ? 1 : 0 );
-//			sendBit( bit );
-//			c <<=1;
-//	};
-//}
-
-void send::sendArray( const uint8_t* array, int size ){
-	while(size--){
-		
-		sendUart( *array++ );
-		
-	};
-}
+void send::readUart(){  hwlib::cout<<uint8_t(usart_getc())<<"\n"; }
 
 void send::sendUart( uint8_t c ){
-	hwlib::cout<< c << "\n";
-	hwlib::uart_putc_bit_banged_pin( c, mp3Transmit); 
-	hwlib::wait_ms(10);
+	//hwlib::cout<< c << "\n";
+	//hwlib::uart_putc_bit_banged_pin( c, mp3Transmit); 
+	usart_putc( c );
+	//if(usart_char_available()){
+	//readUart();
+	//}
+	//hwlib::cout<<"ja"<<hwlib::endl;
 }
 
 void send::executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2 ){ 		// Command, folder(in numbers 1-99), song(0-255)
-	uint16_t checksum = -( versionByte + commandLength + CMD + acknowledge + par1 + par2 ); //Add all and invert it
+	/*uint16_t checksum = -( versionByte + commandLength + CMD + acknowledge + par1 + par2 ); //Add all and invert it
 	uint8_t commandLine[10] = { startByte, versionByte, commandLength, CMD, acknowledge, 
-											 par1, par2, uint8_t(checksum >> 8), uint8_t (checksum & 0xFF), endByte }; // checksum shifting to send the first half and the second half as show
+											 par1, par2, uint8_t(checksum >> 8), uint8_t (checksum & 0xFF), endByte}; // checksum shifting to send the first half and the second half as show
+	*///126, 255, 6, CMD, 01,
+	uint8_t testArray[10] = { 0x7E, 0xFF, 0x06, 0x03, 0x00, 0x00, 0x01, 0xFF, 0xE6, 0xEF };
 	for( uint8_t i = 0; i<10; i++){
-		sendUart( commandLine[i] );
+		sendUart( testArray[i] );
+		hwlib::wait_us(400);
 	}
+	//readUart();
 }
 
 mp3::mp3( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive ):

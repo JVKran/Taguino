@@ -1,14 +1,26 @@
 #include "mp3.hpp"
-send::send()
-mp3::mp3( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive ):
-	send(  mp3Transmit,  mp3Receive )
+send::send( hwlib::pin_out & mp3Reset, hwlib::pin_out & mp3Write ):
+	mp3Reset( mp3Reset ),
+	mp3Write( mp3Write )
+{ init(); }
+
+void send::init(){ mp3Reset.write(0); mp3Write.write(0);}
+void send::reset(){ mp3Reset.write( 1 ); }
+void send::write(){ mp3Write.write( 1 );mp3Write.write( 0 ); }
+
+mp3::mp3( hwlib::pin_out & mp3Reset, hwlib::pin_out & mp3Write ):
+	send(  mp3Reset, mp3Write )
 {}
 
 void mp3::playSound( int sound ){ 
-	Reset.write(1); 
-	hwlib::wait_ms(1);
-	for( int i=0; i<sound; i++)
-								}			//0x03 = specify track command, folder 0, number with corresponding mp3 track
+	reset();								// We can't specify a track, so we start from the first and shift to the specified track
+	
+	for( int i=1; i<sound; i++){			// Shift to the next track.
+		write();	
+		
+	}
+	init();
+}			
 
 //void mp3Control::dataReceived( uint32_t data, sounds select ){ //Pseudocode ; Read data from the transceiver and play the right sound
 	

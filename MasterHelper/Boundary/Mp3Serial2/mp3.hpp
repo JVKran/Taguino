@@ -5,7 +5,7 @@
 #define versionByte 0xFF//255
 #define commandLength 0x06//6
 #define endByte 0xEF//239
-#define acknowledge 0x00//0
+#define acknowledge 0x01//0
 
 template< int N >
 class sounds{
@@ -17,19 +17,32 @@ public:
 
 };
 
-class send{
+class hwuart{
+	//Usart * hw_usart = USART0;
+	public:
+	hwuart();
+	bool usart_char_available();
+	char usart_getc();
+	void usart_putc(char c);
+};
+
+class send : public hwuart{
 private:
 	hwlib::pin_out & mp3Transmit;
 	hwlib::pin_in & mp3Receive;
 public:
 	send( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
-	bool readUart();
+	void readUart();
 	//void sendBit(bool b);
 	//void sendByte( uint8_t c);
 	void sendArray( const uint8_t * array, int size );
 	void sendUart( uint8_t c );
 	void executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2);
 };
+
+
+
+
 
 class mp3 : public send {
 public:
@@ -38,15 +51,6 @@ public:
 	void playSound( int sound );
 	void pauseSound();
 	void setVolume( int volume ); //Van 0-30
-};
-
-class hwuart{
-	//Usart * hw_usart = USART0;
-	public:
-	hwuart();
-	bool usart_char_available();
-	char usart_getc();
-	void usart_putc(char c);
 };
 //Deze klasse is voor wanneer de nrf goed werkt
 //class mp3Control : public mp3{

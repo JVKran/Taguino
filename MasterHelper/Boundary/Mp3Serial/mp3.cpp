@@ -4,7 +4,7 @@ send::send(hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive):
 	mp3Receive( mp3Receive )
 {}
 
-bool send::readUart(){ bool b = hwlib::uart_getc_bit_banged_pin( mp3Receive ); return b;  }
+void send::readUart(){ hwlib::cout<<"hey"<<hwlib::uart_getc_bit_banged_pin( mp3Receive )<<"\n";}
 
 //void send::sendBit( bool b ){ mp3Transmit.write( b );}
 
@@ -18,18 +18,9 @@ bool send::readUart(){ bool b = hwlib::uart_getc_bit_banged_pin( mp3Receive ); r
 //	};
 //}
 
-void send::sendArray( const uint8_t* array, int size ){
-	while(size--){
-		
-		sendUart( *array++ );
-		
-	};
-}
 
 void send::sendUart( uint8_t c ){
-	hwlib::cout<< c << "\n";
-	hwlib::uart_putc_bit_banged_pin( c, mp3Transmit); 
-	hwlib::wait_ms(10);
+	hwlib::cout<<c<<"\n"; hwlib::uart_putc_bit_banged_pin( c, mp3Transmit); //readUart(); 
 }
 
 void send::executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2 ){ 		// Command, folder(in numbers 1-99), song(0-255)

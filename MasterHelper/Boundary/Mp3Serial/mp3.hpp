@@ -23,7 +23,7 @@ private:
 	hwlib::pin_in & mp3Receive;
 public:
 	send( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
-	bool readUart();
+	void readUart();
 	//void sendBit(bool b);
 	//void sendByte( uint8_t c);
 	void sendArray( const uint8_t * array, int size );
