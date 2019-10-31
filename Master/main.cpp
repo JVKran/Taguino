@@ -17,12 +17,20 @@ int main( void ){
    auto spi_bus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(        
       sclk, mosi, miso );
 
-   uint8_t address[5] = { 0x05, 0x04, 0x03, 0x02, 0x01 };
+   uint8_t address[5] = { 0x00, 0x00, 0x00, 0x00, 0x00 };
+   uint8_t adresses[5][5] = { { 0x00, 0x00, 0x00, 0x00, 0x00 },
+   							  { 0x00, 0x00, 0x00, 0x00, 0x00 },
+   							  { 0x00, 0x00, 0x00, 0x00, 0x00 },
+   							  { 0x00, 0x00, 0x00, 0x00, 0x00 },
+   							  { 0x00, 0x00, 0x00, 0x00, 0x00 } 	
+	};
+   uint8_t countPlayers = 0;
+   bool check = true;
 
    auto nrf = NRF24( spi_bus, ce, csn );                          
    nrf.start();                                                   
-   nrf.read_pipe( 3, address );                                
-   nrf.rx_mode( 3 );                                                   
+   nrf.read_pipe( 0, address );                                
+   nrf.rx_mode( 0 );                                                   
 
    uint8_t value[5] = {};                                         
    uint8_t len = 5;                                              
@@ -34,7 +42,22 @@ int main( void ){
          hwlib::cout << "values: " << hwlib::flush;                 
 
          for(int i = 0; i < len; i++){                             
-            hwlib::cout << value[i] << " " << hwlib::flush;       
+            hwlib::cout << value[i] << " " << hwlib::flush; 
+            if( value[i] != address[i] ){
+            	check = false;
+            }      
+         }
+
+         if( check == true ){
+         	countPlayers++;
+         	adresses[countPlayers][4] = countPlayers;
+
+         	nrf.read_pipe( countPlayers, addresses[countPlayers] );
+         	nrf.write_pipe( 0, addresses[countPlayers] );
+         	nrf.tx_mode( 0 );
+         	nrf.write( addresses[countPlayers], len );
+
+         	nrf.rx_mode( 0 );
          }
 
          hwlib::cout << "\n" << hwlib::flush;                        
