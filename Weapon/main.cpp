@@ -57,7 +57,7 @@ int main( void ){
    playerData player = playerData(playerName, 1, 1);
    weaponData weapon = weaponData(2);
    runGame game = runGame(Display, player, gameTime);
-   inputHandler handler = inputHandler(100'000);
+   inputHandler handler = inputHandler(50'000);
    weaponManager gunManager = weaponManager(Display, handler, game);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 

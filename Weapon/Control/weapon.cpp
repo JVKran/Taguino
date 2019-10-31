@@ -41,15 +41,15 @@ void weaponManager::main(){
 					dataToSend = 0;
 					dataToSend |= (player.getPlayerNumber() << 10);
 					dataToSend |= (weapon.getId() << 6);
-					if(hwlib::now_us() - lastShot > 1'000'000){
-					measuredDistance = distanceSensor.getDistance();
-						lastShot = hwlib::now_us();
-					}
+					// if(hwlib::now_us() - lastShot > 1'000'000){
+					// measuredDistance = distanceSensor.getDistance();
+					// 	lastShot = hwlib::now_us();
+					// }
 					dataToSend |= measuredDistance;
 					irTransmitter.sendData(dataToSend);
 					hwlib::cout << "Shot fired! Distance: " << measuredDistance << hwlib::endl;
-					weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
-					Display.showBullets(weapon.getAmountOfBullets());
+					// weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
+					// Display.showBullets(weapon.getAmountOfBullets());
 				} else/* if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)))*/{
 					hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
 					if(weapon.getAmountOfMags() > 0){

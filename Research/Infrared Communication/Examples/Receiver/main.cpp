@@ -18,23 +18,13 @@ int main( void ){
 
   auto irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
   auto irReceiver = receiver(irReceiverPin);
-  auto receptionPin = hwlib::target::pin_out(hwlib::target::pins::d7);
 
   uint16_t receivedNumber;
-  uint_fast64_t howLongAgo = hwlib::now_us();
 
   for(;;){
   	if(irReceiver.dataAvailable()){
   		receivedNumber = irReceiver.readData();
-     	if(receivedNumber == 43643){
-			  receptionPin.write(1);
-			  howLongAgo = hwlib::now_us();
-    	}
-      hwlib::cout << "Main Received: " << int(receivedNumber) << hwlib::endl << hwlib::endl;
-  	}
-  	if(hwlib::now_us() - howLongAgo > 500'000){
-  		receptionPin.write(0);
-  		receptionPin.flush();
+      hwlib::cout << "Data Received: " << int(receivedNumber) << hwlib::endl << hwlib::endl;
   	}
   }
 }
