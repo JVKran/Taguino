@@ -19,11 +19,7 @@ int main( void ){
    constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
 
    auto Display = display(oled, xCoordinates, yCoordinates);
-   // oled.clear();  
-   // oled.flush(); 
-   // Display.showTime(15, 60);
-   // Display.showTime(10,60);
-   // oled.flush();
+
 
    // const char * playerName1 = "Jochem";	//This would usually be received from the master...
    // playerData player1 = playerData(playerName1, 1, 1);
