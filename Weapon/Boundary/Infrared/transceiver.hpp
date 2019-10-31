@@ -11,7 +11,7 @@ class receiverListener {
 
 class transmitter {
 private:
-   	hwlib::target::d3_38kHz transmitter = hwlib::target::d2_38kHz();
+   	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
 
    	uint8_t controlBits;
 public:
@@ -40,6 +40,7 @@ private:
 	uint8_t receivedControlBits;
 
 	uint8_t calculateControlBits(const uint16_t data);
+
 	bool readBit(const uint16_t duration = 800);
 public:
 	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener);

@@ -49,6 +49,8 @@ public:
 	void showMagazines(int amountOfMagazines);
 	void showWeapon(int weaponID);
 	void showTime(const double remainingSeconds, const double totalSeconds);
+	void showPowerUp(const int );
+	void selectedSetting(const int setting);
 
 };
 
