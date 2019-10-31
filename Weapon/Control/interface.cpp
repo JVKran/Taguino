@@ -18,8 +18,10 @@ void interfaceManager::buttonPressed(){
 }
 
 void interfaceManager::encoderTurned(const int pos){
-	newPositionFlag.set();
+	if(pos%2==0){
+newPositionFlag.set();
 	positionPool.write(pos);
+}
 }
 
 void interfaceManager::main(){
