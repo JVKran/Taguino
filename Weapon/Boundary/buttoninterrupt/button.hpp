@@ -7,6 +7,7 @@ class Buttoninterrupter{
 private:
     uint32_t registercont;
     uint32_t mask;
+    uint32_t mask2;
 
 
 

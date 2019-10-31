@@ -9,17 +9,23 @@ Buttoninterrupter::Buttoninterrupter(){
     auto inputpin2 = hwlib::target::pin_in(hwlib::target::pins::a9);
     auto inputpin3 = hwlib::target::pin_in(hwlib::target::pins::a10);
     auto inputpin4 = hwlib::target::pin_in(hwlib::target::pins::a11);
-    auto inputpin5 = hwlib::target::pin_in(hwlib::target::pins::dac0);    
+    auto inputpin5 = hwlib::target::pin_in(hwlib::target::pins::dac0);
+    auto inputpin6 = hwlib::target::pin_in(hwlib::target::pins::d52); 
+    auto inputpin7  = hwlib::target::pin_in(hwlib::target::pins::d53);     
     mask = 0x1U << 15;
     mask |= 0x1U << 17;                      // create mask to cover all pins
     mask |= 0x1U << 18;
     mask |= 0x1U << 19;
     mask |= 0x1U << 20;
+    mask2 = 0x1U << 21;
+    mask2 |= 0x1U << 14;
+    mask |= mask2;
     PIOB->PIO_IFER = mask;
     PIOB->PIO_DIFSR = mask;
     PIOB->PIO_IER = mask;                   //enable interrupts on pins
     PIOB->PIO_ESR = mask;                   //use edge detection
-    PIOB->PIO_AIMER = mask;                 //use FELLSR for mode
+    PIOB->PIO_AIMER = mask;                //use FELLSR for mode
+    PIOB->PIO_REHLSR = mask2;
 }
 void Buttoninterrupter::refreshregister(){
     registercont = PIOB->PIO_ISR;                   //take content of the interrupt status register and store it in registercont, needed because the registers clears on read
@@ -29,7 +35,7 @@ void Buttoninterrupter::refreshregister(){
 bool Buttoninterrupter::read(uint8_t pin){
     
     
-    if((pin<21&&pin>16)||(pin==15)){                                     //check if button is within range
+    if((pin<22&&pin>16)||(pin==15)||(pin==14)){                                     //check if button is within range
     return (( registercont & 0x1U << pin ) != 0 );          // read stored copy of the register for given button
     }
     else{
