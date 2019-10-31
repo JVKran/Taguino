@@ -62,7 +62,8 @@ int main( void ){
 
          hwlib::cout << "\n" << hwlib::flush;                        
 
-         nrf.flush_rx();                                             
+         nrf.flush_rx();  
+         nrf.flush_tx();                                           
          
       }                                  
    }
