@@ -7,25 +7,25 @@
 class playerData {
 	private:
 		const char * name;
-		const int playerNumber;
+		const uint8_t playerNumber;
 		int health = 100;
 		const int teamNumber;
 		int score = 0;
 		int shots = 0;
 	public:
-		playerData(const char * name, const int playerNumber, const int teamNumber = 0);
+		playerData(const char * name, const uint8_t playerNumber, const uint8_t teamNumber = 0);
 
 		const char * getName() const;
-		int getPlayerNumber() const;
-		int getTeamNumber() const;
+		uint8_t getPlayerNumber() const;
+		uint8_t getTeamNumber() const;
 
-		int getHealth() const;
+		uint8_t getHealth() const;
 		void setHealth(const int newHealth);
 
-		int getScore() const;
+		uint8_t getScore() const;
 		void setScore(const int newScore);
 
-		int getShots() const;
+		uint8_t getShots() const;
 		void setShots(const int newShots);
 
 		friend hwlib::ostream& operator<<(hwlib::ostream & stream, const playerData & player){

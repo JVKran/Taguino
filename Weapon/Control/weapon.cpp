@@ -1,6 +1,6 @@
 #include "weapon.hpp"
 
-weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game):
+weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player):
 	task("Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
@@ -9,7 +9,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	semiButton(button(19, &handler, this, 'S')),
 	handler(handler),
 	game(game),
-	player(game.getPlayerData()),
+	player(player),
 	buttonsChannel(this, "Pressed Buttons Channel")
 {
 	handler.addButton(&triggerButton);
@@ -42,14 +42,14 @@ void weaponManager::main(){
 					dataToSend |= (player.getPlayerNumber() << 10);
 					dataToSend |= (weapon.getId() << 6);
 					if(hwlib::now_us() - lastShot > 1'000'000){
-					measuredDistance = distanceSensor.getDistance();
+						measuredDistance = distanceSensor.getDistance();  //Need one more bit so substract the biggest one
 						lastShot = hwlib::now_us();
 					}
-					dataToSend |= measuredDistance;
+					dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
 					irTransmitter.sendData(dataToSend);
-					hwlib::cout << "Shot fired! Distance: " << measuredDistance << hwlib::endl;
+					hwlib::cout << "Shot fired! Distance: " << measuredDistance << ", Player: " << player.getPlayerNumber() << hwlib::endl;
 					weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
-					Display.showBullets(weapon.getAmountOfBullets());
+					//Display.showBullets(weapon.getAmountOfBullets());
 				} else/* if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)))*/{
 					hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
 					if(weapon.getAmountOfMags() > 0){

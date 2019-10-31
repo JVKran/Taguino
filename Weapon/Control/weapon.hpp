@@ -39,7 +39,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
 	public:
-		weaponManager(display & Display, inputHandler & handler, runGame & game);
+		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player);
 
 		virtual void buttonPressed(const char id) override;
 		void newWeaponSelected(const int id);

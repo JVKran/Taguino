@@ -49,12 +49,14 @@ int main( void ){
    //These values would usually be received from the master...
    const char * playerName = "Jochem";
    const int gameTime = 1001;
+   const uint8_t playerNumber = 1;
+   const uint8_t teamNumber = 1;
 
-   playerData player = playerData(playerName, 1, 1);
+   playerData player = playerData(playerName, playerNumber, teamNumber);
    weaponData weapon = weaponData(2);
    runGame game = runGame(Display, player, gameTime);
    inputHandler handler = inputHandler(50'000);
-   weaponManager gunManager = weaponManager(Display, handler, game);
+   weaponManager gunManager = weaponManager(Display, handler, game, player);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
 

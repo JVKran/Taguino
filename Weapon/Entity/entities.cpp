@@ -1,6 +1,6 @@
 #include "entities.hpp"
 
-playerData::playerData(const char * name, const int playerNumber, const int teamNumber):
+playerData::playerData(const char * name, const uint8_t playerNumber, const uint8_t teamNumber):
 	name(name),
 	playerNumber(playerNumber),
 	teamNumber(teamNumber)
@@ -10,15 +10,15 @@ const char * playerData::getName() const {
 	return name;
 }
 
-int playerData::getPlayerNumber() const {
+uint8_t playerData::getPlayerNumber() const {
 	return playerNumber;
 }
 
-int playerData::getTeamNumber() const {
+uint8_t playerData::getTeamNumber() const {
 	return teamNumber;
 }
 
-int playerData::getHealth() const {
+uint8_t playerData::getHealth() const {
 	return health;
 }
 
@@ -26,7 +26,7 @@ void playerData::setHealth(const int newHealth){
 	health = newHealth;
 }
 
-int playerData::getScore() const {
+uint8_t playerData::getScore() const {
 	return score;
 }
 
@@ -34,7 +34,7 @@ void playerData::setScore(const int newScore){
 	score = newScore;
 }
 
-int playerData::getShots() const {
+uint8_t playerData::getShots() const {
 	return shots;
 }
 
