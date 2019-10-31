@@ -12,20 +12,22 @@ protected:
 	hwlib::window_part weaponWindow;
 	hwlib::window_part bulletWindow;
 	hwlib::window_part magazineWindow;
-	hwlib::terminal_from magazineTerminal;
 	hwlib::window_part healthWindow;
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
 	hwlib::terminal_from scoreTerminal;
 
 	displayedData lastData;
-	bool maxBulletsDrawn = false;	
+	bool maxBulletsDrawn = false;
+	bool maxMagazinesDrawn = false;	
 
 	const lookup <int, 360> xCoordinates;
 	const lookup <int, 360> yCoordinates;
 	void drawUnknown();
 	void drawShotgun();
 	void drawPistol();
+	void drawMaxAmmo();
+	void drawInstaKill();
 	
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
@@ -33,7 +35,6 @@ public:
 		weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 		bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 		magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
-		magazineTerminal(magazineWindow, hwlib::font_default_8x8()),
 		healthWindow(oled, hwlib::xy(0,40), hwlib::xy(40,46)),
 		timeWindow(oled, hwlib::xy(107,0), hwlib::xy(128,21)),
 		powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
@@ -52,6 +53,8 @@ public:
 	void showWeapon(int weaponID);
 	void selectedSetting(const int setting);
 	void showTime(const double remainingSeconds, const double totalSeconds);
+	void showPowerUp(int powerUpID);
+	void selectedSetting(const int setting);
 
 };
 
