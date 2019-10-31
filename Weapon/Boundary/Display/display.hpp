@@ -26,6 +26,8 @@ protected:
 	void drawUnknown();
 	void drawShotgun();
 	void drawPistol();
+	void drawMaxAmmo();
+	void drawInstaKill();
 	
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
@@ -49,7 +51,7 @@ public:
 	void showMagazines(int amountOfMagazines);
 	void showWeapon(int weaponID);
 	void showTime(const double remainingSeconds, const double totalSeconds);
-	void showPowerUp(const int );
+	void showPowerUp(int powerUpID);
 	void selectedSetting(const int setting);
 
 };

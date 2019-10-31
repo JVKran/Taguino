@@ -161,6 +161,59 @@ void display::showTime(const double remainingSeconds, const double totalSeconds)
 	timeWindow.flush();
 }
 
+void display::showPowerUp(int powerUpID){
+	if(powerUpID == 0){
+		drawMaxAmmo();
+	}
+	else if(powerUpID == 1){
+		drawInstaKill();
+	}
+}
+
+void display::drawMaxAmmo(){
+	//Left Bullet
+	hwlib::line(hwlib::xy(4, 5), hwlib::xy(4, 13)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(6, 5), hwlib::xy(6, 13)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(4, 13), hwlib::xy(7, 13)).draw(powerUpWindow);
+
+	hwlib::line(hwlib::xy(5, 2), hwlib::xy(6, 5)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(5, 2), hwlib::xy(4, 5)).draw(powerUpWindow);
+
+	//Right Bullet
+	hwlib::line(hwlib::xy(16, 5), hwlib::xy(16, 13)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(18, 5), hwlib::xy(18, 13)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(16, 13), hwlib::xy(19, 13)).draw(powerUpWindow);
+
+	hwlib::line(hwlib::xy(17, 2), hwlib::xy(18, 5)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(17, 2), hwlib::xy(16, 5)).draw(powerUpWindow);
+
+	//Mid Bullet
+	hwlib::line(hwlib::xy(10, 3), hwlib::xy(10, 11)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(12, 3), hwlib::xy(12, 11)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(10, 11), hwlib::xy(13, 11)).draw(powerUpWindow);
+
+	hwlib::line(hwlib::xy(11, 0), hwlib::xy(10, 3)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(11, 0), hwlib::xy(12, 3)).draw(powerUpWindow);
+	powerUpWindow.flush();
+}
+
+void display::drawInstaKill(){
+	hwlib::line(hwlib::xy(3,0), hwlib::xy(8,0)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(2,1), hwlib::xy(9,1)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(1,2), hwlib::xy(10,2)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(1,3), hwlib::xy(10,3)).draw(powerUpWindow);
+	//Eyes
+	hwlib::line(hwlib::xy(3,4), hwlib::xy(5,4)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(8,4), hwlib::xy(10,4)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(3,5), hwlib::xy(5,5)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(8,5), hwlib::xy(10,5)).draw(powerUpWindow);
+
+	hwlib::line(hwlib::xy(1,6), hwlib::xy(8,6)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(2,7), hwlib::xy(2,9)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(4,7), hwlib::xy(4,9)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(6,7), hwlib::xy(6,9)).draw(powerUpWindow);
+	hwlib::line(hwlib::xy(2,7), hwlib::xy(6,7)).draw(powerUpWindow);
+}
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
 

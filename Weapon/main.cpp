@@ -21,13 +21,14 @@ int main( void ){
    auto Display = display(oled, xCoordinates, yCoordinates);
    oled.clear();  
    oled.flush(); 
-   Display.showTime(15, 60);
-   Display.showBullets(12);
-   Display.showWeapon(0);
-   Display.showMagazines(1);
-   Display.showHealthBar();
-   Display.updateHealth(100,72);
+   // Display.showTime(15, 60);
+   // Display.showBullets(12);
+   // Display.showWeapon(0);
+   // Display.showMagazines(1);
+   // Display.showHealthBar();
+   // Display.updateHealth(100,72);
 
+   Display.showPowerUp(1);
    oled.flush();
 
    const char * playerName1 = "Jochem";	//This would usually be received from the master...
