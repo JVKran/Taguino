@@ -1,10 +1,11 @@
 #include "mp3.hpp"
 #include "hwlib.hpp"
+/*
 send::send(hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive):
 	mp3Transmit( mp3Transmit ),
 	mp3Receive( mp3Receive )
 { hwuart();}
-
+*/
 hwuart::hwuart(){
 
 		    // enable the clock to port A
@@ -27,7 +28,7 @@ hwuart::hwuart(){
 	    USART0->US_BRGR = 567; 
 
 	    // No parity, normal channel mode.
-	    USART0->US_MR = US_MR_PAR_NO /*| US_MR_NBSTOP_1_BIT | US_MR_CHRL_8_BIT*/ ;
+	    USART0->US_MR = US_MR_PAR_NO | US_MR_NBSTOP_1_BIT | US_MR_CHRL_8_BIT;
 
 	    // Disable all interrupts.	  
 	    USART0->US_IDR = 0xFFFFFFFF;   
@@ -45,7 +46,7 @@ hwuart::hwuart(){
 
 	char hwuart::usart_getc(){
 	   // uart_init() is not needed because uart_char_available does that
-	   while( ! usart_char_available() ){}
+	   //while( ! usart_char_available() ){}
 	   return USART0->US_RHR; 
 	}
 	void hwuart::usart_putc( char c ){
@@ -56,7 +57,7 @@ hwuart::hwuart(){
 
 	}
 
-
+/*
 void send::readUart(){  hwlib::cout<<uint8_t(usart_getc())<<"\n"; }
 
 void send::sendUart( uint8_t c ){
@@ -68,12 +69,25 @@ void send::sendUart( uint8_t c ){
 	//}
 	//hwlib::cout<<"ja"<<hwlib::endl;
 }
+*/
+void mp3::playSound(uint8_t sound){
 
+		uint8_t testArray[10] = { 0x7E, 0xFF, 0x06, 0x03, 0x00, 0x00, sound, 0xFF, 0xFF, 0xEF };
+		uint16_t checksum = -( testArray[1] + testArray[2] + testArray[3] + testArray[4] + testArray[4] + testArray[5]+ testArray[6] );
+		uint8_t testArray2[10] = { testArray[0], testArray[1], testArray[2], testArray[3], testArray[4], testArray[5], testArray[6], uint8_t(checksum >> 8), uint8_t (checksum & 0xFF), 0xEF }; //Add all and invert it
+			hwlib::wait_ms(100);
+		for(int i=0; i<10; i++){
+			usart_putc(testArray2[i]);
+			hwlib::wait_us(100);
+		}
+
+}
+/*
 void send::executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2 ){ 		// Command, folder(in numbers 1-99), song(0-255)
-	/*uint16_t checksum = -( versionByte + commandLength + CMD + acknowledge + par1 + par2 ); //Add all and invert it
+	uint16_t checksum = -( versionByte + commandLength + CMD + acknowledge + par1 + par2 ); //Add all and invert it
 	uint8_t commandLine[10] = { startByte, versionByte, commandLength, CMD, acknowledge, 
 											 par1, par2, uint8_t(checksum >> 8), uint8_t (checksum & 0xFF), endByte}; // checksum shifting to send the first half and the second half as show
-	*///126, 255, 6, CMD, 01,
+	//126, 255, 6, CMD, 01,
 	uint8_t testArray[10] = { 0x7E, 0xFF, 0x06, 0x03, 0x00, 0x00, 0x01, 0xFF, 0xE6, 0xEF };
 	for( uint8_t i = 0; i<10; i++){
 		sendUart( testArray[i] );
@@ -93,6 +107,7 @@ void mp3::pauseSound(){ executeCMD( 0x0E, 0, 0 );}					    //Pause
 void mp3::setVolume( int volume ){ executeCMD( 6, 0, volume); };		// 6=set volume, nothing, volume range 0-30
 
 void mp3::init(){ executeCMD( 0x3F, 0, 0 );}
+*/
 //void mp3Control::dataReceived( uint32_t data, sounds select ){ //Pseudocode ; Read data from the transceiver and play the right sound
 	
 //	if(data == select[shot/death/win/lose/powerup]){ 

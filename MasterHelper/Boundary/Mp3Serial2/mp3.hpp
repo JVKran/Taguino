@@ -28,16 +28,16 @@ class hwuart{
 
 class send : public hwuart{
 private:
-	hwlib::pin_out & mp3Transmit;
-	hwlib::pin_in & mp3Receive;
+	//hwlib::pin_out & mp3Transmit;
+	//hwlib::pin_in & mp3Receive;
 public:
-	send( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
+	//send( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
 	void readUart();
 	//void sendBit(bool b);
 	//void sendByte( uint8_t c);
-	void sendArray( const uint8_t * array, int size );
-	void sendUart( uint8_t c );
-	void executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2);
+	//void sendArray( const uint8_t * array, int size );
+	//void sendUart( uint8_t c );
+	//void executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2);
 };
 
 
@@ -46,11 +46,11 @@ public:
 
 class mp3 : public send {
 public:
-	mp3( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
-	void init();
-	void playSound( int sound );
-	void pauseSound();
-	void setVolume( int volume ); //Van 0-30
+	//mp3( hwlib::pin_out & mp3Transmit, hwlib::pin_in & mp3Receive );
+	//void init();
+	void playSound( uint8_t sound );
+	//void pauseSound();
+	//void setVolume( int volume ); //Van 0-30
 };
 //Deze klasse is voor wanneer de nrf goed werkt
 //class mp3Control : public mp3{
