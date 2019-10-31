@@ -15,7 +15,7 @@ class runGame : public receiverListener, public rtos::task<> {
     	RGBLed Led = RGBLed();
 
     	hwlib::target::pin_in irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
-  		receiver irReceiver = receiver(irReceiverPin, this);
+  		receiver irReceiver;;
   		uint16_t receivedData;
 
   		rtos::clock secondClock;
@@ -24,7 +24,7 @@ class runGame : public receiverListener, public rtos::task<> {
   		rtos::channel<uint16_t, 10> receivedDataChannel;
   		rtos::timer updateClockTimer;
 	public:
-		runGame(display & Display, const playerData & player, const int playSeconds);
+		runGame(display & Display, const playerData & player, const int playSeconds, const long long int duration = 1000);
 		playerData getPlayerData();
 
 		virtual void dataReceived(const uint16_t data);

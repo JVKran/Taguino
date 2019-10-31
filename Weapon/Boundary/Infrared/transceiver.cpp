@@ -78,9 +78,9 @@ uint8_t transmitter::calculateControlBits(const uint16_t data){
 /// Constructor
 /// \details
 /// This constructor has one mandatory parameter; the pin to which the receiver is attached.
-receiver::receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener):
+receiver::receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener, const long long int duration):
    task("Infrared Receiving Task"),
-   pollClock(this, 100, "Infrared Poll Clock"),
+   pollClock(this, duration, "Infrared Poll Clock"),
    irReceiver(irReceiver),
    listener(receivedListener)
 {}

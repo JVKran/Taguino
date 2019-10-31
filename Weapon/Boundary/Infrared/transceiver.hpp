@@ -43,7 +43,7 @@ private:
 
 	bool readBit(const uint16_t duration = 800);
 public:
-	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener);
+	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener, const long long int duration = 1000);
 
 	bool dataAvailable();
 	char readChar();

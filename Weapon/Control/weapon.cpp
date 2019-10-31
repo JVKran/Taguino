@@ -33,6 +33,7 @@ void weaponManager::newWeaponSelected(const int id){
 
 void weaponManager::main(){
 	for(;;){
+		hwlib::cout << "WeaponManaging Task" << hwlib::endl;
 		wait(buttonsChannel);
 		readButton = buttonsChannel.read();
 		switch(readButton){
