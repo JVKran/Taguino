@@ -93,7 +93,8 @@ class weaponData {
 class displayedData {
 	public:
 		int lastBullets = 0;
-		int lastHealth = 0;
+		int lastMagazines =0;
+		int lastHealth = 100;
 		int lastScore = 0;
 		int lastWeaponId = 0;
 };

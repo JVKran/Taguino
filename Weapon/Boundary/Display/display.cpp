@@ -62,10 +62,15 @@ void display::updateHealth(const unsigned int prevHealth, const unsigned int hea
 }
 
 void display::showMagazines(int amountOfMagazines){
-	hwlib::line(hwlib::xy(0,0),hwlib::xy(10,0)).draw(magazineWindow);					//topMagazine
-	hwlib::line(hwlib::xy(0,0), hwlib::xy(0,7)).draw(magazineWindow);					//leftMagazine
-	hwlib::line(hwlib::xy(0,7), hwlib::xy(6,7)).draw(magazineWindow);					//botMagazine
-	hwlib::line(hwlib::xy(6,7), hwlib::xy(10,0)).draw(magazineWindow);					//rightMagazine
+	if(amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 2 || !maxMagazinesDrawn)){
+		for(int i=0; i<amountOfMagazines; i++){
+			hwlib::line(hwlib::xy(i*10,0),hwlib::xy(i*10,0)).draw(magazineWindow);					//topMagazine
+			hwlib::line(hwlib::xy(i*10,0), hwlib::xy(i*10,7)).draw(magazineWindow);					//leftMagazine
+			hwlib::line(hwlib::xy(i*10,7), hwlib::xy(i*10,7)).draw(magazineWindow);					//botMagazine
+			hwlib::line(hwlib::xy(i*10,7), hwlib::xy(i*10,0)).draw(magazineWindow);					//rightMagazine
+		}	
+	}
+
 	magazineWindow.flush();
 }
 

@@ -11,7 +11,7 @@ class receiverListener {
 
 class transmitter {
 private:
-   	hwlib::target::d2_38kHz transmitter = hwlib::target::d2_38kHz();
+   	hwlib::target::d3_38kHz transmitter = hwlib::target::d2_38kHz();
 
    	uint8_t controlBits;
 public:

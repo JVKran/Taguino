@@ -21,6 +21,11 @@ int main( void ){
    oled.clear();  
    oled.flush(); 
    Display.showTime(30, 60);
+   Display.showBullets(9);
+   Display.showWeapon(1);
+   Display.showMagazines(9);
+   Display.showHealthBar();
+   Display.updateHealth(100,90);
 
    oled.flush();
 
