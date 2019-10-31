@@ -1,31 +1,31 @@
 #include "display.hpp"
 
 void display::showBullets(int amountOfBullets){
-	// if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
-	// 	for(int i=0; i<10 && i<amountOfBullets; i++){									
-	// 		hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7)).draw(bulletWindow);			
-	// 	}
-	// 	if(amountOfBullets>10){																	
-	// 		hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			
-	// 		hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			
-	// 		maxBulletsDrawn = true;														//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
-	// 	}
-	// 	else if(amountOfBullets < lastData.lastBullets && amountOfBullets < 10){
-	// 		for(int i =amountOfBullets; i<lastData.lastBullets; i++){
-	// 			hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7), hwlib::black).draw(bulletWindow);
-	// 		}
-	// 		if(lastData.lastBullets>10){
-	// 			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5), hwlib::black).draw(bulletWindow);
-	// 			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3), hwlib::black).draw(bulletWindow);
-	// 		}
-	// 		maxBulletsDrawn = false;
-	// 	}
-	// 	else{
-	// 		maxBulletsDrawn = false;
-	// 	}
-	// 	lastData.lastBullets = amountOfBullets;
-	// 	bulletWindow.flush();
-	// }
+	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
+		for(int i=0; i<10 && i<amountOfBullets; i++){									
+			hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7)).draw(bulletWindow);			
+		}
+		if(amountOfBullets>10){																	
+			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			
+			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			
+			maxBulletsDrawn = true;														//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
+		}
+		else if(amountOfBullets < lastData.lastBullets && amountOfBullets < 10){
+			for(int i =amountOfBullets; i<lastData.lastBullets; i++){
+				hwlib::line(hwlib::xy(i*4,0),hwlib::xy(i*4,7), hwlib::black).draw(bulletWindow);
+			}
+			if(lastData.lastBullets>10){
+				hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5), hwlib::black).draw(bulletWindow);
+				hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3), hwlib::black).draw(bulletWindow);
+			}
+			maxBulletsDrawn = false;
+		}
+		else{
+			maxBulletsDrawn = false;
+		}
+		lastData.lastBullets = amountOfBullets;
+		bulletWindow.flush();
+	}
 }
 
 void display::showHealthBar(){

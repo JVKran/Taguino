@@ -16,6 +16,7 @@ class runGame : public receiverListener, public rtos::task<> {
 
     	hwlib::target::pin_in irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
   		receiver irReceiver = receiver(irReceiverPin, this);
+  		uint16_t receivedData;
 
   		rtos::clock secondClock;
   		int gameSeconds;

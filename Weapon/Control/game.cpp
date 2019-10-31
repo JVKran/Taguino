@@ -26,7 +26,11 @@ void runGame::main(){
 	for(;;){
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
-			hwlib::cout << "Received " << receivedDataChannel.read() << "!!!";
+			receivedData = receivedDataChannel.read();
+			hwlib::cout << "Data Received: " << int(receivedData) << hwlib::endl;
+			hwlib::cout << "Distance: " << (receivedData & 0x3F) * 10 << "cm. "<< hwlib::endl;
+			hwlib::cout << "Playernumber: " << (receivedData >> 10) << hwlib::endl;
+			hwlib::cout << "Weapon: " << ((receivedData & 0x1C0) >> 6);
 		} else if (event == secondClock) {
 			remainingSeconds--;
 			Display.drawHealth(remainingSeconds / 10);
