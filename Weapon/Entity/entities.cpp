@@ -66,8 +66,8 @@ const bool weaponSettings::autoAllowedForWeapon(const int weaponId) const {
 	return autoAllowed[weaponId];
 }
 
-const bool weaponSettings::semiAllowedForWeapon(const int weaponId) const {
-	return semiAllowed[weaponId];
+const bool weaponSettings::burstAllowedForWeapon(const int weaponId) const {
+	return burstAllowed[weaponId];
 }
 
 
@@ -120,8 +120,8 @@ const bool weaponData::autoAllowed() const {
 	return weapons.autoAllowedForWeapon(id);
 }
 
-const bool weaponData::semiAllowed() const {
-	return weapons.semiAllowedForWeapon(id);
+const bool weaponData::burstAllowed() const {
+	return weapons.burstAllowedForWeapon(id);
 }
 
 const int weaponData::bulletsPerMag() const {

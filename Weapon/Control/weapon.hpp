@@ -19,6 +19,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		button leftManualButton;
 		button rightManualButton;
 		inputHandler handler;
+		bool triggerPressed = false;
 
 		transmitter irTransmitter = transmitter();
 		uint16_t dataToSend;
@@ -26,8 +27,12 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		runGame & game;
 		const playerData & player;
 
-		bool autoFireMode;
-		bool semiFireMode;
+		bool autoFireMode = false;
+
+		bool burstFireMode = false;
+		int shotBullets = 0;
+
+		bool manualFireMode = true;
 
 		hwlib::target::pin_in echoPin = hwlib::target::pin_in(hwlib::target::pins::d9);
 		hwlib::target::pin_out triggerPin = hwlib::target::pin_out(hwlib::target::pins::d8);
@@ -37,6 +42,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		int measuredDistance = 0;
 
 		weaponData weapon = weaponData(1, 2, 17);
+		rtos::timer shootTimer;
 
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
@@ -44,7 +50,9 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player);
 
 		virtual void buttonPressed(const char id) override;
+
 		void newWeaponSelected(const int id);
+		void shootBullet();
 
 		void main() override;
 };

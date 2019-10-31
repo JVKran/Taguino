@@ -46,9 +46,9 @@ protected:
 	//rtos::pool<scoreboard> newScoreBoardPool;
 
 	rtos::flag newTimeFlag;
-	rtos::pool<int> newTimePool;
-	const int totalGameTime;
-	int remainingSeconds;
+	rtos::pool<double> newTimePool;
+	const double totalGameTime;
+	double remainingSeconds;
 
 	rtos::flag newPowerUpFlag;
 	int powerUpID;
@@ -67,6 +67,9 @@ public:
 	void drawMagazines();
 
 	void showWeapon(int weaponID);
+	void drawWeapon();
+
+	void showScoreBoard();
 
 	void showTime(const double remainingSeconds);
 	void drawTime();
@@ -75,6 +78,7 @@ public:
 	void drawPowerUp();
 
 	void selectedSetting(const int setting);
+	void selectedWindow(const int window);
 
 	void main() override;
 

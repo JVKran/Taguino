@@ -34,6 +34,15 @@ void interfaceManager::main(){
 		if(event == newPositionFlag){
 			currentPosition = positionPool.read();
 			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
+			if(!currentlyInSetting){
+				Display.selectedWindow(currentPosition % 2);
+			} else {
+				switch(inWhichSetting){
+					case 0:
+						weapon.newWeaponSelected(currentPosition % 2);
+						break;
+				}
+			}
 
 		} else {
 			if(currentlyInSetting){
@@ -41,8 +50,8 @@ void interfaceManager::main(){
 				weapon.newWeaponSelected(currentPosition);
 				rotaryEncoder.setPos(inWhichSetting);
 			} else {
-				Display.selectedSetting(currentPosition);
-				inWhichSetting = currentPosition;
+				Display.selectedSetting(currentPosition % 2);
+				inWhichSetting = currentPosition % 2;
 			}
 			currentlyInSetting = !currentlyInSetting;
 		}

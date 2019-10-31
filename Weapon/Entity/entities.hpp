@@ -45,14 +45,14 @@ class weaponSettings {
 		std::array<int, 5> bulletsPerMag = 			{		6,		17, 		5, 			30, 		30		};
 		std::array<int, 5> maxShotsPerTenSeconds = 	{		40, 	100, 		20,			100, 		140		};
 		std::array<bool, 5> autoAllowed = 			{		false, 	false, 		false, 		true, 		true	};
-		std::array<bool, 5> semiAllowed = 			{		false, 	false, 		false, 		true, 		true	};
+		std::array<bool, 5> burstAllowed = 			{		false, 	false, 		false, 		true, 		true	};
 	public:
 		const char * getName(const int weaponId) const;
 		const int getDamage(const int weaponId, const int distance) const;
 		const int getBulletsPerMag(const int weaponId) const;
 		const int maxShotsPerTime(const int weaponId) const;
 		const bool autoAllowedForWeapon(const int weaponId) const;
-		const bool semiAllowedForWeapon(const int weaponId) const;
+		const bool burstAllowedForWeapon(const int weaponId) const;
 };
 
 class weaponData {
@@ -79,14 +79,14 @@ class weaponData {
 		const int bulletsPerMag() const;
 		const unsigned int maxShotsPerTenSeconds() const;
 		const bool autoAllowed() const;
-		const bool semiAllowed() const;
+		const bool burstAllowed() const;
 
 		friend hwlib::ostream& operator<<(hwlib::ostream & stream, const weaponData & weapon){
 			stream << hwlib::left << "Statistics of weapon " << weapon.getName() << " with ID " << weapon.getId() << "." << hwlib::endl;
 			stream << hwlib::setw(30) << "Bullets: " << weapon.getAmountOfBullets() << hwlib::endl;
 			stream << hwlib::setw(30) << "Magazines: " << weapon.getAmountOfMags() << hwlib::endl;
 			stream << hwlib::setw(30) << "Max shots per second: " << int(weapon.maxShotsPerTenSeconds() / 10) << hwlib::endl;
-			stream << hwlib::setw(30) << "Semi Allowed: " << hwlib::boolalpha << weapon.semiAllowed() << hwlib::endl;
+			stream << hwlib::setw(30) << "Burst Allowed: " << hwlib::boolalpha << weapon.burstAllowed() << hwlib::endl;
 			stream << hwlib::setw(30) << "Auto Allowed: " << hwlib::boolalpha << weapon.autoAllowed() << hwlib::endl;
 			stream << hwlib::setw(30) << "Damagefactor: " << hwlib::boolalpha << weapon.getDamage() << hwlib::endl;
 			return stream;
