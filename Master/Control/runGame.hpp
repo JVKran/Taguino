@@ -5,6 +5,15 @@
 #include "keypad.hpp"
 #include "display.hpp"
 
+// this file contains Doxygen lines
+/// @file
+
+/// \brief
+/// control object to run the game
+/// \details
+/// This object can be used to change the scoreboard, send messages to 
+///players and add a player to the list 
+
 enum keypadID = {};
 enum rotaryID = { LEFT, RIGHT, BUTTON };
 
@@ -24,15 +33,58 @@ private:
 
 public:
 
-	runGame();
+	/// \brief
+    /// constructor
+    /// \details
+    /// This constructor does initialize the values display, rotaryEncoder and keypad
+	runGame( display& d, rotaryEncoder& re, keypad& kp );
 
+	/// \brief
+    /// get the name
+    /// \details
+    /// not sure with this function
 	void damageDone(uint8_t damage);
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to read which key has been pressed
 	void keyPressed();
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to read the if the encoder button has been pressed
 	void encoderPressed();
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to read if the encoder is turning left or right
 	void encoderTurnedToPos(int pos);
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to start the game
 	void startGame();
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to add a player in game
 	void addPlayer();
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// With this function you are able to read what is send in the message
 	void decodeMessage();
+
+	/// \brief
+    /// get the name
+    /// \details
+    /// The main
 	void main();
 
 }
