@@ -24,6 +24,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	Display.showBullets(weapon.getAmountOfBullets());
 	Display.showWeapon(weapon.getId());	
 	Display.showMagazines(weapon.getAmountOfMags());
+	irTransmitter.sendData(43643);
 }
 
 void weaponManager::buttonPressed(const char id){
