@@ -2,7 +2,7 @@
 #include "rtos.hpp"
 #include "runGame.hpp"
 
-runGame::runGame(display& d, rotaryEncoder& re, keypad& kp):
+runGame::runGame(display& o, rotaryEncoder& re, keypad& kp):
 	task("runGame", 3),
 	toetsChannel(this, "toetsChannel");
 	receiveMessageChannel(this, "receiveMessageChannel");

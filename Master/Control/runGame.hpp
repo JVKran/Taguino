@@ -37,7 +37,7 @@ public:
     /// constructor
     /// \details
     /// This constructor does initialize the values display, rotaryEncoder and keypad
-	runGame( display& d, rotaryEncoder& re, keypad& kp );
+	runGame( display& o, rotaryEncoder& re, keypad& kp );
 
 	/// \brief
     /// get the name
