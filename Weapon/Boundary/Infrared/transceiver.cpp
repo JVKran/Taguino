@@ -25,11 +25,11 @@ void transmitter::startCondition(){
 /// for 800us and a low signal for 1600us. The signal is active low; when the transmitter
 /// is transmitting the receiver reads a low signal.
 void transmitter::sendBit(const bool bit, const uint16_t duration){
-   transmitter.write(1);
-   hwlib::wait_us(duration * (1 + bit));
-   transmitter.write(0);
-   hwlib::wait_us(duration * (1 + !bit));
-}
+      transmitter.write(1);
+      hwlib::wait_us(duration * (1 + bit));
+      transmitter.write(0);
+      hwlib::wait_us(duration * (1 + !bit));
+   }
 
 /// \brief
 /// Send Character
@@ -85,15 +85,6 @@ receiver::receiver(hwlib::target::pin_in & irReceiver, receiverListener * receiv
    listener(receivedListener)
 {}
 
-void receiver::main(){
-   for(;;){
-      wait(pollClock);
-      if(dataAvailable()){
-         listener->dataReceived(readData());
-      }
-   }
-}
-
 /// \brief
 /// Data Available
 /// \details
@@ -138,31 +129,17 @@ bool receiver::dataAvailable(){
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
 bool receiver::readBit(const uint16_t duration){
    lowDuration = hwlib::now_us();
-   // while(irReceiver.read()){
-   //    irReceiver.refresh();
-   //    if(hwlib::now_us() - lowDuration > 2400){
-   //       return 0;
-   //    }
-   // }
-   // highDuration = hwlib::now_us();
-   // while(!irReceiver.read()){
-   //    irReceiver.refresh();
-   // }
-   // highDuration = hwlib::now_us() - highDuration;
-   // return (highDuration > duration) ? true : false;
    while(irReceiver.read()){
       irReceiver.refresh();
       if(hwlib::now_us() - lowDuration > 2400){
          return 0;
       }
    }
-   if(hwlib::now_us() - lowDuration > 400){
-      return false;
-   } else {
-      return true;
+   highDuration = hwlib::now_us();
+   while(!irReceiver.read()){
+      irReceiver.refresh();
    }
    highDuration = hwlib::now_us() - highDuration;
-   hwlib::cout<<int(highDuration)<<'\n';
    return (highDuration > duration) ? true : false;
 }
 
@@ -209,6 +186,15 @@ uint8_t receiver::calculateControlBits(const uint16_t data){
       controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
    }
    return controlBits;
+}
+
+void receiver::main(){
+   for(;;){
+      wait(pollClock);
+      if(dataAvailable()){
+         listener->dataReceived(readData());
+      }
+   }
 }
 
 /// \brief
