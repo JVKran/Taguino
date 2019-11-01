@@ -1,3 +1,6 @@
+#ifndef __SIGNUP_HPP
+#define __SIGNUP_HPP
+
 #include "hwlib.hpp"
 #include "rtos.hpp"
 #include "playerData.hpp"
@@ -32,4 +35,6 @@ public:
 	void createPlayer();
 	void main();
 
-}
+};
+
+#endif //__SIGNUP_HPP

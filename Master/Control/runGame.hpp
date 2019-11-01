@@ -1,3 +1,6 @@
+#ifndef __RUNGAME_HPP
+#define __RUNGAME_HPP
+
 #include "hwlib.hpp"
 #include "rtos.hpp"
 #include "playerData.hpp"
@@ -89,4 +92,6 @@ public:
     /// The main
 	void main();
 
-}
+};
+
+#endif //__RUNGAME_HPP

@@ -1,3 +1,6 @@
+#ifndef __NRF24L01CONTROL_HPP
+#define __NRF24L01CONTROL_HPP
+
 #include "hwlib.hpp"
 #include "rtos.hpp"
 
@@ -17,4 +20,6 @@ public:
 	void sendFast();
 	void main();
 
-}
+};
+
+#endif //__NRF24L01CONTROL_HPP
