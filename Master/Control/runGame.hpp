@@ -45,49 +45,49 @@ public:
 	runGame( display& o, NRF24L01Control& nrf, rotaryEncoder& re, keypad& kp );
 
 	/// \brief
-    /// get the name
+    /// change the scoreboard
     /// \details
     /// This function will edit the scoreboard depending on what you give it
 	void changeScoreboard();
 
 	/// \brief
-    /// get the name
+    /// check if key pressed
     /// \details
     /// With this function you are able to read which key has been pressed
 	void keyPressed();
 
 	/// \brief
-    /// get the name
+    /// check if encoder button is pressed
     /// \details
     /// With this function you are able to read the if the encoder button has been pressed
 	void encoderPressed();
 
 	/// \brief
-    /// get the name
+    /// check if encoder has been turned
     /// \details
     /// With this function you are able to read if the encoder is turning left or right
 	void encoderTurnedToPos(int pos);
 
 	/// \brief
-    /// get the name
+    /// start the game
     /// \details
     /// With this function you are able to start the game
 	void startGame();
 
 	/// \brief
-    /// get the name
+    /// create player
     /// \details
     /// With this function you are able to add a player in game
 	void addPlayer();
 
 	/// \brief
-    /// get the name
+    /// decode the nrf message
     /// \details
     /// With this function you are able to read what is send in the message
 	void decodeMessage();
 
 	/// \brief
-    /// get the name
+    /// main
     /// \details
     /// The main
 	void main();

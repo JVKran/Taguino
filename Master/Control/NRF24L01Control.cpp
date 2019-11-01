@@ -7,6 +7,10 @@ NRF24L01Control::NRF24L01Control(){
 
 }
 
+void NRF24L01Control::start(){
+	
+}
+
 void NRF24L01Control::startListening(){
 
 }
