@@ -35,7 +35,7 @@ void display::showBullets(int amountOfBullets){
 
 void display::drawBullets(const bool draw){
 	amountOfBullets = newBulletPool.read();
-	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn) || draw == true){
+	if((amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)) || draw == true){
 		for(int i=0; i<10 && i< amountOfBullets; i++){									
 			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);			
 			hwlib::cout<<"First for loop"<<amountOfBullets<<hwlib::endl;
@@ -388,7 +388,7 @@ void display::main(){
 	for(;;){
 		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
 		if(event == newBulletFlag){
-			drawBullets();
+			drawBullets(false);
 		} else if (event == newMagazineFlag){
 			drawMagazines();
 		} else if (event == newHealthFlag){
