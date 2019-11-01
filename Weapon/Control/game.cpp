@@ -33,6 +33,9 @@ void runGame::main(){
 			hwlib::cout << "Playernumber: " << (receivedData >> 10) << hwlib::endl;
 			hwlib::cout << "Weapon: " << ((receivedData & 0x1C0) >> 6);
 		} else if (event == secondClock) {
+			hwlib::cout<<"Time reduced";
+			HWLIB_TRACE;
+
 			remainingSeconds--;
 		} else {
 			Display.showTime(remainingSeconds);							//Update time on display every gameTime / 100; 

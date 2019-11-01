@@ -35,26 +35,22 @@ void display::showBullets(int amountOfBullets){
 
 void display::drawBullets(const bool draw){
 	amountOfBullets = newBulletPool.read();
-	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn) || draw == true){
+	if((amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)) || draw == true){
 		for(int i=0; i<10 && i< amountOfBullets; i++){									
-			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);			
-			hwlib::cout<<"First for loop"<<amountOfBullets<<hwlib::endl;
+			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);
 		}
 		if(amountOfBullets > 10){																	
 			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			
 			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			
 			maxBulletsDrawn = true;			//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
-			hwlib::cout<<"drawing cross"<<amountOfBullets<<hwlib::endl;
 		}
 		else if(amountOfBullets < lastData.lastBullets && amountOfBullets < 10){
 			for(int i = amountOfBullets; i< lastData.lastBullets; i++){
 				hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7), hwlib::black).draw(bulletWindow);
-				hwlib::cout<<"Second for loop"<<amountOfBullets<<hwlib::endl;
 			}
 			if(lastData.lastBullets > 10){
 				hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5), hwlib::black).draw(bulletWindow);
 				hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3), hwlib::black).draw(bulletWindow);
-				hwlib::cout<<"Removing cross"<<amountOfBullets<<hwlib::endl;
 			}
 			maxBulletsDrawn = false;
 		}
@@ -110,9 +106,9 @@ void display::showMagazines(int amountOfMagazines){
 	newMagazinePool.write(amountOfMagazines);
 }
 
-void display::drawMagazines(){
+void display::drawMagazines(const bool draw){
 	amountOfMagazines = newMagazinePool.read();
-	if(amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 3 || !maxMagazinesDrawn)){
+	if((amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 3 || !maxMagazinesDrawn))|| draw == true){
 		for(int i = 0; i < 3 && i < amountOfMagazines; i++){
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13+10,0)).draw(magazineWindow);						//topMagazine
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13,7)).draw(magazineWindow);							//leftMagazine
@@ -212,6 +208,7 @@ void display::showTime(const double remainingSeconds){
 
 void display::drawTime(){
 	remainingSeconds = newTimePool.read();
+	hwlib::cout<<int(remainingSeconds)<<'\n';
 	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
 	double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
 	//hwlib::cout << "Total: " << totalGameTime << ", Remaining: " << remainingSeconds << ", LocationToBeFilled: " << int(LocationToBeFilled) << hwlib::endl;
@@ -373,10 +370,10 @@ void display::selectedWindow(const int window){
 			drawTime();
 			drawWeapon();
 			drawBullets(true);
-			drawMagazines();
+			drawMagazines(true);
 			showHealthBar();
 			updateHealth();
-			drawPowerUp();
+			drawInstaKill();
 			break;
 		case 1:
 			oled.clear();
@@ -388,14 +385,29 @@ void display::main(){
 	for(;;){
 		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
 		if(event == newBulletFlag){
-			drawBullets();
+			hwlib::cout<<"Ik ben hier :)";
+			HWLIB_TRACE;
+
+			drawBullets(false);
 		} else if (event == newMagazineFlag){
-			drawMagazines();
+			hwlib::cout<<"Ik ben hier :)";
+			HWLIB_TRACE;
+
+			drawMagazines(false);
 		} else if (event == newHealthFlag){
+			hwlib::cout<<"Ik ben hier :)";
+			HWLIB_TRACE;
+
 			updateHealth();
 		} else if (event == newTimeFlag){
+			hwlib::cout<<"Ik ben hier :)";
+			HWLIB_TRACE;
+
 			drawTime();
 		} else if (event == newPowerUpFlag){
+			hwlib::cout<<"Ik ben hier :)";
+			HWLIB_TRACE;
+
 			drawPowerUp();
 		} /*else if (event == newScoreBoardFlag){
 

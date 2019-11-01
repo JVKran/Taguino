@@ -64,7 +64,7 @@ public:
 	void updateHealth();
 
 	void showMagazines(int amountOfMagazines);
-	void drawMagazines();
+	void drawMagazines(const bool draw);
 
 	void showWeapon(int weaponID);
 	void drawWeapon();
