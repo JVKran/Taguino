@@ -10,7 +10,7 @@ enum rotaryID = { LEFT, RIGHT, BUTTON };
 
 class runGame : public rtos::task<>{
 private:
-	enum state_t {};
+	enum state_t { IDLE, NEWMESSAGE, ADDPLAYER, CHANGESCOREBOARD, SENDMESSAGE };
 
 	rtos::channel 	toetsChannel;
 	rtos::channel 	receiveMessageChannel;
