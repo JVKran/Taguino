@@ -17,8 +17,19 @@ private:
 
 	playerData& player;
 	NRF24L01Control& nrf;
+	display& oled;
+	rotaryEncoder& encoder;
+	keypad& key;
 
 
 public:
+
+	signUp();
+
+	void keyPressed();
+	void encoderPressed();
+	void encoderTurnedToPos(int pos);
+	void createPlayer();
+	void main();
 
 }
