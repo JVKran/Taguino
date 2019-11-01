@@ -17,7 +17,7 @@ void messageDecoder::main(){
 		auto p = pauses.read();
 		switch(state){
 			case states::idle:
-				if(p > 4000 && p < 5000){
+				if(p > 1800 && p < 1500){
 					state = states::message;
 					n = 0;
 					m = 0;
@@ -27,7 +27,7 @@ void messageDecoder::main(){
 				if(p > 200 && p < 2000){
 					n++;
 					m = m << 1;
-					m|=(p > 1000) ? 1 : 0;
+					m|=(p > 1200) ? 1 : 0;
 					if(n == 15){
 						state = states::idle;
 						listener.messageReceived(m);

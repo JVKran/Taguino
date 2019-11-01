@@ -5,7 +5,7 @@
 
 class messageListener {
 	public:
-		virtual void messageReceived(const int m) = 0;	
+		virtual void messageReceived(const uint16_t m) = 0;	
 };
 
 //<<<<<<<<<<<<<<<<<<<------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>
@@ -37,7 +37,7 @@ class messageLogger : public rtos::task<>, public messageListener {
 		hwlib::terminal_from messageTerminal = hwlib::terminal_from(messageWindow, messageFont);
 		hwlib::glcd_oled oled;
 
-		rtos::channel<int, 1024> messages;
+		rtos::channel<uint16_t, 1024> messages;
 		rtos::timer clearDisplayTimer;
 
 		enum class states {idle, showmessage};
@@ -46,7 +46,7 @@ class messageLogger : public rtos::task<>, public messageListener {
 	public:
 		messageLogger(hwlib::i2c_bus_bit_banged_scl_sda & bus, const char * name = "");
 
-		void messageReceived(const int m) override {
+		void messageReceived(const uint16_t m) override {
 			messages.write(m);
 		}
 		void main() override;
