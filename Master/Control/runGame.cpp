@@ -2,15 +2,16 @@
 #include "rtos.hpp"
 #include "runGame.hpp"
 
-runGame::runGame(display& o, rotaryEncoder& re, keypad& kp):
+runGame::runGame(display& o, NRF24L01Control& nrf, rotaryEncoder& re, keypad& kp):
 	task("runGame", 3),
-	toetsChannel(this, "toetsChannel");
-	receiveMessageChannel(this, "receiveMessageChannel");
-	newPlayerPool(this, "newPlayerPool");
-	newPlayerFlag(this, "newPlayerFlag")
-	oled(d);
-	encoder(re);
-	key(kp);
+	toetsChannel(this, "toetsChannel"),
+	receiveMessageChannel(this, "receiveMessageChannel"),
+	newPlayerPool(this, "newPlayerPool"),
+	newPlayerFlag(this, "newPlayerFlag"),
+	oled(d),
+	nrf(nrf),
+	encoder(re),
+	key(kp)
 {};
 
 void runGame::changeScoreboard(){

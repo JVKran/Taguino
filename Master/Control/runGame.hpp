@@ -4,6 +4,7 @@
 #include "rotaryEncoder.hpp"
 #include "keypad.hpp"
 #include "display.hpp"
+#include "NRF24L01Control.hpp"
 
 // this file contains Doxygen lines
 /// @file
@@ -27,6 +28,7 @@ private:
 	rtos::flag		newPlayerFlag;
 
 	std::aray<playerData, 32> players = {};
+	NRF24L01Control& nrf;
 	display& oled;
 	rotaryEncoder& encoder;
 	keypad& key;
@@ -37,7 +39,7 @@ public:
     /// constructor
     /// \details
     /// This constructor does initialize the values display, rotaryEncoder and keypad
-	runGame( display& o, rotaryEncoder& re, keypad& kp );
+	runGame( display& o, NRF24L01Control& nrf, rotaryEncoder& re, keypad& kp );
 
 	/// \brief
     /// get the name
