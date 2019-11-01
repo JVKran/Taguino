@@ -25,10 +25,17 @@ void transmitter::startCondition(){
 /// for 800us and a low signal for 1600us. The signal is active low; when the transmitter
 /// is transmitting the receiver reads a low signal.
 void transmitter::sendBit(const bool bit, const uint16_t duration){
-      transmitter.write(1);
-      hwlib::wait_us(duration * (1 + bit));
-      transmitter.write(0);
-      hwlib::wait_us(duration * (1 + !bit));
+      if(bit){
+         transmitter.write(1);
+         hwlib::wait_us(1800);
+         transmitter.write(0);
+         hwlib::wait_us(900);
+      } else {
+         transmitter.write(0);
+         hwlib::wait_us(1800);
+         transmitter.write(1);
+         hwlib::wait_us(900);
+      }
    }
 
 /// \brief
@@ -78,11 +85,8 @@ uint8_t transmitter::calculateControlBits(const uint16_t data){
 /// Constructor
 /// \details
 /// This constructor has one mandatory parameter; the pin to which the receiver is attached.
-receiver::receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener, const long long int duration):
-   task("Infrared Receiving Task"),
-   pollClock(this, duration, "Infrared Poll Clock"),
-   irReceiver(irReceiver),
-   listener(receivedListener)
+receiver::receiver(hwlib::target::pin_in & irReceiver):
+   irReceiver(irReceiver)
 {}
 
 /// \brief
@@ -129,17 +133,31 @@ bool receiver::dataAvailable(){
 /// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
 bool receiver::readBit(const uint16_t duration){
    lowDuration = hwlib::now_us();
+   // while(irReceiver.read()){
+   //    irReceiver.refresh();
+   //    if(hwlib::now_us() - lowDuration > 2400){
+   //       return 0;
+   //    }
+   // }
+   // highDuration = hwlib::now_us();
+   // while(!irReceiver.read()){
+   //    irReceiver.refresh();
+   // }
+   // highDuration = hwlib::now_us() - highDuration;
+   // return (highDuration > duration) ? true : false;
    while(irReceiver.read()){
       irReceiver.refresh();
       if(hwlib::now_us() - lowDuration > 2400){
          return 0;
       }
    }
-   highDuration = hwlib::now_us();
-   while(!irReceiver.read()){
-      irReceiver.refresh();
+   if(hwlib::now_us() - lowDuration > 400){
+      return false;
+   } else {
+      return true;
    }
    highDuration = hwlib::now_us() - highDuration;
+   hwlib::cout<<int(highDuration)<<'\n';
    return (highDuration > duration) ? true : false;
 }
 
@@ -186,15 +204,6 @@ uint8_t receiver::calculateControlBits(const uint16_t data){
       controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
    }
    return controlBits;
-}
-
-void receiver::main(){
-   for(;;){
-      wait(pollClock);
-      if(dataAvailable()){
-         listener->dataReceived(readData());
-      }
-   }
 }
 
 /// \brief
