@@ -6,13 +6,16 @@
 #include "display.hpp"
 
 enum keypadID = {};
+enum rotaryID = { LEFT, RIGHT, BUTTON };
 
 class runGame : public rtos::task<>{
 private:
 	enum state_t {};
 
-	rtos::channel toetsChannel;
-	rtos::channel receiveMessageChannel;
+	rtos::channel 	toetsChannel;
+	rtos::channel 	receiveMessageChannel;
+	rtos::pool		newPlayerPool;
+	rtos::flag		newPlayerFlag;
 
 	std::aray<playerData, 32> players = {};
 	display& oled;
