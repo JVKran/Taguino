@@ -13,7 +13,7 @@ runGame::runGame(display& d, rotaryEncoder& re, keypad& kp):
 	key(kp);
 {};
 
-void runGame::damageDone(uint8_t damage){
+void runGame::changeScoreboard(){
 
 }
 

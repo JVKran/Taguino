@@ -42,8 +42,8 @@ public:
 	/// \brief
     /// get the name
     /// \details
-    /// not sure with this function
-	void damageDone(uint8_t damage);
+    /// This function will edit the scoreboard depending on what you give it
+	void changeScoreboard();
 
 	/// \brief
     /// get the name
