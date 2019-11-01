@@ -29,7 +29,7 @@ class runGame : public receiverListener, public rtos::task<> {
 		
     playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
 
-		virtual void dataReceived(const uint16_t data) override;
+		virtual void dataReceived(const uint16_t data);
 
 		void main() override;
 };
