@@ -40,15 +40,14 @@ void weaponManager::newWeaponSelected(const int id){
 
 void weaponManager::shootBullet(){
 	if(weapon.getAmountOfBullets() > 0 /* && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))*/){
-		dataToSend = 0;
-		dataToSend |= (player.getPlayerNumber() << 10);
-		dataToSend |= (weapon.getId() << 6);
+		dataToSend = 43643;
+		// dataToSend |= (player.getPlayerNumber() << 10);
+		// dataToSend |= (weapon.getId() << 6);
 		// if(hwlib::now_us() - lastShot > 1'000'000){
 		// 	measuredDistance = distanceSensor.getDistance();  //Need one more bit so substract the biggest one
 		// 	lastShot = hwlib::now_us();
 		// }
-		measuredDistance = 200;
-		dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
+		// dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
 		irTransmitter.sendData(dataToSend);
 		hwlib::cout << "Shot fired! Distance: " << measuredDistance << ", Player: " << player.getPlayerNumber() << hwlib::endl;
 		weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);

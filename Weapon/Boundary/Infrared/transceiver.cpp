@@ -25,18 +25,11 @@ void transmitter::startCondition(){
 /// for 800us and a low signal for 1600us. The signal is active low; when the transmitter
 /// is transmitting the receiver reads a low signal.
 void transmitter::sendBit(const bool bit, const uint16_t duration){
-      if(bit){
-         transmitter.write(1);
-         hwlib::wait_us(1800);
-         transmitter.write(0);
-         hwlib::wait_us(900);
-      } else {
-         transmitter.write(0);
-         hwlib::wait_us(1800);
-         transmitter.write(1);
-         hwlib::wait_us(900);
-      }
-   }
+   transmitter.write(1);
+   hwlib::wait_us(duration * (1 + bit));
+   transmitter.write(0);
+   hwlib::wait_us(duration * (1 + !bit));
+}
 
 /// \brief
 /// Send Character
