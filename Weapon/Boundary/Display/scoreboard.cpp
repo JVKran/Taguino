@@ -22,7 +22,6 @@ scoreboard::scoreboard(hwlib::window & window, hwlib::glcd_oled & oled, std::arr
 	// auto terminalFourthPlace 	= hwlib::terminal_from(windowPartFourthPlace, windowFont);
 	// auto terminalFifthPlace 	= hwlib::terminal_from(windowPartFifthPlace, windowFont);
 
-
 	// terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) << players[0].getName() << players[0].getScore();
 	// terminalSecondPlace << hwlib::left <<hwlib::setw(11) << players[1].getName() << players[1].getScore();
 	// terminalThirdPlace 	<< hwlib::left <<hwlib::setw(11) << players[2].getName() << players[2].getScore();

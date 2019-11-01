@@ -14,5 +14,4 @@ int main( void ){
          hwlib::cout << irReceiver.readData() << hwlib::endl;
       }
    }
-
 }

@@ -29,7 +29,11 @@ int main( void ){
    display Display = display(oled, xCoordinates, yCoordinates, gameTime);
    weaponData weapon = weaponData(2);
    runGame game = runGame(Display, player, gameTime, 100);       //Period to check for IR signals in microseconds 1000us = 1ms
+<<<<<<< HEAD
    inputHandler handler = inputHandler(100'000);                   //Period to poll register with buttonstates
+=======
+   inputHandler handler = inputHandler(10'000);                   //Period to poll register with buttonstates
+>>>>>>> 5b8c7489724b7c77911850b09db0b880c78a39b2
    weaponManager gunManager = weaponManager(Display, handler, game, player);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
