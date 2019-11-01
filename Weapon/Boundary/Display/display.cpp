@@ -38,23 +38,19 @@ void display::drawBullets(const bool draw){
 	if((amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)) || draw == true){
 		for(int i=0; i<10 && i< amountOfBullets; i++){									
 			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);			
-			hwlib::cout<<"First for loop"<<amountOfBullets<<hwlib::endl;
 		}
 		if(amountOfBullets > 10){																	
 			hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5)).draw(bulletWindow);			
 			hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3)).draw(bulletWindow);			
 			maxBulletsDrawn = true;			//Doesn't have to be drawn again as long as bullets isnt equal or less than 10
-			hwlib::cout<<"drawing cross"<<amountOfBullets<<hwlib::endl;
 		}
 		else if(amountOfBullets < lastData.lastBullets && amountOfBullets < 10){
 			for(int i = amountOfBullets; i< lastData.lastBullets; i++){
 				hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7), hwlib::black).draw(bulletWindow);
-				hwlib::cout<<"Second for loop"<<amountOfBullets<<hwlib::endl;
 			}
 			if(lastData.lastBullets > 10){
 				hwlib::line(hwlib::xy(39,2), hwlib::xy(39,5), hwlib::black).draw(bulletWindow);
 				hwlib::line(hwlib::xy(38,3), hwlib::xy(41,3), hwlib::black).draw(bulletWindow);
-				hwlib::cout<<"Removing cross"<<amountOfBullets<<hwlib::endl;
 			}
 			maxBulletsDrawn = false;
 		}
