@@ -41,7 +41,7 @@ private:
 
 	uint8_t calculateControlBits(const uint16_t data);
 
-	bool readBit(const uint16_t duration = 800);
+	bool readBit(const uint16_t duration = 700);
 public:
 	receiver(hwlib::target::pin_in & irReceiver, receiverListener * receivedListener, const long long int duration = 1000);
 

@@ -137,6 +137,7 @@ bool receiver::readBit(const uint16_t duration){
       irReceiver.refresh();
    }
    highDuration = hwlib::now_us() - highDuration;
+   hwlib::cout<<int(highDuration)<<'\n';
    return (highDuration > duration) ? true : false;
 }
 
