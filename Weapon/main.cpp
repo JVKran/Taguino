@@ -21,15 +21,15 @@ int main( void ){
 
    //These values would usually be received from the master...
    const char * playerName = "Jochem";
-   const int gameTime = 1001;
+   const int gameTime = 1000;
    const uint8_t playerNumber = 1;
    const uint8_t teamNumber = 1;
 
-   display Display = display(oled, xCoordinates, yCoordinates, gameTime);
    playerData player = playerData(playerName, playerNumber, teamNumber);
+   display Display = display(oled, xCoordinates, yCoordinates, gameTime);
    weaponData weapon = weaponData(2);
-   runGame game = runGame(Display, player, gameTime, 1000);    //Period to check for IR signals
-   inputHandler handler = inputHandler(10'000);               //Period to poll register
+   runGame game = runGame(Display, player, gameTime, 1000);       //Period to check for IR signals in microseconds 1000us = 1ms
+   inputHandler handler = inputHandler(10'000);                   //Period to poll register with buttonstates
    weaponManager gunManager = weaponManager(Display, handler, game, player);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 

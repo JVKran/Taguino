@@ -4,11 +4,11 @@ runGame::runGame(display & Display, const playerData & player, const int playSec
 	Display(Display),
 	player(player),
 	irReceiver(irReceiverPin, this, duration),
-	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),
+	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer")
 {
-	gameSeconds = playSeconds;
+	gameSeconds = playSeconds + 1;										//Startup takes one second
 	remainingSeconds = playSeconds;
 	Display.showTime(remainingSeconds);
 	Display.showHealthBar();
@@ -35,8 +35,8 @@ void runGame::main(){
 		} else if (event == secondClock) {
 			remainingSeconds--;
 		} else {
-			Display.showTime(remainingSeconds);
-			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
+			Display.showTime(remainingSeconds);							//Update time on display every gameTime / 100; 
+			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);		//so time on display is updated 100 times during the entire game.
 		}
 	}
 }

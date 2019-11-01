@@ -12,22 +12,24 @@ class runGame : public receiverListener, public rtos::task<> {
 		display & Display;
 		playerData player;
 
-    	RGBLed Led = RGBLed();
+    RGBLed Led = RGBLed();
 
-    	hwlib::target::pin_in irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
-  		receiver irReceiver;;
-  		uint16_t receivedData;
+    hwlib::target::pin_in irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
+  	receiver irReceiver;;
+  	uint16_t receivedData;
 
-  		rtos::clock secondClock;
-  		int gameSeconds;
-  		int remainingSeconds;
-  		rtos::channel<uint16_t, 10> receivedDataChannel;
-  		rtos::timer updateClockTimer;
+  	rtos::clock secondClock;                           //Activates main() every second to substract 1 from remainingTime.
+  	int gameSeconds;                                   //After initialization remainingSeconds and gameSeconds are equal.
+  	int remainingSeconds;
+
+  	rtos::channel<uint16_t, 10> receivedDataChannel;   //Contains received Infrared Messages.
+  	rtos::timer updateClockTimer;
 	public:
 		runGame(display & Display, const playerData & player, const int playSeconds, const long long int duration = 1000);
-		playerData getPlayerData();
+		
+    playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
 
-		virtual void dataReceived(const uint16_t data);
+		virtual void dataReceived(const uint16_t data) override;
 
 		void main() override;
 };

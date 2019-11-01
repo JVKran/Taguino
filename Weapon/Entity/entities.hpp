@@ -38,6 +38,8 @@ class playerData {
 		}
 };
 
+//WeaponSettings is only used by weaponData to lookup what settings are available. weaponData just calls the function with its ID.
+//Hence it actually is another layer of abstraction; ApplicationLogic.
 class weaponSettings {
 	private:
 		std::array<const char *, 5> weaponNames = 	{	"Shotgun", "Pistol", 	"Sniper", 	"AK-47", 	"M16"	};
