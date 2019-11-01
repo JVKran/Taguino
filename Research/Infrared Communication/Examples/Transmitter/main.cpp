@@ -11,6 +11,7 @@ int main( void ){
 
    	for(;;){
    		irTransmitter.sendData(data);
+   		hwlib::cout<<int(data)<<'\n';
    		hwlib::wait_ms(100);
    	}
 }
