@@ -57,7 +57,8 @@ void messageLogger::main(){
 	for(;;){
 		auto event = wait(messages + clearDisplayTimer);
 		if(event == messages){
-			messageTerminal << "\f" << messages.read() << hwlib::flush;
+			// messageTerminal << "\f" << messages.read() << hwlib::flush;
+			hwlib::cout << messages.read() << hwlib::endl;
 			clearDisplayTimer.set(5'000'000);
 		} else {
 			messageTerminal << "\f     " << hwlib::flush;
