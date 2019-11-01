@@ -23,6 +23,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 
 		transmitter irTransmitter = transmitter();
 		uint16_t dataToSend;
+		hwlib::target::pin_out irReceiverGatePin = hwlib::target::pin_out(hwlib::target::pins::d30);
 
 		runGame & game;
 		const playerData & player;

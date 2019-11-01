@@ -111,6 +111,7 @@ void weaponManager::main(){
 					break;
 			}
 		} else {
+			irReceiverGatePin.write(0);
 			if(manualFireMode){
 				shootBullet();
 			} else if(burstFireMode && triggerPressed){
@@ -123,6 +124,7 @@ void weaponManager::main(){
 				shootBullet();
 				shootTimer.set(100'000);				//Dit moet vervangen worden door "weapon.getMaxShotsPerTenSeconds() / 10"
 			}
+			irReceiverGatePin.write(1);
 		}
 	}
 }
