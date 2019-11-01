@@ -7,18 +7,19 @@ int main(){
 	hwlib::wait_ms(3000);
     		hwuart afspeler;
         
-        /*
+        
         uint8_t testArray[10] = { 0xFF, 0xFF, 0xFF, 0x03, 0x01, 0x01, 0x05, 0xFF, 0xFF, 0xEF };
         
 		for(;;){
-            hwlib::wait_ms(2000);
+            hwlib::wait_ms(500);
         for(int i=0; i<10; i++){
             afspeler.usart_putc(testArray[i]);
             hwlib::wait_us(400);
         }
+        hwlib::cout<<"sending"<<hwlib::endl;
         }
-        */
-       
+        
+       /*
        for(;;){
            if(afspeler.usart_getc() == 254){
                uint8_t testArray[8] = { 0, 0, 0, 0, 0, 0, 0, 0};
@@ -35,4 +36,5 @@ int main(){
        }
        
        }
+       */
 }
