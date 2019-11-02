@@ -1,6 +1,6 @@
 #include "weapon.hpp"
 
-weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player):
+weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, const long long int period):
 	task("Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
@@ -10,6 +10,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	leftManualButton(button(14, &handler, this, 'M', 19)),
 	rightManualButton(button(21, &handler, this, 'M', 18)),
 	handler(handler),
+	irTransmitter(infraredTransmitter(period)),
 	game(game),
 	player(player),
 	shootTimer(this, "Shoot Timer"),
@@ -40,19 +41,19 @@ void weaponManager::newWeaponSelected(const int id){
 }
 
 void weaponManager::shootBullet(){
-	if(weapon.getAmountOfBullets() > 0 /* && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))*/){
+	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
 		dataToSend = 43643;
-		// dataToSend |= (player.getPlayerNumber() << 10);
-		// dataToSend |= (weapon.getId() << 6);
-		// if(hwlib::now_us() - lastShot > 1'000'000){
-		// 	measuredDistance = distanceSensor.getDistance();  //Need one more bit so substract the biggest one
-		// 	lastShot = hwlib::now_us();
-		// }
-		// dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
+		dataToSend |= (player.getPlayerNumber() << 10);
+		dataToSend |= (weapon.getId() << 6);
+		if(hwlib::now_us() - lastShot > 1'000'000){
+			measuredDistance = distanceSensor.getDistance();  //Need one more bit so substract the biggest one
+			lastShot = hwlib::now_us();
+		}
+		dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
 		irTransmitter.sendData(dataToSend);
-		hwlib::cout << "Shot fired! Distance: " << measuredDistance << ", Player: " << player.getPlayerNumber() << hwlib::endl;
+		hwlib::cout << 'S' << hwlib::endl;
 		weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
-	} else/* if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)))*/{
+	} else if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
 		//hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
 		if(weapon.getAmountOfMags() > 0){
 			weapon.setAmountOfMags(weapon.getAmountOfMags() - 1);
@@ -72,38 +73,42 @@ void weaponManager::main(){
 			readButton = buttonsChannel.read();
 			switch(readButton){
 				case 'T':
-					hwlib::cout << "Triggerbutton Pressed" << hwlib::endl;
 					shootTimer.set(100);
 					shotBullets = 0;
 					triggerPressed = true;
 					break;
 				case 'A':
 					hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
-					//if(weapon.autoAllowed()){						//Uitgecomment voor debugdoeleinden; definitieve versie heeft dit wel.
+					if(weapon.autoAllowed()){
 						autoFireMode = true;
 						burstFireMode = false;
 						manualFireMode = false;
 						shotBullets = 0;
-					//}
+						//Display.drawAutoIcon();
+					} else {
+						//Display.drawManualIcon();
+					}
 					break;
 				case 'B':
 					hwlib::cout << "Burstfire-Mode selected" << hwlib::endl;
-					//if(weapon.burstAllowed()){					//Uitgecomment voor debugdoeleinden; definitieve versie heeft dit wel.
+					if(weapon.burstAllowed()){
 						autoFireMode = false;
 						burstFireMode = true;
 						manualFireMode = false;
-					//}
+						//Display.drawBurstIcon();
+					} else {
+						//Display.drawManualIcon();
+					}
 					break;
 				case 'M':
 					hwlib::cout << "Manualfire-Mode selected" << hwlib::endl;
 					autoFireMode = false;
 					burstFireMode = false;
 					manualFireMode = true;
+					//Display.drawManualIcon
 					break;
 				case 'R':
-					hwlib::cout << "Triggerbutton Released" << hwlib::endl;
 					Display.showBullets(weapon.getAmountOfBullets());
-					hwlib::cout << "Kogels: " << weapon.getAmountOfBullets() << hwlib::endl;
 					triggerPressed = false;
 					break;
 				default:
@@ -117,13 +122,12 @@ void weaponManager::main(){
 				if(shotBullets < 5){
 					shotBullets++;
 					shootBullet();
-					shootTimer.set(100'000);			//Dit moet vervangen worden door "weapon.getMaxShotsPerTenSeconds() / 10"
+					shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
 				}
 			} else if(autoFireMode && triggerPressed){
 				shootBullet();
-				shootTimer.set(100'000);				//Dit moet vervangen worden door "weapon.getMaxShotsPerTenSeconds() / 10"
+				shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
 			}
-			irReceiverGatePin.write(1);
 		}
 	}
 }

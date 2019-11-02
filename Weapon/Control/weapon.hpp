@@ -7,7 +7,7 @@
 #include "HCSR04.hpp"
 #include "rtos.hpp"
 #include "game.hpp"
-#include "transceiver.hpp"
+#include "transmitter.hpp"
 
 class weaponManager : public buttonListener, public rtos::task<> {
 	private:
@@ -21,7 +21,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		inputHandler handler;
 		bool triggerPressed = false;
 
-		transmitter irTransmitter = transmitter();
+		infraredTransmitter irTransmitter;
 		uint16_t dataToSend;
 
 		runGame & game;
@@ -47,7 +47,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
 	public:
-		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player);
+		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, const long long int period = 100);
 
 		virtual void buttonPressed(const char id) override;
 

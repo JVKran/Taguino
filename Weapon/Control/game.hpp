@@ -2,21 +2,21 @@
 #define __GAME_HPP
 
 #include "entities.hpp"
-#include "transceiver.hpp"
+#include "receiver.hpp"
 #include "RGBLed.hpp"
 #include "display.hpp"
 #include "rtos.hpp"
 
-class runGame : public receiverListener, public rtos::task<> {
-	private:
-		display & Display;
-		playerData player;
+class runGame : public messageListener, public rtos::task<> {
+private:
+	display & Display;
+	playerData player;
 
     RGBLed Led = RGBLed();
 
-    hwlib::target::pin_in irReceiverPin = hwlib::target::pin_in(hwlib::target::pins::d5);
-  	receiver irReceiver;;
   	uint16_t receivedData;
+
+  	weaponSettings weaponStats = weaponSettings();
 
   	rtos::clock secondClock;                           //Activates main() every second to substract 1 from remainingTime.
   	int gameSeconds;                                   //After initialization remainingSeconds and gameSeconds are equal.
@@ -24,14 +24,14 @@ class runGame : public receiverListener, public rtos::task<> {
 
   	rtos::channel<uint16_t, 10> receivedDataChannel;   //Contains received Infrared Messages.
   	rtos::timer updateClockTimer;
-	public:
-		runGame(display & Display, const playerData & player, const int playSeconds, const long long int duration = 1000);
-		
-    playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
+public:
+	runGame(display & Display, const playerData & player, const int playSeconds);
+	
+	playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
 
-		virtual void dataReceived(const uint16_t data);
+	virtual void messageReceived(const uint16_t data);
 
-		void main() override;
+	void main() override;
 };
 
 

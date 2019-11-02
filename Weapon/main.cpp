@@ -25,12 +25,18 @@ int main( void ){
    const uint8_t playerNumber = 1;
    const uint8_t teamNumber = 1;
 
+   const long long int infraredPollPeriod = 200;
+   const long long int infraredTransmitPeriod = 200;
+   const long long int inputPollPeriod = 100'000;
+
    playerData player = playerData(playerName, playerNumber, teamNumber);
    display Display = display(oled, xCoordinates, yCoordinates, gameTime);
    weaponData weapon = weaponData(2);
-   runGame game = runGame(Display, player, gameTime, 100);       //Period to check for IR signals in microseconds 1000us = 1ms
-   inputHandler handler = inputHandler(10'000);                   //Period to poll register with buttonstates
-   weaponManager gunManager = weaponManager(Display, handler, game, player);
+   runGame game = runGame(Display, player, gameTime);
+   infraredDecoder decoder = infraredDecoder(game);
+   infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
+   inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
+   weaponManager gunManager = weaponManager(Display, handler, game, player, infraredTransmitPeriod);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
    rtos::run();
