@@ -67,11 +67,6 @@ void infraredTransmitter::main(){
                }
                break;
             case substates::HIGH_TRANSMITTING:
-            if(highDuration > 1200){
-               hwlib::cout << 1;
-            } else {
-               hwlib::cout << 0;
-            }
                if(hwlib::now_us() - highStartTime > highDuration){
                   transmitter.write(0);
                   lowStartTime = hwlib::now_us();
