@@ -12,7 +12,6 @@ class receiverListener {
 class transmitter {
 private:
    	hwlib::target::d3_38kHz transmitter = hwlib::target::d3_38kHz();
-   	hwlib::target::pin_out irReceiverGatePin = hwlib::target::pin_out(hwlib::target::pins::d30);
 
    	uint8_t controlBits;
 public:

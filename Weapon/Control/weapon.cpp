@@ -111,7 +111,6 @@ void weaponManager::main(){
 					break;
 			}
 		} else {
-			irReceiverGatePin.write(0);
 			if(manualFireMode){
 				shootBullet();
 			} else if(burstFireMode && triggerPressed){

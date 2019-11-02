@@ -2,6 +2,7 @@
 #define __TRANSCEIVER_HPP
 
 #include "hwlib.hpp"
+#include "rtos.hpp"
 
 class transmitter {
 private:
@@ -18,30 +19,53 @@ public:
    	uint8_t calculateControlBits(const uint16_t data);
 };
 
-class receiver {
+
+
+class highSignalListener {
+public:
+	virtual void highSignalDetected(const int highDuration) = 0;
+};
+
+
+
+class infraredReceiver : public rtos::task<> {
 private:
-	hwlib::target::pin_in irReceiver;
+	hwlib::target::pin_in irReceiver = hwlib::target::pin_in(hwlib::target::pins::d5);
+	highSignalListener & listener;
 
 	uint_fast64_t highDuration = 0;
-	uint_fast64_t lowDuration = 0;
 
-	char receivedChar;
+	rtos::clock sampleClock;
+
+	enum class states {IDLE, SIGNAL};
+	states state = states::IDLE;
+public:
+	infraredReceiver(highSignalListener & listener);
+
+	void main() override;
+};
+
+
+
+class infraredDecoder : public rtos::task<>, public highSignalListener {
+private:
+
+	int highDuration;
+	int receivedBits;
 	uint16_t receivedData;
 
 	uint8_t controlBits;
 	uint8_t receivedControlBits;
+
+	rtos::channel<int, 1024> highDurations;
+	enum class states {IDLE, MESSAGE};
+	states state = states::IDLE;
 public:
-	receiver(hwlib::target::pin_in & irReceiver);
+	infraredDecoder();
 
-	bool dataAvailable();
+	virtual void highSignalDetected(const int highDuration) override;
 
-	bool readBit(const uint16_t duration = 800);
-	char readChar();
-	uint16_t readData();
-
-	void debugTerminal();
-
-	uint8_t calculateControlBits(const uint16_t data);
+	void main() override;
 };
 
 #endif //__TRANSCEIVER_HPP

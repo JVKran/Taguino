@@ -78,154 +78,69 @@ uint8_t transmitter::calculateControlBits(const uint16_t data){
 /// Constructor
 /// \details
 /// This constructor has one mandatory parameter; the pin to which the receiver is attached.
-receiver::receiver(hwlib::target::pin_in & irReceiver):
-   irReceiver(irReceiver)
+infraredReceiver::infraredReceiver(highSignalListener & listener):
+   task("Signal Detecting Task"),
+   listener(listener),
+   sampleClock(this, 100, "Sample Clock")
 {}
 
-/// \brief
-/// Data Available
-/// \details
-/// This function checks if a start condition is currently happening. A start of communication
-/// is recognizable by a high signal for 2400us followed by a low signal for 2400us. Since
-/// neither a low or high bit is represented this way, it must be the start condition.
-bool receiver::dataAvailable(){
-   if(!irReceiver.read()){
-      highDuration = hwlib::now_us();
-      while(!irReceiver.read()){
-         irReceiver.refresh();
-      }
-      highDuration = hwlib::now_us() - highDuration;
-      //If startbit received
-      if(highDuration > 1600){
-         lowDuration = hwlib::now_us();
-         while(irReceiver.read()){
-            irReceiver.refresh();
-         }
-         lowDuration = hwlib::now_us() - lowDuration;
-         if(lowDuration > 1600){
-            return true;
-         } else {
-            return false;
-         }
-      } else {
-         return false;
-      }
-   } else {
-      return false;
-   }
-}
-
-/// \brief
-/// Read Bit
-/// \details
-/// This function returns true if a 1 is received or false when a 0 is received.
-/// It first waits for the signal to become low (which is a high signal from the receiver);
-/// Thus the signal is active low.
-/// It does that since only the duration of the high signal is of interest; that duration determines
-/// if the transmitter sent a 1 or 0.
-/// If a high signal has been received for more than 800us a 1 has been send; 0 otherwise.
-bool receiver::readBit(const uint16_t duration){
-   lowDuration = hwlib::now_us();
-   while(irReceiver.read()){
-      irReceiver.refresh();
-      if(hwlib::now_us() - lowDuration > 2400){
-         return 0;
-      }
-   }
-   highDuration = hwlib::now_us();
-   while(!irReceiver.read()){
-      irReceiver.refresh();
-   }
-   highDuration = hwlib::now_us() - highDuration;
-   return (highDuration > duration) ? true : false;
-}
-
-/// \brief
-/// Read Char
-/// \details
-/// This function returns the character that has been received. This function calls readBit() eight
-/// times since a char consists of eight bits.
-char receiver::readChar(){
-   receivedChar = 0;
-   for(int i = 7; i >= 0; i--){
-      receivedChar |= (readBit() << i);
-   }
-   return receivedChar;
-}
-
-/// \brief
-/// Read Data
-/// \details
-/// This function returns the uint16_t that has been received. This function calls readBit() sixteen
-/// times since a uint16_t consists of sixteen bits.
-uint16_t receiver::readData(){
-   receivedData = 0;
-   receivedControlBits = 0;
-   for(int i = 15; i >= 0; i--){
-      receivedData |= (readBit() << i);
-   }
-   for(int i = 7; i >= 0; i--){
-      receivedControlBits |= (readBit() << i);
-   }
-   //hwlib::cout << "Received Controlbits: " << receivedControlBits << hwlib::endl;
-   //hwlib::cout << "Received Data: " << receivedData << hwlib::endl << hwlib::endl;
-   return (calculateControlBits(receivedData) == receivedControlBits) ? receivedData : 0;
-}
-
-/// \brief
-/// Calculate Control Bits
-/// \details
-/// This function calculates the control bits based on the passed data. It consists of 8 bits whose
-/// value is equal to the xor of bit 0 and bit 7, bit 1 and bit 8, etc.
-uint8_t receiver::calculateControlBits(const uint16_t data){
-   controlBits = 0;
-   for(unsigned int i = 0; i < 8; i++){
-      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
-   }
-   return controlBits;
-}
-
-/// \brief
-/// Read Raw Data
-/// \details
-/// This function was and is being used for debugging purposes. It is only able to read 8 bits at a time
-/// but that's all that's needed to debug and finetune communication. This function prints a decimal representation
-/// of the received character and of course the character itself.
-void receiver::debugTerminal(){
+void infraredReceiver::main(){
    for(;;){
-      if(!irReceiver.read()){
-         highDuration = hwlib::now_us();
-         while(!irReceiver.read()){
-            irReceiver.refresh();
-         }
-         highDuration = hwlib::now_us() - highDuration;
-         //If startbit received
-         if(highDuration > 1600){
-            lowDuration = hwlib::now_us();
-            while(irReceiver.read()){
-               irReceiver.refresh();
+      wait(sampleClock);
+      switch(state){
+         case states::SIGNAL:
+            if(!irReceiver.read()){       //If transmitter is high
+               highDuration += 100;
+            } else {
+               listener.highSignalDetected(highDuration);
+               state = states::IDLE;
             }
-            lowDuration = hwlib::now_us() - lowDuration;
-            if(lowDuration > 1600){
-               receivedChar = 0;
-               for(int i = 7; i >= 0; i--){
-                  while(irReceiver.read()){
-                     irReceiver.refresh();
-                     hwlib::wait_us(50);
-                  }
-                  highDuration = hwlib::now_us();
-                  while(!irReceiver.read()){
-                     irReceiver.refresh();
-                     hwlib::wait_us(50);
-                  }
-                  highDuration = hwlib::now_us() - highDuration;
-                  if(highDuration > 800){
-                     receivedChar |= (1UL << i);
-                  }
+            break;
+         case states::IDLE:
+            if(!irReceiver.read()){
+               state = states::SIGNAL;
+               highDuration = 0;
+            }
+            break;
+      }
+   }
+}
+
+infraredDecoder::infraredDecoder():
+   highDurations(this, "High Durations Channel")
+{}
+
+void infraredDecoder::highSignalDetected(const int highDuration){
+   highDurations.write(highDuration);
+}
+
+void infraredDecoder::main(){
+   for(;;){
+      wait(highDurations);
+      highDuration = highDurations.read();
+      switch(state){
+         case states::IDLE:
+            if(highDuration > 2000 && highDuration < 2800){
+               state = states::MESSAGE;
+               hwlib::cout << "Message received";
+               receivedBits = 0;
+               receivedData = 0;
+               highDuration = highDurations.read();
+            }
+            break;
+         case states::MESSAGE:
+            if(highDuration > 400 && highDuration < 2000){
+               receivedData |= (highDuration > 1200) ? (1UL << (15 - receivedBits)) : 0;
+               receivedBits++;
+               if(receivedBits == 16){
+                  hwlib::cout << ": " << int(receivedData) << hwlib::endl;
+                  state = states::IDLE;
                }
-               hwlib::cout << int(receivedChar) << " = " << receivedChar << hwlib::endl;
+            } else {
+               hwlib::cout << " but exited at bit " << receivedBits << " because highDuration was " << highDuration << "." << hwlib::endl;
+               state = states::IDLE;
             }
-         }
+            break;
       }
    }
 }
