@@ -1,10 +1,19 @@
 #include "hwlib.hpp"
-#include "transceiver.hpp"
+#include "receiver.hpp"
+
+class messageLogger : public messageListener {
+public:
+    virtual void messageReceived(const uint16_t message) override{
+      hwlib::cout << int(message) << hwlib::endl;
+    }
+};
+
 
 int main( void ){	
   hwlib::wait_ms(500);
 
-  infraredDecoder decoder = infraredDecoder();
+  messageLogger logger = messageLogger();
+  infraredDecoder decoder = infraredDecoder(logger);
   infraredReceiver receiver = infraredReceiver(decoder);
   // for(;;){
   // 	if(irReceiver.dataAvailable()){
