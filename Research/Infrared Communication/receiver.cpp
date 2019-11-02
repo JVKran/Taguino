@@ -60,6 +60,7 @@ void infraredDecoder::main(){
          case states::IDLE:
             if(highDuration > 2000 && highDuration < 2800){
                state = states::MESSAGE;
+               hwlib::cout << "Startcondition Received" << hwlib::endl;
                receivedBits = 0;
                receivedData = 0;
                amountOfControlBits = 0;
@@ -73,6 +74,7 @@ void infraredDecoder::main(){
                receivedBits++;
                if(receivedBits == 16){
                   state = states::CONTROL;
+                  hwlib::cout << receivedData << hwlib::endl;
                }
             } else {
                state = states::IDLE;
@@ -89,10 +91,12 @@ void infraredDecoder::main(){
                      state = states::IDLE;
                   } else {
                      state = states::IDLE;
+                     hwlib::cout << "Message: " << receivedData << ", Controlbits: " << receivedControlBits << " which should be " << controlBits << hwlib::endl;
                   }
                }
             } else {
                state = states::IDLE;
+               hwlib::cout << "Message: " << receivedData << ", Controlbits: " << receivedControlBits << " which should be " << controlBits << hwlib::endl;
             }
             break;
       }

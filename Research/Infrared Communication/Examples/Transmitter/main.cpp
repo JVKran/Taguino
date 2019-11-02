@@ -5,18 +5,18 @@
 
 class tester : public rtos::task<> {
 private:
-	infraredEncoder & encoder;
+	infraredTransmitter & Transmitter;
 	rtos::clock testClock;
 public:
-	tester(infraredEncoder & encoder):
-		encoder(encoder),
+	tester(infraredTransmitter & Transmitter):
+		Transmitter(Transmitter),
 		testClock(this, 1'000'000, "TestClock")
 	{}
 
 	void main() override{
 		for(;;){
 			wait(testClock);
-			encoder.sendData(43643);
+			Transmitter.sendData(43643);
 			hwlib::cout << "Sent data" << hwlib::endl;
 		}
 	}
@@ -25,8 +25,8 @@ public:
 int main( void ){	
 	hwlib::wait_ms( 500 );
 
-	auto encoder = infraredEncoder();
-	auto logger = tester(encoder);
+	auto Transmitter = infraredTransmitter();
+	auto logger = tester(Transmitter);
 
 	rtos::run();
 }
