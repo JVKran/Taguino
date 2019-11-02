@@ -18,15 +18,16 @@ private:
    	bool hasBeenControlled;
 
    	uint_fast64_t startedTime;
-   	uint_fast64_t transmittedDuration;
+   	uint_fast64_t highStartTime;
    	uint_fast64_t highDuration;
-   	uint_fast64_t lowTransmittedDuration;
+   	uint_fast64_t lowStartTime;
    	uint_fast64_t lowDuration;
 
    	enum class states {IDLE, COMMUNICATING};
    	states state = states::IDLE;
-   	enum class substates {IDLE, TRANSMITTING, NOT_TRANSMITTING, CONTROLLING};
+   	enum class substates {IDLE, HIGH_TRANSMITTING, LOW_TRANSMITTING, STARTING, CONTROLLING, SENDING};
    	substates substate = substates::IDLE;
+   	substates previousSubstate = substates::IDLE;
 public:
 	infraredTransmitter();
 

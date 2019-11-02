@@ -17,7 +17,6 @@ public:
 		for(;;){
 			wait(testClock);
 			Transmitter.sendData(43643);
-			hwlib::cout << "Sent data" << hwlib::endl;
 		}
 	}
 };

@@ -11,70 +11,84 @@ void infraredTransmitter::main(){
    for(;;){
       auto event = wait(transmitClock+messageChannel);
       if(event == messageChannel && state == states::IDLE){
-         hwlib::cout << "MessageChannel" << hwlib::endl;
-         state = states::COMMUNICATING;
-         substate = substates::TRANSMITTING;
-         hasBeenControlled = false;
-         transmittedDuration = hwlib::now_us();
-         highDuration = 2400;
-         transmitter.write(1);
          dataToTransmit = messageChannel.read();
-         hwlib::cout << "Transmission for data " << dataToTransmit << hwlib::endl;
+         bitsToSend = 15;
+         state = states::COMMUNICATING;
+         substate = substates::STARTING;
+         //hwlib::cout << "Message Received: " << dataToTransmit << hwlib::endl;
          bitsToSend = 15;
       } else if (event == transmitClock && state == states::COMMUNICATING){
-         hwlib::cout << "TransmitClock" << hwlib::endl;
          switch(substate){
-            case substates::CONTROLLING:
-               if(hasBeenControlled){
-                  state = states::IDLE;
-                  break;
+            case substates::STARTING:
+               //hwlib::cout << "Sending Startcondition" << hwlib::endl;
+               if(previousSubstate != substate){
+                  transmitter.write(1);
+                  highStartTime = hwlib::now_us();
+                  highDuration = 2400;
+                  lowDuration = 2400;
+                  previousSubstate = substate;
+                  substate = substates::HIGH_TRANSMITTING;
+               } else {
+                  substate = substates::SENDING;
                }
-               bitsToSend = 7;
-               dataToTransmit = calculateControlBits(dataToTransmit);
-               hwlib::cout << "Sending controlbits " << int(dataToTransmit) << hwlib::endl;
-               hasBeenControlled = true;
-               substate = substates::IDLE;
-               state = states::IDLE;
+               break;
+            case substates::SENDING:
+            //hwlib::cout << "Sending Data" << hwlib::endl;
+               if(bitsToSend >= 0){
+                  if(((dataToTransmit >> bitsToSend) & 1UL) == 1){
+                     highDuration = 1600;
+                     lowDuration = 800;
+                  } else {
+                     highDuration = 800;
+                     lowDuration = 1600;
+                  }
+                  transmitter.write(1);
+                  highStartTime = hwlib::now_us();
+                  previousSubstate = substate;
+                  substate = substates::HIGH_TRANSMITTING;
+                  bitsToSend--;
+               } else {
+                  substate = substates::CONTROLLING;
+                  controlBits = calculateControlBits(dataToTransmit);
+                  bitsToSend = 7;
+               }
+               break;
+            case substates::CONTROLLING:
+            //hwlib::cout << "Sending Controlbits" << hwlib::endl;
+               if(bitsToSend >= 0){
+                  if(((controlBits >> bitsToSend) & 1UL) == 1){
+                     highDuration = 1600;
+                     lowDuration = 800;
+                  } else {
+                     highDuration = 800;
+                     lowDuration = 1600;
+                  }
+                  transmitter.write(1);
+                  highStartTime = hwlib::now_us();
+                  previousSubstate = substate;
+                  substate = substates::HIGH_TRANSMITTING;
+                  bitsToSend--;
+               } else {
+                  substate = substates::IDLE;
+                  state = states::IDLE;
+               }
+               break;
+            case substates::HIGH_TRANSMITTING:
+            //hwlib::cout << "Sending 1" << hwlib::endl;
+               if(hwlib::now_us() - highStartTime > highDuration){
+                  transmitter.write(0);
+                  lowStartTime = hwlib::now_us();
+                  substate = substates::LOW_TRANSMITTING;
+               }
+               break;
+            case substates::LOW_TRANSMITTING:
+            //hwlib::cout << "Sending 0" << hwlib::endl;
+               if(hwlib::now_us() - lowStartTime > lowDuration){
+                  substate = previousSubstate;
+               }
                break;
             case substates::IDLE:
-               hwlib::cout << "IDLE" << hwlib::endl;
-               if(bitsToSend == 0){
-                  substate = substates::CONTROLLING;
-                  break;
-               }
-               transmittedDuration = hwlib::now_us();
-               transmitter.write(1);
-               if((dataToTransmit >> bitsToSend) & 1UL){
-                  highDuration = 1600;
-                  lowDuration = 800;
-               } else {
-                  highDuration = 800;
-                  lowDuration = 1600;
-               }
-               substate = substates::TRANSMITTING;
-               bitsToSend--;
                break;
-            case substates::TRANSMITTING:
-               hwlib::cout << "Transmitting" << hwlib::endl;
-               if(hwlib::now_us() - transmittedDuration > highDuration){
-                  transmitter.write(0);
-                  lowTransmittedDuration = hwlib::now_us();
-                  substate = substates::NOT_TRANSMITTING;
-                  if(highDuration == 2400){
-                     hwlib::cout << "Startcondition sent" << hwlib::endl;
-                  } else if (highDuration == 1600){
-                     hwlib::cout << 0;
-                  } else {
-                     hwlib::cout << 1;
-                  }
-               }
-               break;
-            case substates::NOT_TRANSMITTING:
-               hwlib::cout << "NotTrasmitting" << hwlib::endl;
-               if(hwlib::now_us() - lowTransmittedDuration > lowDuration){
-                  substate = substates::IDLE;
-               }
-               break;  
          }
       }
    }
