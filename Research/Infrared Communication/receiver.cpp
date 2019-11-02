@@ -44,6 +44,14 @@ void infraredDecoder::highSignalDetected(const int highDuration){
    highDurations.write(highDuration);
 }
 
+uint8_t infraredDecoder::calculateControlBits(const uint16_t data){
+   controlBits = 0;
+   for(unsigned int i = 0; i < 8; i++){
+      controlBits |= (((data >> i) & 1UL) ^ ((data >> (i + 8)) & 1UL)) << i;
+   }
+   return controlBits;
+}
+
 void infraredDecoder::main(){
    for(;;){
       wait(highDurations);
@@ -52,10 +60,11 @@ void infraredDecoder::main(){
          case states::IDLE:
             if(highDuration > 2000 && highDuration < 2800){
                state = states::MESSAGE;
-               //hwlib::cout << "Message received";
                receivedBits = 0;
                receivedData = 0;
-               //highDuration = highDurations.read();
+               amountOfControlBits = 0;
+               controlBits = 0;
+               receivedControlBits = 0;
             }
             break;
          case states::MESSAGE:
@@ -63,12 +72,26 @@ void infraredDecoder::main(){
                receivedData |= (highDuration > 1200) ? (1UL << (15 - receivedBits)) : 0;
                receivedBits++;
                if(receivedBits == 16){
-                  //hwlib::cout << ": " << int(receivedData) << hwlib::endl;
-                  listener.messageReceived(receivedData);
-                  state = states::IDLE;
+                  state = states::CONTROL;
                }
             } else {
-               //hwlib::cout << " but exited at bit " << receivedBits << " because highDuration was " << highDuration << "." << hwlib::endl;
+               state = states::IDLE;
+            }
+            break;
+         case states::CONTROL:
+            if(highDuration > 400 && highDuration < 2000){
+               receivedControlBits |= (highDuration > 1200) ? (1UL << (7 - amountOfControlBits)) : 0;
+               amountOfControlBits++;
+               if(amountOfControlBits == 8){
+                  controlBits = calculateControlBits(receivedData);
+                  if(controlBits == receivedControlBits){
+                     listener.messageReceived(receivedData);
+                     state = states::IDLE;
+                  } else {
+                     state = states::IDLE;
+                  }
+               }
+            } else {
                state = states::IDLE;
             }
             break;

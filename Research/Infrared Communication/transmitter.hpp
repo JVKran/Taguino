@@ -4,7 +4,7 @@
 #include "hwlib.hpp"
 #include "rtos.hpp"
 
-class transmitter {
+class infraredTransmitter {
 private:
    	hwlib::target::d3_38kHz transmitter = hwlib::target::d3_38kHz();
 

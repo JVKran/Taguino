@@ -45,14 +45,17 @@ private:
 
 	uint8_t controlBits;
 	uint8_t receivedControlBits;
+	int amountOfControlBits;
 
 	rtos::channel<int, 1024> highDurations;
-	enum class states {IDLE, MESSAGE};
+	enum class states {IDLE, MESSAGE, CONTROL};
 	states state = states::IDLE;
 public:
 	infraredDecoder(messageListener & listener);
 
 	virtual void highSignalDetected(const int highDuration) override;
+
+	uint8_t calculateControlBits(const uint16_t data);
 
 	void main() override;
 };
