@@ -30,9 +30,9 @@ void transceiveMessage::readMSG(){
 	
 	for(;;){                                                           
       if( nrf.checkRXfifo() ){                                       //checks if there is something in the RX FIFO
-         nrf.read( value, len );                                     //reads the RX FIFO
+          nrf.read( value, len );                                     //reads the RX FIFO
 		
-		  if( value[0] < 5 ){										// 0-4 are player
+		  if( value[0] < 5 ){										// 0-4 are players
 		 	writeMSG( value, len, 0 );								// Send data to master
 		  }
 		  if( value[0] == 5 ){										// 5 is master
