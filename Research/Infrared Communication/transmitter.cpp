@@ -14,24 +14,17 @@ void infraredTransmitter::main(){
          dataToTransmit = messageChannel.read();
          bitsToSend = 15;
          state = states::COMMUNICATING;
-         substate = substates::STARTING;
+         substate = substates::HIGH_TRANSMITTING;
+         previousSubstate = substates::SENDING;
+         transmitter.write(1);
+         highStartTime = hwlib::now_us();
+         highDuration = 2400;
+         lowDuration = 2400;
          //hwlib::cout << "Message Received: " << dataToTransmit << hwlib::endl;
          bitsToSend = 15;
+         hwlib::cout << hwlib::endl;
       } else if (event == transmitClock && state == states::COMMUNICATING){
          switch(substate){
-            case substates::STARTING:
-               //hwlib::cout << "Sending Startcondition" << hwlib::endl;
-               if(previousSubstate != substate){
-                  transmitter.write(1);
-                  highStartTime = hwlib::now_us();
-                  highDuration = 2400;
-                  lowDuration = 2400;
-                  previousSubstate = substate;
-                  substate = substates::HIGH_TRANSMITTING;
-               } else {
-                  substate = substates::SENDING;
-               }
-               break;
             case substates::SENDING:
             //hwlib::cout << "Sending Data" << hwlib::endl;
                if(bitsToSend >= 0){
@@ -74,7 +67,11 @@ void infraredTransmitter::main(){
                }
                break;
             case substates::HIGH_TRANSMITTING:
-            //hwlib::cout << "Sending 1" << hwlib::endl;
+            if(highDuration > 1200){
+               hwlib::cout << 1;
+            } else {
+               hwlib::cout << 0;
+            }
                if(hwlib::now_us() - highStartTime > highDuration){
                   transmitter.write(0);
                   lowStartTime = hwlib::now_us();
@@ -82,7 +79,6 @@ void infraredTransmitter::main(){
                }
                break;
             case substates::LOW_TRANSMITTING:
-            //hwlib::cout << "Sending 0" << hwlib::endl;
                if(hwlib::now_us() - lowStartTime > lowDuration){
                   substate = previousSubstate;
                }

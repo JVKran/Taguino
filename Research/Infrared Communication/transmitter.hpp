@@ -25,7 +25,7 @@ private:
 
    	enum class states {IDLE, COMMUNICATING};
    	states state = states::IDLE;
-   	enum class substates {IDLE, HIGH_TRANSMITTING, LOW_TRANSMITTING, STARTING, CONTROLLING, SENDING};
+   	enum class substates {IDLE, HIGH_TRANSMITTING, LOW_TRANSMITTING, CONTROLLING, SENDING};
    	substates substate = substates::IDLE;
    	substates previousSubstate = substates::IDLE;
 public:
