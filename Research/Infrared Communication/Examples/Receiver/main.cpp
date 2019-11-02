@@ -10,7 +10,7 @@ public:
   {}
 
   virtual void messageReceived(const uint16_t message) override{
-    messageTerminal << '\f' << int(message) << hwlib::endl;
+    hwlib::cout << '\f' << int(message) << hwlib::endl;
   }
 };
 

@@ -10,7 +10,7 @@ private:
 public:
 	tester(infraredTransmitter & Transmitter):
 		Transmitter(Transmitter),
-		testClock(this, 1'000'000, "TestClock")
+		testClock(this, 100'000, "TestClock")
 	{}
 
 	void main() override{
