@@ -2,17 +2,35 @@
 #include "receiver.hpp"
 
 class messageLogger : public messageListener {
+private:
+  hwlib::terminal & messageTerminal;
 public:
-    virtual void messageReceived(const uint16_t message) override{
-      hwlib::cout << int(message) << hwlib::endl;
-    }
+  messageLogger(hwlib::terminal & messageTerminal):
+    messageTerminal(messageTerminal)
+  {
+    messageTerminal << "Started" << hwlib::endl;
+  }
+
+  virtual void messageReceived(const uint16_t message) override{
+    messageTerminal << '\f' << int(message) << hwlib::endl;
+  }
 };
 
 
-int main( void ){	
-  hwlib::wait_ms(500);
+int main( void ){
+  auto scl      = hwlib::target::pin_oc{ hwlib::target::pins::scl };
+  auto sda      = hwlib::target::pin_oc{ hwlib::target::pins::sda };
+   
+  auto i2c_bus  = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
+  auto oled     = hwlib::glcd_oled( i2c_bus ); 
+  oled.clear();
+  oled.flush();
 
-  messageLogger logger = messageLogger();
+  auto timeWindow = hwlib::window_part(oled, hwlib::xy(0, 0), hwlib::xy(128, 16));
+  auto timeFont = hwlib::font_default_8x8();
+  auto timeField = hwlib::terminal_from(timeWindow, timeFont);
+
+  messageLogger logger = messageLogger(timeField);
   infraredDecoder decoder = infraredDecoder(logger);
   infraredReceiver receiver = infraredReceiver(decoder);
   // for(;;){

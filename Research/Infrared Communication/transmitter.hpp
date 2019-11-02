@@ -4,20 +4,35 @@
 #include "hwlib.hpp"
 #include "rtos.hpp"
 
-class infraredTransmitter {
+class infraredTransmitter : public rtos::task<> {
 private:
    	hwlib::target::d3_38kHz transmitter = hwlib::target::d3_38kHz();
 
-   	uint8_t controlBits;
+   	rtos::clock transmitClock;
+   	rtos::channel<int, 2048> highDurations;
+   	unsigned int highDuration;
+
+   	unsigned int transmittedDuration;
+   	int lowDuration;
+
+   	enum class states {IDLE, TRANSMITTING, NOT_TRANSMITTING};
+   	states state = states::IDLE;
 public:
-	void startCondition();
+	infraredTransmitter();
 
-   	void sendBit(const bool bit, const uint16_t duration = 700);
-   	void sendChar(const char character);
-   	void sendData(const uint16_t data);
+	void main() override;
 
-   	uint8_t calculateControlBits(const uint16_t data);
+   	void sendBit(const bool bit);
+   	void sendStartCondition();
 };
 
+class infraredEncoder {
+private:
+	infraredTransmitter transmitter = infraredTransmitter();
+	uint8_t controlBits;
+public:
+	void sendData(const uint16_t data);
+	uint8_t calculateControlBits(const uint16_t data);
+};
 
 #endif //__TRANSMITTER_HPP
