@@ -9,13 +9,13 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := KY040.cpp input.cpp
+SOURCES := receiver.cpp
 
 # header files in this project
-HEADERS := KY040.hpp input.hpp
+HEADERS := receiver.hpp
 
 # other places to look for files for this project
-SEARCH  := ../.. ..
+SEARCH  := ../..
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there

@@ -9,15 +9,15 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := KY040.cpp input.cpp
+SOURCES := button.cpp
 
 # header files in this project
-HEADERS := KY040.hpp input.hpp
+HEADERS := button.hpp
 
 # other places to look for files for this project
-SEARCH  := ../.. ..
+SEARCH  := 
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there
-RELATIVE := ../../../..
+RELATIVE := ../../..
 include $(RELATIVE)/Makefile.due
