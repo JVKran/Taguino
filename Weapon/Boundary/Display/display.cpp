@@ -6,7 +6,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
-	timeWindow(oled, hwlib::xy(107,8), hwlib::xy(128,29)),
+	timeWindow(oled, hwlib::xy(107,9), hwlib::xy(128,30)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 	scoreTerminal(oled, hwlib::font_default_8x8()),
 	xCoordinates(xCoordinates),
@@ -33,9 +33,9 @@ void display::showBullets(int amountOfBullets){
 	newBulletPool.write(amountOfBullets);
 }
 
-void display::drawBullets(){
+void display::drawBullets(const bool draw){
 	amountOfBullets = newBulletPool.read();
-	if(amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)){
+	if((amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)) || draw == true){
 		for(int i=0; i<10 && i< amountOfBullets; i++){									
 			hwlib::line(hwlib::xy(i*4,0), hwlib::xy(i*4,7)).draw(bulletWindow);			
 		}
@@ -368,7 +368,8 @@ void display::selectedWindow(const int window){
 			oled.clear();
 			drawTime();
 			drawWeapon();
-			drawBullets();
+			drawBullets(true);
+			drawMagazines();
 			showHealthBar();
 			updateHealth();
 			drawPowerUp();
@@ -383,7 +384,7 @@ void display::main(){
 	for(;;){
 		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
 		if(event == newBulletFlag){
-			drawBullets();
+			drawBullets(false);
 		} else if (event == newMagazineFlag){
 			drawMagazines();
 		} else if (event == newHealthFlag){

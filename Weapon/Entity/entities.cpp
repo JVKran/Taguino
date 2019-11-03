@@ -51,7 +51,11 @@ const char * weaponSettings::getName(const int weaponId) const {
 }
 
 const int weaponSettings::getDamage(const int weaponId, const int distance) const {
-	return damageFactors[weaponId] * distance;
+	if(weaponId >= 0 && weaponId <= 4){
+		return (weaponId == 1) ? damageFactors[weaponId] * (distance / 10) : damageFactors[weaponId];
+	} else {
+		return damageFactors[0];
+	}
 }
 
 const int weaponSettings::getBulletsPerMag(const int weaponId) const {

@@ -57,7 +57,7 @@ public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, const int gameTime);
 
 	void showBullets(int amountOfBullets);
-	void drawBullets();
+	void drawBullets(const bool draw);
 
 	void showHealthBar();
 	void showHealth(const int health);

@@ -1,5 +1,5 @@
 #include "hwlib.hpp"
-#include "transceiver.hpp"
+#include "receiver.hpp"
 
 int main( void ){	
 
