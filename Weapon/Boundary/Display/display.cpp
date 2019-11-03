@@ -1,6 +1,6 @@
 #include "display.hpp"
 
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, const int gameTime):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
@@ -21,7 +21,6 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	//newScoreBoardPool("New Scoreboard Pool"),
 	newTimeFlag(this),
 	newTimePool("New Time Pool"),
-	totalGameTime(gameTime),
 	newPowerUpFlag(this),
 	newPowerUpPool("New Powerup Pool")
 {
@@ -201,7 +200,12 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
-void display::showTime(const double remainingSeconds){
+void display::showTime(const double remainingSeconds, double totalGameSeconds){
+	if(totalGameSeconds == 0){
+		totalGameSeconds = totalGameTime;
+	} else {
+		totalGameTime = totalGameSeconds;
+	}
 	newTimeFlag.set();
 	newTimePool.write(remainingSeconds);
 }

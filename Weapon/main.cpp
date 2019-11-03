@@ -6,7 +6,6 @@
 #include "weapon.hpp"
 #include "game.hpp"
 #include "display.hpp"
-#include "exchanger.hpp"
 #include <array>
 
 int main( void ){	
@@ -32,7 +31,6 @@ int main( void ){
 
    //These values would usually be received from the master...
    const char * playerName = "Jochem";
-   const int gameTime = 1000;
    const uint8_t playerNumber = 1;
    const uint8_t teamNumber = 1;
 
@@ -42,13 +40,12 @@ int main( void ){
    const long long int radioPollPeriod = 100'000;
    
    playerData player = playerData(playerName, playerNumber, teamNumber);
-   display Display = display(oled, xCoordinates, yCoordinates, gameTime);
+   display Display = display(oled, xCoordinates, yCoordinates);
    weaponData weapon = weaponData(2);
-   runGame game = runGame(Display, player, gameTime);
-   exchangeGameData exchanger = exchangeGameData(game, spiBus, radioPollPeriod);
+   inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
+   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler);
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
-   inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
    weaponManager gunManager = weaponManager(Display, handler, game, player, infraredTransmitPeriod);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 

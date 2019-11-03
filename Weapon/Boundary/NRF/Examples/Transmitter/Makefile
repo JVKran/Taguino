@@ -15,7 +15,7 @@ SOURCES := NRF24.cpp
 HEADERS := NRF24.hpp NRF24_register.hpp
 
 # other places to look for files for this project
-SEARCH  := ../..
+SEARCH  := ..
 
 # set RELATIVE to the next higher directory 
 # and defer to the Makefile.* there

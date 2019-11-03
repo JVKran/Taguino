@@ -47,14 +47,14 @@ protected:
 
 	rtos::flag newTimeFlag;
 	rtos::pool<double> newTimePool;
-	const double totalGameTime;
+	double totalGameTime = 0;
 	double remainingSeconds;
 
 	rtos::flag newPowerUpFlag;
 	int powerUpID;
 	rtos::pool<int> newPowerUpPool;
 public:
-	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, const int gameTime);
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates);
 
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
@@ -71,7 +71,7 @@ public:
 
 	void showScoreBoard();
 
-	void showTime(const double remainingSeconds);
+	void showTime(const double remainingSeconds, double totalGameSeconds = 0);
 	void drawTime();
 
 	void showPowerUp(int powerUpID);
