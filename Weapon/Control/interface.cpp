@@ -44,7 +44,7 @@ void interfaceManager::main(){
 			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
 			//If button is pressed while not currently setting anything; we want to enter settingmode.
 			if(!currentlyInSetting){
-				Display.selectedWindow(currentPosition % 2);
+				Display.selectedWindow((currentPosition >= 0) ? currentPosition % 2 : (currentPosition / -1) % 2);
 			} else {
 				//Else if we're setting anything we want to determine what we're setting and perform actions based on the position.
 				switch(inWhichSetting){

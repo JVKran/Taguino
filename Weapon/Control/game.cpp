@@ -27,6 +27,7 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	Display.showTime(remainingSeconds, gameSeconds);
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	Display.showHealthBar();
+	//Display.showScore(player.getScore());
 }
 
 void runGame::main(){
@@ -85,6 +86,13 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 	hwlib::cout << hwlib::endl;
 	switch(data[0]){
 		case 1:
+			for(int i = 0; i < signedUpPlayers; i++){
+				hwlib::cout << "Player " << board.playerNumbers[i] << ": ";
+				for(int j = 0; j < 8; j++){
+					hwlib::cout << board.playerNames[i][j];
+				}
+				hwlib::cout << hwlib::endl;
+			}
 			game->gameStartSignalReceived(data[1]);
 			break;
 		case 2:

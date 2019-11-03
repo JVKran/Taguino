@@ -3,6 +3,7 @@
 display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
+	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
@@ -82,6 +83,9 @@ void display::showHealthBar(){
 
 void display::updateHealth(){
 	health = newHealthPool.read();
+	if(health < 0 || health > 100){
+		health = lastData.lastHealth;
+	}
 	int amountOfBlack = 27-((100 - health) * 0.27);
 	int amountOfWhite = (100 - health) * 0.27;
 	if(lastData.lastHealth < health){
@@ -110,7 +114,7 @@ void display::showMagazines(int amountOfMagazines){
 
 void display::drawMagazines(){
 	amountOfMagazines = newMagazinePool.read();
-	if(amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 3 || !maxMagazinesDrawn)){
+	if((amountOfMagazines < 3 || !maxMagazinesDrawn) && amountOfMagazines >= 0){
 		for(int i = 0; i < 3 && i < amountOfMagazines; i++){
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13+10,0)).draw(magazineWindow);						//topMagazine
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13,7)).draw(magazineWindow);							//leftMagazine
@@ -139,8 +143,8 @@ void display::drawMagazines(){
 			maxMagazinesDrawn = false;
 		}
 		lastData.lastMagazines = amountOfMagazines;
+		magazineWindow.flush();
 	}
-	magazineWindow.flush();
 }
 
 void display::showWeapon(int weaponID){
@@ -210,7 +214,7 @@ void display::showScore(const uint8_t score){
 
 void display::drawScore(){
 	score = newScorePool.read();
-	scoreTerminal << '\f' << score * 100;
+	scoreTerminal << '\f' << score * 100 << hwlib::flush;
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
@@ -222,17 +226,19 @@ void display::showTime(const double remainingSeconds, double totalGameSeconds){
 }
 
 void display::drawTime(){
-	remainingSeconds = newTimePool.read();
-	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
-	double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
-	for(int i = 0;i <LocationToBeFilled; i++){
-		if(i < 181){
-			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
-		}else{
-			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-179) + 10, yCoordinates.get(i-179) + 10)).draw(timeWindow);
+	if(currentlySelectedWindow == 0){
+		remainingSeconds = newTimePool.read();
+		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
+		double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
+		for(int i = 0;i <LocationToBeFilled; i++){
+			if(i < 181){
+				hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
+			}else{
+				hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-179) + 10, yCoordinates.get(i-179) + 10)).draw(timeWindow);
+			}
 		}
+		timeWindow.flush();
 	}
-	timeWindow.flush();
 }
 
 void display::showPowerUp(int powerUpID){
@@ -306,8 +312,8 @@ void display::selectedSetting(const int setting){
 		case 0:
 			//Selected to change weapon
 			hwlib::cout << "Setting weapon." << hwlib::endl;
-			hwlib::circle(hwlib::xy(50,5), 2).draw(oled);
-			oled.flush();
+			hwlib::circle(hwlib::xy(5, 5), 2).draw(weaponSettingWindow);
+			weaponSettingWindow.flush();
 			break;
 		case 1:
 			//Selected to activate powerups
@@ -318,7 +324,7 @@ void display::selectedSetting(const int setting){
 		case -1:
 			//Selected to quit setting
 			hwlib::cout << "Finished setting." << hwlib::endl;
-			hwlib::circle(hwlib::xy(50,5), 2, hwlib::black).draw(oled);
+			hwlib::circle(hwlib::xy(5,5), 2, hwlib::black).draw(weaponSettingWindow);
 			hwlib::circle(hwlib::xy(90,45), 2, hwlib::black).draw(oled);
 			oled.flush();
 			break;
@@ -381,6 +387,7 @@ void display::showScoreBoard(){
 void display::selectedWindow(const int window){
 	switch(window){
 		case 0:
+			currentlySelectedWindow = 0;
 			oled.clear();
 			drawTime();
 			drawWeapon();
@@ -390,6 +397,7 @@ void display::selectedWindow(const int window){
 			updateHealth();
 			break;
 		case 1:
+			currentlySelectedWindow = 1;
 			oled.clear();
 			showScoreBoard();
 	}

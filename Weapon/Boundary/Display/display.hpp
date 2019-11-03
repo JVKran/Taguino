@@ -11,6 +11,7 @@ class display : public rtos::task<> {
 protected:
 	hwlib::glcd_oled & oled;
 	hwlib::window_part weaponWindow;
+	hwlib::window_part weaponSettingWindow;
 	hwlib::window_part bulletWindow;
 	hwlib::window_part magazineWindow;
 	hwlib::window_part healthWindow;
@@ -22,6 +23,7 @@ protected:
 	displayedData lastData;
 	bool maxBulletsDrawn = false;
 	bool maxMagazinesDrawn = false;	
+	int currentlySelectedWindow = 0;
 
 	const lookup <int, 360> xCoordinates;
 	const lookup <int, 360> yCoordinates;
