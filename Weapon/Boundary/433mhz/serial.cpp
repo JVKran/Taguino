@@ -81,9 +81,9 @@ hwuart::hwuart(){
                    //look for startbyte
 			uint8_t byte1 = (uint8_t)(playernumber>>8);
 			uint8_t byte2 = (uint8_t)playernumber;
-            uint8_t intArray[2] = {byte1, byte2};
+            uint8_t intArray[3] = {0xFF, byte1, byte2}; //startbyte+data
 			
-            for(int i=0; i<2; i++){
+            for(int i=0; i<3; i++){
 			putc(intArray[i]);
 				hwlib::wait_us(400);
             }	   
