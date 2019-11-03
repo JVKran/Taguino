@@ -5,36 +5,26 @@
 //Als uart niet werkt, io mode gebruiken, veel makkelijker. Adkey1 om te resetten naar eerst lied, daarna met IO 2 verder gaan.
 int main(){
 	hwlib::wait_ms(3000);
-    		hwuart afspeler;
+    		hwuart transceiver;
+            uint16_t data =12345;
         
-        
-        uint8_t testArray[10] = { 0xFF, 0xFF, 0xFF, 0x03, 0x01, 0x01, 0x05, 0xFF, 0xFF, 0xEF };
+        // transmitting code, usefull for testing purpose and as example for what would be in the grenade
+        /*
+
         
 		for(;;){
             hwlib::wait_ms(500);
-        for(int i=0; i<10; i++){
-            afspeler.usart_putc(testArray[i]);
-            hwlib::wait_us(400);
+            transceiver.put_uint(data);
         }
         hwlib::cout<<"sending"<<hwlib::endl;
         }
-        
-       /*
+        */
+       //receiving code for the weapon 
        for(;;){
-           if(afspeler.usart_getc() == 254){
-               uint8_t testArray[8] = { 0, 0, 0, 0, 0, 0, 0, 0};
-               for(int i=0; i<8; i++){
-           testArray[i] = afspeler.usart_getc();
-           hwlib::wait_us(800);
-               }
-               for(int i=0; i<8; i++){
-           hwlib::cout<<testArray[i]<<hwlib::endl; 
-           hwlib::wait_us(800);
-               }
+
+           data = transceiver.get_uint();
                hwlib::cout<<hwlib::endl<<hwlib::endl<<hwlib::endl;
-           
+               hwlib::wait_us(800);
        }
        
-       }
-       */
 }
