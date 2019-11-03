@@ -40,23 +40,56 @@ hwuart::hwuart(){
 
 
 
-	bool hwuart::usart_char_available(){
+	bool hwuart::char_available(){
 	   	
 	   return ( USART0->US_CSR & 1 ) != 0;
 	}
 
-	char hwuart::usart_getc(){
+	char hwuart::getc(){
 	   // uart_init() is not needed because uart_char_available does that
-	   while( ! usart_char_available() ){}
+	   while( ! char_available() ){}
 	   return USART0->US_RHR; 
 	}
-	void hwuart::usart_putc( char c ){
+	void hwuart::putc( char c ){
 	      
 	   //usart_init();	
 	   while( ( USART0->US_CSR & 2 ) == 0 ){}
 	   USART0->US_THR = c;
 
 	}
+	uint16_t hwuart::get_uint(){
+
+           if(char_available()){                   //needed to stop code from blocking when no message availible
+           if(getc() == 254){                    //look for startbyte
+               uint8_t intArray[2] = { 0, 0};
+               for(int i=0; i<2; i++){
+					intArray[i] = getc();                // get next bytes and put them in array
+					hwlib::wait_us(800);
+               }
+			   return 0x00 | intArray[0]<<8 | intArray[1];
+			   }
+           }
+		   
+			   return 0;
+		   
+		   
+       }
+       
+	
+	void hwuart::put_uint(uint16_t playernumber){
+
+                   //look for startbyte
+			uint8_t byte1 = (uint8_t)(playernumber>>8);
+			uint8_t byte2 = (uint8_t)playernumber;
+            uint8_t intArray[2] = {byte1, byte2};
+			
+            for(int i=0; i<2; i++){
+			putc(intArray[i]);
+				hwlib::wait_us(400);
+            }	   
+       }
+       
+	
 
 /*
 void send::readUart(){  hwlib::cout<<uint8_t(usart_getc())<<"\n"; }
