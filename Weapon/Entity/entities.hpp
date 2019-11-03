@@ -104,5 +104,13 @@ class displayedData {
 		int lastWeaponId = 0;
 };
 
+class scoreBoard {
+public:
+	std::array<char[8], 32> playerNames = {};
+	std::array<uint8_t, 32> playerNumbers = {};
+	std::array<uint8_t, 32> playerPositions = {};
+	std::array<uint8_t, 32> playerScores = {};
+};
+
 
 #endif //__ENTITIES_HPP

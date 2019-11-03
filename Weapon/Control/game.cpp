@@ -3,7 +3,7 @@
 runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler):
 	Display(Display),
 	player(player),
-	exchanger(exchangeGameData(this, spiBus, duration)),
+	exchanger(exchangeGameData(Display, this, spiBus, duration)),
 	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer"),
@@ -24,7 +24,7 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	handler.resume();
 	gameSeconds = timeToPlay * 10;
 	remainingSeconds = timeToPlay * 10;
-	Display.showTime(timeToPlay * 10, timeToPlay * 10);
+	Display.showTime(remainingSeconds, gameSeconds);
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	Display.showHealthBar();
 }
@@ -47,6 +47,9 @@ void runGame::main(){
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;
+			if(remainingSeconds <= 0){
+				handler.suspend();				//Prevent shooting
+			}
 		} else {
 			Display.showTime(remainingSeconds);							//Update time on display every gameTime / 100; 
 			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);		//so time on display is updated 100 times during the entire game.
@@ -54,7 +57,8 @@ void runGame::main(){
 	}
 }
 
-exchangeGameData::exchangeGameData(runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration):
+exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration):
+	Display(Display),
 	game(game),
 	radio(NRF24(spiBus, ce, csn, duration, game->getPlayerData().getPlayerNumber()))
 {
@@ -81,23 +85,50 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 	hwlib::cout << hwlib::endl;
 	switch(data[0]){
 		case 1:
-			hwlib::cout << "Game started" << hwlib::endl;
 			game->gameStartSignalReceived(data[1]);
 			break;
 		case 2:
-			hwlib::cout << "Playernumber " << data[1] << " has a score of " << data[2] << " hence his position is " << data[3] << hwlib::endl;
+			if(data[1] == game->getPlayerData().getPlayerNumber()){
+				game->getPlayerData().setScore(data[2]);
+				Display.showScore(data[2]);
+			}
+			//What's happening here is just a start. Needs to be fixed; doesn't work.
+			hwlib::cout << "Player";
+			for(int i = 0; i < 31; i++){
+				if(board.playerNumbers[i] == data[1]){
+					for(int j = 0; j < 8; j++){
+						hwlib::cout << board.playerNames[i][j];
+					}
+				}
+			}
+
+			hwlib::cout << " has a score of " << data[2] << " hence his position is " << data[3] << hwlib::endl;
+			for(int i = 30; i > data[3]; i--){
+				board.playerNumbers[i] = board.playerNumbers[i - i];
+			}
 			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
+			Display.showPowerUp(0);
 			break;
 		case 4:
 			hwlib::cout << "InstaDeath Activated" << hwlib::endl;
-			break;
-		case 5:
-			hwlib::cout << "Time to Play: " << data[1] << " out of " << data[2] << " seconds." << hwlib::endl;
+			Display.showPowerUp(1);
 			break;
 		case 6:
-			hwlib::cout << "PlayerNumber " << data[1] << " has name " << data[2] << data[3] << data[4] << hwlib::endl;
+			hwlib::cout << "PlayerNumber " << data[1] << " has name ";
+			board.playerNumbers[signedUpPlayers] = data[1];
+			for(int i = 2; i <= 10; i++){
+				if(data[i] == 0){
+					board.playerNames[signedUpPlayers][i - 2] = ' ';
+				} else {
+					board.playerNames[signedUpPlayers][i - 2] = char(data[i]);
+				}
+			}
+			signedUpPlayers++;
+			break;
+		case 7:
+			Display.showPowerUp(10);
 			break;
 	}
 }

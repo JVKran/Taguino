@@ -16,6 +16,7 @@ protected:
 	hwlib::window_part healthWindow;
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
+	hwlib::window_part scoreWindow;
 	hwlib::terminal_from scoreTerminal;
 
 	displayedData lastData;
@@ -33,6 +34,10 @@ protected:
 	rtos::flag newBulletFlag;
 	rtos::pool<int> newBulletPool;
 	int amountOfBullets;
+
+	rtos::flag newScoreFlag;
+	rtos::pool<uint8_t> newScorePool;
+	uint8_t score;
 
 	rtos::flag newMagazineFlag;
 	rtos::pool<int> newMagazinePool;
@@ -70,6 +75,9 @@ public:
 	void drawWeapon();
 
 	void showScoreBoard();
+
+	void showScore(const uint8_t score);
+	void drawScore();
 
 	void showTime(const double remainingSeconds, double totalGameSeconds = 0);
 	void drawTime();

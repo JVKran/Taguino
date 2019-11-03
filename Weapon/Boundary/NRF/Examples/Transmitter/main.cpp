@@ -26,9 +26,15 @@ int main( void ){
 
    uint8_t value[5] = { 1, 100, 0, 0, 0 };                              //the value we are going to transmit
    uint8_t len = 5;                                                   //the length of the value in bytes
-   
-   for(;;){                                                           //infinity loop
-      nrf.write( value, len );                                        //transmitting data
-      hwlib::wait_ms(5000);
+                                                         //infinity loop
+   nrf.write( value, len );                                        //transmitting data
+
+   hwlib::wait_ms(10000);
+
+   value[5] = { 2, 1, 10, 0, 0 }; 
+
+   for(;;){
+      nrf.write(value, len);
+      hwlib::wait_ms(10000);
    }
 }

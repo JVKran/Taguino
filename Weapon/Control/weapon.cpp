@@ -42,7 +42,7 @@ void weaponManager::newWeaponSelected(const int id){
 
 void weaponManager::shootBullet(){
 	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
-		dataToSend = 43643;
+		dataToSend = 0;
 		dataToSend |= (player.getPlayerNumber() << 10);
 		dataToSend |= (weapon.getId() << 6);
 		if(hwlib::now_us() - lastShot > 1'000'000){

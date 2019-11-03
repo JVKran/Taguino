@@ -6,13 +6,16 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
-	timeWindow(oled, hwlib::xy(107,9), hwlib::xy(128,30)),
+	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
-	scoreTerminal(oled, hwlib::font_default_8x8()),
+	scoreWindow(oled, hwlib::xy(88, 9), hwlib::xy(128, 17)),
+	scoreTerminal(scoreWindow, hwlib::font_default_8x8()),
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
 	newBulletPool("New Bullet Pool"),
+	newScoreFlag(this),
+	newScorePool("New Score Pool"),
 	newMagazineFlag(this),
 	newMagazinePool("New Magazine Pool"),
 	newHealthFlag(this),
@@ -28,8 +31,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 }
 
 void display::showBullets(int amountOfBullets){
-	newBulletFlag.set();
 	newBulletPool.write(amountOfBullets);
+	newBulletFlag.set();
 }
 
 void display::drawBullets(const bool draw){
@@ -96,13 +99,13 @@ void display::updateHealth(){
 }
 
 void display::showHealth(const int health){
-	newHealthFlag.set();
 	newHealthPool.write(health);
+	newHealthFlag.set();
 }
 
 void display::showMagazines(int amountOfMagazines){
-	newMagazineFlag.set();
 	newMagazinePool.write(amountOfMagazines);
+	newMagazineFlag.set();
 }
 
 void display::drawMagazines(){
@@ -200,21 +203,28 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
+void display::showScore(const uint8_t score){
+	newScorePool.write(score);
+	newScoreFlag.set();
+}
+
+void display::drawScore(){
+	score = newScorePool.read();
+	scoreTerminal << '\f' << score * 100;
+}
+
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
-	if(totalGameSeconds == 0){
-		totalGameSeconds = totalGameTime;
-	} else {
+	if(totalGameSeconds != 0){
 		totalGameTime = totalGameSeconds;
 	}
-	newTimeFlag.set();
 	newTimePool.write(remainingSeconds);
+	newTimeFlag.set();
 }
 
 void display::drawTime(){
 	remainingSeconds = newTimePool.read();
 	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
 	double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
-	//hwlib::cout << "Total: " << totalGameTime << ", Remaining: " << remainingSeconds << ", LocationToBeFilled: " << int(LocationToBeFilled) << hwlib::endl;
 	for(int i = 0;i <LocationToBeFilled; i++){
 		if(i < 181){
 			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
@@ -226,17 +236,18 @@ void display::drawTime(){
 }
 
 void display::showPowerUp(int powerUpID){
-	newPowerUpFlag.set();
 	newPowerUpPool.write(powerUpID);
+	newPowerUpFlag.set();
 }
 
 void display::drawPowerUp(){
 	powerUpID = newPowerUpPool.read();
 	if(powerUpID == 0){
 		drawMaxAmmo();
-	}
-	else if(powerUpID == 1){
+	} else if(powerUpID == 1){
 		drawInstaKill();
+	} else {
+		powerUpWindow.flush();
 	}
 }
 
@@ -283,6 +294,7 @@ void display::drawInstaKill(){
 	hwlib::line(hwlib::xy(4,7), hwlib::xy(4,9)).draw(powerUpWindow);
 	hwlib::line(hwlib::xy(6,7), hwlib::xy(6,9)).draw(powerUpWindow);
 	hwlib::line(hwlib::xy(2,7), hwlib::xy(6,7)).draw(powerUpWindow);
+	powerUpWindow.flush();
 }
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
@@ -376,7 +388,6 @@ void display::selectedWindow(const int window){
 			drawMagazines();
 			showHealthBar();
 			updateHealth();
-			drawPowerUp();
 			break;
 		case 1:
 			oled.clear();
@@ -386,7 +397,7 @@ void display::selectedWindow(const int window){
 
 void display::main(){
 	for(;;){
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -397,7 +408,10 @@ void display::main(){
 			drawTime();
 		} else if (event == newPowerUpFlag){
 			drawPowerUp();
-		} /*else if (event == newScoreBoardFlag){
+		} else if (event == newScoreFlag){
+			drawScore();
+		}
+		/*else if (event == newScoreBoardFlag){
 
 		} */
 	}
