@@ -15,6 +15,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
 	newBulletPool("New Bullet Pool"),
+	newWeaponFlag(this),
+	newWeaponPool("New Weapon Pool"),
 	newScoreFlag(this),
 	newScorePool("New Score Pool"),
 	newMagazineFlag(this),
@@ -29,6 +31,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newPowerUpPool("New Powerup Pool")
 {
 	oled.clear();
+	//scoreTerminal << hwlib::right << '\f' << 1023;
+	//showScore(10);
 }
 
 void display::showBullets(int amountOfBullets){
@@ -148,17 +152,9 @@ void display::drawMagazines(){
 }
 
 void display::showWeapon(int weaponID){
-	switch(weaponID){
-		case 0: 
-			drawShotgun();
-			break;
-		case 1: 
-			drawPistol();
-			break;
-		default:
-			drawUnknown();
-	}
+	newWeaponPool.write(weaponID);
 	lastData.lastWeaponId = weaponID;
+	newWeaponFlag.set();
 }
 
 void display::drawWeapon(){
@@ -213,8 +209,7 @@ void display::showScore(const uint8_t score){
 }
 
 void display::drawScore(){
-	score = newScorePool.read();
-	scoreTerminal << '\f' << score * 100 << hwlib::flush;
+	scoreTerminal << '\f' << int(newScorePool.read());
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
@@ -389,7 +384,7 @@ void display::selectedWindow(const int window){
 		case 0:
 			currentlySelectedWindow = 0;
 			oled.clear();
-			drawTime();
+			showTime(remainingSeconds, totalGameTime);
 			drawWeapon();
 			drawBullets(true);
 			drawMagazines();
@@ -405,7 +400,7 @@ void display::selectedWindow(const int window){
 
 void display::main(){
 	for(;;){
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag);
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -418,6 +413,18 @@ void display::main(){
 			drawPowerUp();
 		} else if (event == newScoreFlag){
 			drawScore();
+		} else if (event == newWeaponFlag){
+			weaponId = newWeaponPool.read();
+			switch(weaponId){
+				case 0: 
+					drawShotgun();
+					break;
+				case 1: 
+					drawPistol();
+					break;
+				default:
+					drawUnknown();
+			}
 		}
 		/*else if (event == newScoreBoardFlag){
 

@@ -37,6 +37,10 @@ protected:
 	rtos::pool<int> newBulletPool;
 	int amountOfBullets;
 
+	rtos::flag newWeaponFlag;
+	rtos::pool<int> newWeaponPool;
+	int weaponId;
+
 	rtos::flag newScoreFlag;
 	rtos::pool<uint8_t> newScorePool;
 	uint8_t score;
