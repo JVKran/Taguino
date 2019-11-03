@@ -13,8 +13,8 @@ int main(){
 	
 	// Transmit
 	if( !grenadeSw.read() ){
-		damage = mhz.dmgTimer(damage);		// When the button is pressed it adds 5 damage every second, up to 50. 
-		mhz.write( player, damage );		// This will now loop.
+		damage = mhz.dmgTimer( damage );		// When the button is pressed it adds 5 damage every second, up to 50. 
+		mhz.write( player, damage );		    // This will now loop.
 	}
 	
 	// Receive

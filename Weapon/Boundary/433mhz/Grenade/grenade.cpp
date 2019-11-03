@@ -1,4 +1,4 @@
-#include "serial.hpp"
+#include "grenade.hpp"
 #include "hwlib.hpp"
 hwuart::hwuart(){
 
@@ -59,16 +59,21 @@ mhz433::mhz433( hwlib::pin_in & sw):
 
 void mhz433::write( uint16_t playerNumber, uint8_t damage ){
 	
+	 // Split the uint16_t playerNumber into two uint8_t, to be able to transmit it
 	 uint8_t playerId = (uint8_t)(playerNumber>>8);
 	 uint8_t playerId1 = (uint8_t) playerNumber;
+	
+	 // The grenade dammage cap will be 50, if too low or high just change it.
 	 if( damage > 51){ damage=50; }
+	
+	 // Making the checksum
 	 uint8_t checksum = ( damage / 256 ) ^ ( damage & 0xFF);
 	
 	 // Start bit, player id 1, player id 2, damage, sound, checksum, end bit.
 	 uint8_t explosionData[amount+1] = { 0xFF, playerId, playerId1, damage, 1, checksum }; 
         
 	 for(;;){
-		 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes
+		 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes, if too short or long, just change it.
 		 for(int i=0; i<amount+1; i++){
 			putc( explosionData[i] );
 			hwlib::wait_us(400);
@@ -103,7 +108,8 @@ void mhz433::read(){
 			   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.
 
 			   // Dit gedeelte nog niet helemaal goed.
-			   uint8_t nrfData[3] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// playerId, playerId, damage, song.
+			   uint8_t len =3
+			   uint8_t nrfData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// playerId, playerId, damage, song.
 			   
 			   nrf.write( nrfData, len );
 			}
@@ -114,7 +120,10 @@ void mhz433::read(){
 uint8_t mhz433::dmgTimer( uint8_t damage ){
 	while( !sw.read() ){
 		damage++;
+		// The grenade dammage cap will be 50, if too low or high just change it.
+	 	if( damage > 51){ damage=50; break; }
 		hwlib::wait_ms(200);			// Add 5 damage every second, up to 50.
+		
 	}
 	return damage;
 }

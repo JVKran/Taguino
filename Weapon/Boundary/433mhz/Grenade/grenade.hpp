@@ -19,7 +19,7 @@ private:
 	const int amount = 5;
 	hwlib::pin_in & sw;
 public:
-	mhz433( hwlib::pin_in & sw);
+	mhz433( hwlib::pin_in & sw );
 	void write( uint8_t playerNumber, uint8_t damage );
 	void read();
 	uint8_t dmgTimer( uint8_t damage );
