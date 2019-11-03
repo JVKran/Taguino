@@ -11,7 +11,7 @@
 /// This class has 3 functions:
 ///		- play(int i): 	The play function returns the given sound on its position.	
 ///		- size(): 		The size function returns the size of the sound array.
-///		- set(): 		The set function returns.
+///		- set(): 		The set function sets the given value.
 
 template< int N >
 class sounds{
@@ -21,17 +21,17 @@ public:
 /// \brief
 /// Function to return from array sound.
 /// \details
-///
+/// This function is used to return a value from sound at position i - 1.
 	int play( int i ){ return sound[ i-1 ]; }
 /// \brief
 /// Function to return size of sound.
 /// \details
-///
+/// This function returns the size of the sound array.
 	int size(){ return sound.size();}
 /// \brief
 ///	Function to set a sound.
 /// \details
-///
+/// This function will set the given value at a new position.
 	void set( int setSound ){ sound[setSound-1] = setSound; }
 
 };
@@ -44,12 +44,13 @@ class hwuart{
 	char usart_getc();
 	void usart_putc(char c);
 };
+
 /// \brief
 ///	The class send inherits from hwuart and is used to send commands to the mp3 module.
 /// \details
 ///	The class has one function:
 /// 	- executeCMD( uint8_t CMD, uint8_t par1, uint8_t par2): 
-///     	This needs the mp3 command, folder and mp3 file. It will send commands to the mp3 module.
+///     	This needs the mp3 command, command specific value, command specific value2 and will then send commands to the mp3 module.
 class send : public hwuart{
 public:
 /// \brief
@@ -70,10 +71,35 @@ public:
 /// 	- setVolume( int volume ): 	Set the volume.
 class mp3 : public send{
 public:
+/// \brief
+/// sendCMD sends your own commands.
+/// \details
+/// This function will send the command, command specific value, command specific value2 and executes it at the mp3 module.
 	void sendCMD( uint8_t CMD, uint8_t par1, uint8_t par2 );
+/// \brief
+/// resetModule will reset the mp3 module.
+/// \details
+/// This function will send the command to reset to the mp3 module, 
+/// clearing every command you have given to the module.
 	void resetModule();
+/// \brief
+/// playSound will play the given sound.
+/// \details
+///	This function will send the command to play the given sound from the beginning.
+/// Folders on the SD are numbered from 1-99 and mp3 files are numbered from 1 - 255, 
+/// giving those values will play the corresponding sound. In this case the folder is always the first one.
 	void playSound( int sound );
+/// \brief
+/// pauseSound will pause the current sound.
+/// \details
+/// This function will pause the sound that is currently playing,
+/// altough there is no start function, meaning this can also be seen as stopping a sound.
 	void pauseSound();
+/// \brief
+/// setVolume will set the volume at given value.
+/// \details
+/// This function will set the volume of the mp3 module at the given value,
+/// the volume can go from 0 - 30.
 	void setVolume( int volume ); //Van 0-30
 };
 
@@ -96,10 +122,13 @@ public:
 			sound.set(s);
 		}
 	}
-	
+/// \brief
+/// startPlayingSound will play a sound corresponding to the given data.
+/// \details
+/// This function will compare the data to the values in the array, if they are the same it will play the corresponding sound.
 	void startPlayingSound( int data ){
 		for( int i=1; i<sound.size()+1; i++){ 
-			if(data == sound.play(i+1)){ 			// If data is a song, play it
+			if(data == sound.play(i+1)){ 			// If data is a song, play it. +1 because .play will return value -1;
 				playSound( sound.play( i ) );
 				break;
 			}
