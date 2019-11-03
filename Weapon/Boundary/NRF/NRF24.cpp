@@ -1,26 +1,40 @@
-// File      : NRF24.cpp
-// Part of   : NRF24L01+ library
-// Copyright : menno.vanderjagt@student.hu.nl 2019
-//
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at 
-// http://www.boost.org/LICENSE_1_0.txt)
-
 #include "NRF24.hpp"
 #include "NRF24_register.hpp"
-#include "hwlib.hpp"
 
 /************************************************************************************************/
 
-NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn ):
-   bus( bus ), ce( ce ), csn( csn ), payload_size( 5 ), addr_width( 5 )
-{} 
+NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, const long long int duration, const uint8_t addressToListenTo ):
+   bus( bus ), 
+   ce( ce ), 
+   csn( csn ), 
+   payload_size( 5 ), 
+   addr_width( 5 ),
+   sampleClock(this, duration, "Clock to check for messages")
+{
+   address[4] = addressToListenTo;
+   start();                                                     //sets the registers to a default value
+   read_pipe(address);                                        //sets the pipe, address and payload size
+   powerUp_rx(); 
+} 
 
-/************************************************************************************************/
+void NRF24::main(){
+   for(;;){
+      wait(sampleClock);
+      if( checkRXfifo() ){                                      //checks if there is something in the RX FIFO
+         read(receivedData, amountOfBytes);                                    //reads the RX FIFO
+         for(int i = 0; i < amountOfListeners; i++){
+            radioListeners[i]->dataReceived(receivedData, amountOfBytes);
+         }
+         flush_rx();                                             //empties the RX FIFO
+         
+      }
+   }
+}
 
-NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, uint8_t payload_size, uint8_t addr_width ):
-   bus( bus ), ce( ce ), csn( csn ), payload_size( payload_size ), addr_width( addr_width )
-{}
+void NRF24::addListener(radioListener * listener){
+  radioListeners[amountOfListeners] = listener;
+  amountOfListeners++;
+}
 
 /************************************************************************************************/
 

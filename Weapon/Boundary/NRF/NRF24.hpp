@@ -1,15 +1,16 @@
-// File      : NRF24.hpp
-// Part of   : NRF24L01+ library
-// Copyright : menno.vanderjagt@student.hu.nl 2019
-//
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at 
-// http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef NRF24_HPP
 #define NRF24_HPP
 
 #include "hwlib.hpp"
+#include "rtos.hpp"
+#include <array>
+
+class radioListener {
+public:
+    virtual void dataReceived(const uint8_t data[], const int len) = 0;
+};
+
+class exchangeGameData;
 
 // this file contains Doxygen lines
 /// @file
@@ -18,13 +19,23 @@
 /// object of nrf24l01+
 /// \details
 /// This object can be used to transmit and receive data over the nrf24l01+ chip
-class NRF24 {
+class NRF24 : public rtos::task<> {
 protected:
 	hwlib::spi_bus & bus; 
 	hwlib::pin_out & ce;
 	hwlib::pin_out & csn;
+
 	uint8_t payload_size;
 	uint8_t addr_width;
+
+    std::array<radioListener*, 5> radioListeners;
+    int amountOfListeners = 0;
+
+    uint8_t receivedData[5] = {};                                           //the array in which the data will be saved
+    uint8_t amountOfBytes = 5;  
+    uint8_t address[5] = {0, 0, 0, 0, 0};
+
+    rtos::clock sampleClock;
 
 public:
     
@@ -33,13 +44,11 @@ public:
     /// \details
     /// This constructor does initialize the default attributes and automatically
     /// gives a value to the payload_size(5) and to the addr_width(5).
-    NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn);
+    NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, const long long int duration, const uint8_t addressToListenTo);
 
-    /// \brief
-    /// full constructor
-    /// \details
-    /// This constructor lets you initialize all the values instead of using the default values
-    NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, uint8_t payload_size, uint8_t addr_width );
+    void addListener(radioListener * listener);
+
+    void main() override;
 
     /// \brief
     /// transfers one thing
