@@ -16,6 +16,8 @@ private:
   display & Display;
   runGame * game;
 
+  const uint8_t weaponNumber;
+
   scoreBoard board;
   int signedUpPlayers = 0;
 
@@ -24,14 +26,16 @@ private:
 
   NRF24 radio;
   uint8_t dataToTransmit[5] = {0, 0, 0, 0, 0};
-  uint8_t address[5] = {0, 0, 0, 0, 0};
+  uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};
+  uint8_t masterAddress[5] = {0, 0, 0, 0, 0};
   const uint8_t amountOfDataToTransmit = 5;
 public:
-  exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration);
+  exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber);
 
   virtual void dataReceived(const uint8_t data[], const int len) override;
 
   void updateScore(const uint8_t playerNumber, const uint8_t dealtDamage);
+  void signalOnline();
 
 };
 
@@ -61,7 +65,7 @@ private:
 
   rtos::task<> & handler;
 public:
-  runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler);
+  runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
   
   playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
 

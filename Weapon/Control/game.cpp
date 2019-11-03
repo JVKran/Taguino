@@ -1,15 +1,16 @@
 #include "game.hpp"
 
-runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler):
+runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber):
 	Display(Display),
 	player(player),
-	exchanger(exchangeGameData(Display, this, spiBus, duration)),
+	exchanger(exchangeGameData(Display, this, spiBus, duration, weaponNumber)),
 	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer"),
 	handler(handler)
 {
 	handler.suspend();
+	exchanger.signalOnline();
 }
 
 playerData runGame::getPlayerData(){
@@ -43,7 +44,7 @@ void runGame::main(){
 			if(playerNumber != player.getPlayerNumber()){				//If player didn't shoot himself
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
-				//Display.showHealth(player.getHealth()); Crashes Program...
+				Display.showHealth(player.getHealth());
 				hwlib::cout << "New Health: " << player.getHealth() << hwlib::endl;
 			}
 		} else if (event == secondClock) {
@@ -58,24 +59,38 @@ void runGame::main(){
 	}
 }
 
-exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration):
+exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber):
 	Display(Display),
 	game(game),
+	weaponNumber(weaponNumber),
 	radio(NRF24(spiBus, ce, csn, duration, game->getPlayerData().getPlayerNumber()))
 {
 	radio.addListener(this);
+	receiveAddress[4] = game->getPlayerData().getPlayerNumber();
+}
+
+void exchangeGameData::signalOnline(){
+	radio.write_pipe( masterAddress );				//Master address = 0x00
+   	radio.powerDown_rx();
+
+   	dataToTransmit[0] = 1;					//1 is defined as onlineMessage
+   	dataToTransmit[1] = weaponNumber;
+   	radio.write(dataToTransmit, amountOfDataToTransmit);
+
+   	radio.read_pipe(receiveAddress);
+   	radio.powerUp_rx();
 }
 
 void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dealtDamage){
-	radio.write_pipe( 0x00 );				//Master address = 0x00
+	radio.write_pipe( masterAddress );				//Master address = 0x00
    	radio.powerDown_rx();
 
-   	dataToTransmit[0] = playerNumber;
-   	dataToTransmit[1] = dealtDamage;
-
+   	dataToTransmit[0] = 2;					//2 is defined as newScoreMessage
+   	dataToTransmit[1] = playerNumber;
+   	dataToTransmit[2] = dealtDamage;
 	radio.write( dataToTransmit, amountOfDataToTransmit );
-	address[4] = game->getPlayerData().getPlayerNumber();
-   	radio.read_pipe(address);
+
+   	radio.read_pipe(receiveAddress);
    	radio.powerUp_rx();
 }
 
@@ -86,13 +101,13 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 	hwlib::cout << hwlib::endl;
 	switch(data[0]){
 		case 1:
-			for(int i = 0; i < signedUpPlayers; i++){
-				hwlib::cout << "Player " << board.playerNumbers[i] << ": ";
-				for(int j = 0; j < 8; j++){
-					hwlib::cout << board.playerNames[i][j];
-				}
-				hwlib::cout << hwlib::endl;
-			}
+			// for(int i = 0; i < signedUpPlayers; i++){
+			// 	hwlib::cout << "Player " << board.playerNumbers[i] << ": ";
+			// 	for(int j = 0; j < 8; j++){
+			// 		hwlib::cout << board.playerNames[i][j];
+			// 	}
+			// 	hwlib::cout << hwlib::endl;
+			// }
 			game->gameStartSignalReceived(data[1]);
 			break;
 		case 2:

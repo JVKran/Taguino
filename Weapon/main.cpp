@@ -34,6 +34,9 @@ int main( void ){
    const uint8_t playerNumber = 1;
    const uint8_t teamNumber = 1;
 
+   //This one is device specific
+   const uint8_t weaponNumber = 1;
+
    const long long int infraredPollPeriod = 200;
    const long long int infraredTransmitPeriod = 200;
    const long long int inputPollPeriod = 100'000;
@@ -43,7 +46,7 @@ int main( void ){
    display Display = display(oled, xCoordinates, yCoordinates);
    weaponData weapon = weaponData(2);
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
-   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler);
+   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
    weaponManager gunManager = weaponManager(Display, handler, game, player, infraredTransmitPeriod);
