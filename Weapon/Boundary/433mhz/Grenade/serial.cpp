@@ -1,7 +1,5 @@
 #include "serial.hpp"
 #include "hwlib.hpp"
-wuart();}
-
 hwuart::hwuart(){
 
 		    // enable the clock to port A
@@ -36,34 +34,55 @@ hwuart::hwuart(){
 
 
 
-	bool hwuart::usart_char_available(){
+	bool hwuart::char_available(){
 	   	
 	   return ( USART0->US_CSR & 1 ) != 0;
 	}
 
-	char hwuart::usart_getc(){
+	char hwuart::getc(){
 	   // uart_init() is not needed because uart_char_available does that
-	   while( ! usart_char_available() ){}
+	   while( ! char_available() ){}
 	   return USART0->US_RHR; 
 	}
-	void hwuart::usart_putc( char c ){
+	void hwuart::putc( char c ){
 	      
 	   //usart_init();	
 	   while( ( USART0->US_CSR & 2 ) == 0 ){}
 	   USART0->US_THR = c;
 
 	}
+	uint16_t hwuart::get_uint(){
 
-void mhz433::write( uint8_t player, uint8_t damage ){
+           if(char_available()){                   //needed to stop code from blocking when no message availible
+           if(getc() == 254){                    //look for startbyte
+               uint8_t intArray[2] = { 0, 0};
+               for(int i=0; i<2; i++){
+					intArray[i] = getc();                // get next bytes and put them in array
+					hwlib::wait_us(800);
+               }
+			   return 0x00 | intArray[0]<<8 | intArray[1];
+			   }
+           }
+		   
+			   return 0;
+		   
+		   
+       }
+
+void mhz433::write( uint16_t playerNumber, uint8_t damage ){
+	
+	 uint8_t byte1 = (uint8_t)(playerNumber>>8);
+	 uint8_t byte2 = (uint8_t) playerNumber;
+	
 	 uint8_t checksum = ( damage / 256 ) ^ ( damage & 0xFF);
 	
-	// Start bit, player id, damage, sound, checksum, end bit.
-	 uint8_t explosionData[amount] = { 100, player, damage, 1, checksum }; 
+	 // Start bit, player id, damage, sound, checksum, end bit.
+	 uint8_t explosionData[amount] = { 0xFF, byte1, byte2, damage, 1, checksum }; 
         
 	 for(;;){
 		 hwlib::wait_ms(500);
 		 for(int i=0; i<amount; i++){
-			usart_putc( explosionData[i] );
+			putc( explosionData[i] );
 			hwlib::wait_us(400);
 		 }
 	 hwlib::cout<<"sending"<<hwlib::endl;
@@ -73,7 +92,7 @@ void mhz433::write( uint8_t player, uint8_t damage ){
 void mhz433::read(){
    for(;;){
 	   
-	   if( usart_getc() == 100 ){												// If it's the start bit
+	   if( getc() == 254 ){												// If it's the start bit
 		   
 		   uint8_t tmpArray[amount] = { 0, 0, 0, 0, 0 };
 		   

@@ -6,16 +6,17 @@ class hwuart{
 	//Usart * hw_usart = USART0;
 	public:
 	hwuart();
-	bool usart_char_available();
-	char usart_getc();
-	void usart_putc(char c);
+	bool char_available();
+	char getc();
+	void putc(char c);
+	uint16_t get_uint();
 };
 
 class mhz433 : public hwuart{
 private:
-	const int amount = 5;
+	const int amount = 6;
 public:
-	void write( uint8_t player, uint8_t damage );
+	void write( uint8_t playerNumber, uint8_t damage );
 	void read();
 	
 	
