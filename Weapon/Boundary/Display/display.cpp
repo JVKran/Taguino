@@ -1,18 +1,25 @@
 #include "display.hpp"
 
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, const int gameTime):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
+	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
+	fireModeWindow(oled, hwlib::xy(0, 42), hwlib::xy(41, 57)),
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
-	timeWindow(oled, hwlib::xy(107,8), hwlib::xy(128,29)),
+	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
-	scoreTerminal(oled, hwlib::font_default_8x8()),
+	scoreWindow(oled, hwlib::xy(88, 9), hwlib::xy(128, 17)),
+	scoreTerminal(scoreWindow, hwlib::font_default_8x8()),
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
 	newBulletPool("New Bullet Pool"),
+	newWeaponFlag(this),
+	newWeaponPool("New Weapon Pool"),
+	newScoreFlag(this),
+	newScorePool("New Score Pool"),
 	newMagazineFlag(this),
 	newMagazinePool("New Magazine Pool"),
 	newHealthFlag(this),
@@ -21,16 +28,19 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	//newScoreBoardPool("New Scoreboard Pool"),
 	newTimeFlag(this),
 	newTimePool("New Time Pool"),
-	totalGameTime(gameTime),
 	newPowerUpFlag(this),
-	newPowerUpPool("New Powerup Pool")
+	newPowerUpPool("New Powerup Pool"),
+	newFireModeFlag(this),
+	newFireModePool("New Fire Mode Pool")
 {
 	oled.clear();
+	//scoreTerminal << hwlib::right << '\f' << 1023;
+	//showScore(10);
 }
 
 void display::showBullets(int amountOfBullets){
-	newBulletFlag.set();
 	newBulletPool.write(amountOfBullets);
+	newBulletFlag.set();
 }
 
 void display::drawBullets(const bool draw){
@@ -80,6 +90,9 @@ void display::showHealthBar(){
 
 void display::updateHealth(){
 	health = newHealthPool.read();
+	if(health < 0 || health > 100){
+		health = lastData.lastHealth;
+	}
 	int amountOfBlack = 27-((100 - health) * 0.27);
 	int amountOfWhite = (100 - health) * 0.27;
 	if(lastData.lastHealth < health){
@@ -97,18 +110,18 @@ void display::updateHealth(){
 }
 
 void display::showHealth(const int health){
-	newHealthFlag.set();
 	newHealthPool.write(health);
+	newHealthFlag.set();
 }
 
 void display::showMagazines(int amountOfMagazines){
-	newMagazineFlag.set();
 	newMagazinePool.write(amountOfMagazines);
+	newMagazineFlag.set();
 }
 
 void display::drawMagazines(){
 	amountOfMagazines = newMagazinePool.read();
-	if(amountOfMagazines != lastData.lastMagazines && (amountOfMagazines < 3 || !maxMagazinesDrawn)){
+	if((amountOfMagazines < 3 || !maxMagazinesDrawn) && amountOfMagazines >= 0){
 		for(int i = 0; i < 3 && i < amountOfMagazines; i++){
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13+10,0)).draw(magazineWindow);						//topMagazine
 			hwlib::line(hwlib::xy(i*13,0), hwlib::xy(i*13,7)).draw(magazineWindow);							//leftMagazine
@@ -137,22 +150,14 @@ void display::drawMagazines(){
 			maxMagazinesDrawn = false;
 		}
 		lastData.lastMagazines = amountOfMagazines;
+		magazineWindow.flush();
 	}
-	magazineWindow.flush();
 }
 
 void display::showWeapon(int weaponID){
-	switch(weaponID){
-		case 0: 
-			drawShotgun();
-			break;
-		case 1: 
-			drawPistol();
-			break;
-		default:
-			drawUnknown();
-	}
+	newWeaponPool.write(weaponID);
 	lastData.lastWeaponId = weaponID;
+	newWeaponFlag.set();
 }
 
 void display::drawWeapon(){
@@ -201,38 +206,141 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
-void display::showTime(const double remainingSeconds){
-	newTimeFlag.set();
+void display::drawSniper(){
+	weaponWindow.clear();
+
+	hwlib::line(hwlib::xy(0,5), hwlib::xy(8,5)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,5), hwlib::xy(0,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,9), hwlib::xy(9,7)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(9,7), hwlib::xy(12,10)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(8,6), hwlib::xy(15,6)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(15,5), hwlib::xy(40,5)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(30,6),hwlib::xy(40,6)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(30,6), hwlib::xy(30,8)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(17,8), hwlib::xy(30,8)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(16,10),hwlib::xy(17,8)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(12,10),hwlib::xy(16,10)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(10,2), hwlib::xy(27,2)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(10,3), hwlib::xy(27,3)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(27,0), hwlib::xy(27,2)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(15,4), hwlib::xy(15,5)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(22,4), hwlib::xy(22,5)).draw(weaponWindow);
+
+	weaponWindow.flush();
+
+}
+
+void display::drawM16(){
+	weaponWindow.clear();
+
+	hwlib::line(hwlib::xy(9,5), hwlib::xy(30,5)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(2,6), hwlib::xy(9,6)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,11), hwlib::xy(2,5)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,11), hwlib::xy(3,11)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(3,11), hwlib::xy(8,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(8,9), hwlib::xy(6,14)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(6,14), hwlib::xy(9,14)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(9,14), hwlib::xy(11,9)).draw(weaponWindow); 
+	hwlib::line(hwlib::xy(11,9), hwlib::xy(13,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(13,9), hwlib::xy(13,12)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(13,12), hwlib::xy(17,18)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(17,18), hwlib::xy(21,18)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(21,18), hwlib::xy(17,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(18,11), hwlib::xy(22,7)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(20,7), hwlib::xy(21,8)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(21,8), hwlib::xy(30,8)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(30,8), hwlib::xy(30,3)).draw(weaponWindow);
+
+	weaponWindow.flush();
+
+}
+
+void display::drawAK(){
+	weaponWindow.clear();
+
+	hwlib::line(hwlib::xy(0,3), hwlib::xy(3,3)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,3), hwlib::xy(0,7)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(0,7), hwlib::xy(11,4)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(3,2), hwlib::xy(11,2)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(11,1), hwlib::xy(33,1)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(22,0), hwlib::xy(25,0)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(11,4), hwlib::xy(9,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(9,9), hwlib::xy(13,9)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(13,9), hwlib::xy(18,4)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(18,4), hwlib::xy(22,4)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(22,4), hwlib::xy(26,10)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(26,10), hwlib::xy(31,10)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(32,10), hwlib::xy(28,4)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(28,4), hwlib::xy(33,4)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(33,4), hwlib::xy(33,1)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(33,2), hwlib::xy(40,2)).draw(weaponWindow);
+	hwlib::line(hwlib::xy(33,4), hwlib::xy(40,4)).draw(weaponWindow);
+
+	hwlib::line(hwlib::xy(40,4), hwlib::xy(40,0)).draw(weaponWindow);
+
+	weaponWindow.flush();
+
+}
+
+
+void display::showScore(const int score){
+	newScorePool.write(score);
+	newScoreFlag.set();
+}
+
+void display::drawScore(){
+	score = newScorePool.read();
+	hwlib::cout << score << hwlib::endl;
+	if(score > 0){
+		scoreTerminal << '\f' << score;
+	}
+}
+
+void display::showTime(const double remainingSeconds, double totalGameSeconds){
+	if(totalGameSeconds != 0){
+		totalGameTime = totalGameSeconds;
+	}
 	newTimePool.write(remainingSeconds);
+	newTimeFlag.set();
 }
 
 void display::drawTime(){
-	remainingSeconds = newTimePool.read();
-	hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
-	double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
-	//hwlib::cout << "Total: " << totalGameTime << ", Remaining: " << remainingSeconds << ", LocationToBeFilled: " << int(LocationToBeFilled) << hwlib::endl;
-	for(int i = 0;i <LocationToBeFilled; i++){
-		if(i < 181){
-			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
-		}else{
-			hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-179) + 10, yCoordinates.get(i-179) + 10)).draw(timeWindow);
+	if(currentlySelectedWindow == 0){
+		remainingSeconds = newTimePool.read();
+		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
+		double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
+		for(int i = 0;i <LocationToBeFilled; i++){
+			if(i < 181){
+				hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i+179) + 10, yCoordinates.get(i+179) + 10)).draw(timeWindow);
+			}else{
+				hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-179) + 10, yCoordinates.get(i-179) + 10)).draw(timeWindow);
+			}
 		}
+		timeWindow.flush();
 	}
-	timeWindow.flush();
 }
 
 void display::showPowerUp(int powerUpID){
-	newPowerUpFlag.set();
 	newPowerUpPool.write(powerUpID);
+	newPowerUpFlag.set();
 }
 
 void display::drawPowerUp(){
 	powerUpID = newPowerUpPool.read();
 	if(powerUpID == 0){
 		drawMaxAmmo();
-	}
-	else if(powerUpID == 1){
+	} else if(powerUpID == 1){
 		drawInstaKill();
+	} else {
+		powerUpWindow.flush();
 	}
 }
 
@@ -279,6 +387,7 @@ void display::drawInstaKill(){
 	hwlib::line(hwlib::xy(4,7), hwlib::xy(4,9)).draw(powerUpWindow);
 	hwlib::line(hwlib::xy(6,7), hwlib::xy(6,9)).draw(powerUpWindow);
 	hwlib::line(hwlib::xy(2,7), hwlib::xy(6,7)).draw(powerUpWindow);
+	powerUpWindow.flush();
 }
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
@@ -290,8 +399,8 @@ void display::selectedSetting(const int setting){
 		case 0:
 			//Selected to change weapon
 			hwlib::cout << "Setting weapon." << hwlib::endl;
-			hwlib::circle(hwlib::xy(50,5), 2).draw(oled);
-			oled.flush();
+			hwlib::circle(hwlib::xy(5, 5), 2).draw(weaponSettingWindow);
+			weaponSettingWindow.flush();
 			break;
 		case 1:
 			//Selected to activate powerups
@@ -302,7 +411,7 @@ void display::selectedSetting(const int setting){
 		case -1:
 			//Selected to quit setting
 			hwlib::cout << "Finished setting." << hwlib::endl;
-			hwlib::circle(hwlib::xy(50,5), 2, hwlib::black).draw(oled);
+			hwlib::circle(hwlib::xy(5,5), 2, hwlib::black).draw(weaponSettingWindow);
 			hwlib::circle(hwlib::xy(90,45), 2, hwlib::black).draw(oled);
 			oled.flush();
 			break;
@@ -365,24 +474,60 @@ void display::showScoreBoard(){
 void display::selectedWindow(const int window){
 	switch(window){
 		case 0:
+			currentlySelectedWindow = 0;
 			oled.clear();
-			drawTime();
+			showTime(remainingSeconds, totalGameTime);
 			drawWeapon();
 			drawBullets(true);
 			drawMagazines();
 			showHealthBar();
 			updateHealth();
-			drawPowerUp();
 			break;
 		case 1:
+			currentlySelectedWindow = 1;
 			oled.clear();
 			showScoreBoard();
 	}
 }
 
+void display::showFireMode(const int mode){
+	newFireModePool.write(mode);
+	newFireModeFlag.set();
+}
+
+void display::drawFireMode(){
+	fireMode = newFireModePool.read();
+	fireModeWindow.clear();
+	switch(fireMode){
+		case 0:		//Manual
+			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+			break;
+		case 1:		//AutoFire
+			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(3,6),hwlib::xy(12,6)).draw(fireModeWindow);
+			break;
+		case 2:		//Burst
+			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(2,7),hwlib::xy(13,7)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(3,4),hwlib::xy(12,4)).draw(fireModeWindow);
+			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
+			break;
+		default:
+			break;
+	}
+	fireModeWindow.flush();
+}
+
 void display::main(){
 	for(;;){
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag);
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -393,7 +538,33 @@ void display::main(){
 			drawTime();
 		} else if (event == newPowerUpFlag){
 			drawPowerUp();
-		} /*else if (event == newScoreBoardFlag){
+		} else if (event == newScoreFlag){
+			drawScore();
+		} else if (event == newFireModeFlag){
+			drawFireMode();
+		} else if (event == newWeaponFlag){
+			weaponId = newWeaponPool.read();
+			switch(weaponId){
+				case 0: 
+					drawShotgun();
+					break;
+				case 1: 
+					drawPistol();
+					break;
+				case 2:
+					drawSniper();
+					break;
+				case 3:
+					drawAK();
+					break;
+				case 4:
+					drawM16();
+					break;
+				default:
+					drawUnknown();
+			}
+		}
+		/*else if (event == newScoreBoardFlag){
 
 		} */
 	}

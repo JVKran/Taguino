@@ -3,6 +3,10 @@
 #ifndef __KY040_HPP
 #define __KY040_HPP
 
+#include "input.hpp"
+#include "button.hpp"
+#include "hwlib.hpp"
+
 /// \brief
 /// Polling KY040 Rotary Encoder Interface
 /// \details
@@ -34,23 +38,29 @@
 /// 	}
 /// }
 /// ~~~~~~~~~~~~~~~
-class KY040{
+
+class encoderListener;
+class inputHandler;
+
+class KY040 {
 	private:
-	   	hwlib::pin_in & CLK;
-	    hwlib::pin_in & DT;
-	    hwlib::pin_in & SW;
-	    int posCounter;
-	    bool swPress;
-	    int lastPos;
-	    int curPos;
+	    rotaryEncoder encoder = rotaryEncoder();
+	    int switchPinNumber;
+
+	    int posCounter = 0;
+	    int lastPos = 0;
+
+	    encoderListener * listener;
+
+	    inputHandler * handler;
+	    Buttoninterrupter * buttonRegister;
   	public:
-	    KY040(hwlib::pin_in & CLK, hwlib::pin_in & DT, hwlib::pin_in & SW = hwlib::pin_in_dummy, const int posCounter = 0, const bool swPress = false);
+	    KY040(const int receivedSwitchPinNumber, encoderListener * listener, inputHandler* handler);
+	    
 	    void update();
+
 	    int getPos();
 	    void setPos(const int newPos);
-	    bool isPressed();
-
-	    bool testCorrectFunctioning();
 };
 
 #endif //__KY040_HPP
