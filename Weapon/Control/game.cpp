@@ -108,7 +108,7 @@ void exchangeGameData::signalOnline(){
    	dataToTransmit[1] = weaponNumber;					//Byte two should containt weaponNumber which also is the playerNumber
    	radio.write(dataToTransmit, amountOfDataToTransmit);
 
-   	radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
+   	radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
    	radio.powerUp_rx();
 }
 
@@ -200,6 +200,11 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			break;
 		case 7:
 			Display.showPowerUp(10);
+			break;
+		case 8:
+			receiveAddress[4] = data[1];
+			radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
+   			radio.powerUp_rx();
 			break;
 	}
 }
