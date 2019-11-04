@@ -3,7 +3,6 @@
 
 #include "entities.hpp"
 #include "receiver.hpp"
-//#include "exchanger.hpp"
 #include "NRF24.hpp"
 #include "RGBLed.hpp"
 #include "display.hpp"
@@ -21,14 +20,15 @@ private:
   scoreBoard board;
   int signedUpPlayers = 0;
 
+  //Used for the NRF24L01+
   hwlib::target::pin_out csn  = hwlib::target::pin_out( hwlib::target::pins::d30 );
   hwlib::target::pin_out ce   = hwlib::target::pin_out( hwlib::target::pins::d32 );
 
   NRF24 radio;
-  uint8_t dataToTransmit[5] = {0, 0, 0, 0, 0};
-  uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};
-  uint8_t masterAddress[5] = {0, 0, 0, 0, 0};
-  const uint8_t amountOfDataToTransmit = 5;
+  uint8_t dataToTransmit[5] = {0, 0, 0, 0, 0};    //Used for storing data to transmit
+  uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};    //Used to store the address at which to listen for incoming messages
+  uint8_t masterAddress[5] = {0, 0, 0, 0, 0};     //Used to store the address of the master
+  const uint8_t amountOfDataToTransmit = 5;       //Contains the length of the data to transmit; always 5.
 public:
   exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber);
 
