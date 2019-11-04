@@ -203,7 +203,7 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			break;
 		case 8:
 			receiveAddress[4] = data[1];
-			radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
+			radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
    			radio.powerUp_rx();
 			break;
 	}
