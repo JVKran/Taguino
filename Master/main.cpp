@@ -16,7 +16,7 @@ int main( void ){
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
    auto oled   = hwlib::glcd_oled(i2cBus);
 
-
+   
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
    auto miso = hwlib::target::pin_in( hwlib::target::pins::d13 );
@@ -34,5 +34,7 @@ int main( void ){
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
 
+   display Display = display(oled);
+   oled.flush();
    rtos::run();
 }
