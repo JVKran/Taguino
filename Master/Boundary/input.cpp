@@ -36,6 +36,10 @@ void inputHandler::addEncoder(KY040 * e){
 	encoder = e;
 }
 
+void inputHandler::addKeyboard(keyboard * k){
+	keypad = e;
+}
+
 Buttoninterrupter * inputHandler::getRegister(){
 	return &buttonInterrupter;
 }
