@@ -4,7 +4,6 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
-	fireModeWindow(oled, hwlib::xy(0, 42), hwlib::xy(41, 57)),
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
@@ -29,9 +28,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newTimeFlag(this),
 	newTimePool("New Time Pool"),
 	newPowerUpFlag(this),
-	newPowerUpPool("New Powerup Pool"),
-	newFireModeFlag(this),
-	newFireModePool("New Fire Mode Pool")
+	newPowerUpPool("New Powerup Pool")
 {
 	oled.clear();
 	//scoreTerminal << hwlib::right << '\f' << 1023;
@@ -206,102 +203,13 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
-void display::drawSniper(){
-	weaponWindow.clear();
-
-	hwlib::line(hwlib::xy(0,5), hwlib::xy(8,5)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,5), hwlib::xy(0,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,9), hwlib::xy(9,7)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(9,7), hwlib::xy(12,10)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(8,6), hwlib::xy(15,6)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(15,5), hwlib::xy(40,5)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(30,6),hwlib::xy(40,6)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(30,6), hwlib::xy(30,8)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(17,8), hwlib::xy(30,8)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(16,10),hwlib::xy(17,8)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(12,10),hwlib::xy(16,10)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(10,2), hwlib::xy(27,2)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(10,3), hwlib::xy(27,3)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(27,0), hwlib::xy(27,2)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(15,4), hwlib::xy(15,5)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(22,4), hwlib::xy(22,5)).draw(weaponWindow);
-
-	weaponWindow.flush();
-
-}
-
-void display::drawM16(){
-	weaponWindow.clear();
-
-	hwlib::line(hwlib::xy(9,5), hwlib::xy(30,5)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(2,6), hwlib::xy(9,6)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,11), hwlib::xy(2,5)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,11), hwlib::xy(3,11)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(3,11), hwlib::xy(8,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(8,9), hwlib::xy(6,14)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(6,14), hwlib::xy(9,14)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(9,14), hwlib::xy(11,9)).draw(weaponWindow); 
-	hwlib::line(hwlib::xy(11,9), hwlib::xy(13,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(13,9), hwlib::xy(13,12)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(13,12), hwlib::xy(17,18)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(17,18), hwlib::xy(21,18)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(21,18), hwlib::xy(17,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(18,11), hwlib::xy(22,7)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(20,7), hwlib::xy(21,8)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(21,8), hwlib::xy(30,8)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(30,8), hwlib::xy(30,3)).draw(weaponWindow);
-
-	weaponWindow.flush();
-
-}
-
-void display::drawAK(){
-	weaponWindow.clear();
-
-	hwlib::line(hwlib::xy(0,3), hwlib::xy(3,3)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,3), hwlib::xy(0,7)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(0,7), hwlib::xy(11,4)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(3,2), hwlib::xy(11,2)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(11,1), hwlib::xy(33,1)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(22,0), hwlib::xy(25,0)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(11,4), hwlib::xy(9,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(9,9), hwlib::xy(13,9)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(13,9), hwlib::xy(18,4)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(18,4), hwlib::xy(22,4)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(22,4), hwlib::xy(26,10)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(26,10), hwlib::xy(31,10)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(32,10), hwlib::xy(28,4)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(28,4), hwlib::xy(33,4)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(33,4), hwlib::xy(33,1)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(33,2), hwlib::xy(40,2)).draw(weaponWindow);
-	hwlib::line(hwlib::xy(33,4), hwlib::xy(40,4)).draw(weaponWindow);
-
-	hwlib::line(hwlib::xy(40,4), hwlib::xy(40,0)).draw(weaponWindow);
-
-	weaponWindow.flush();
-
-}
-
-
-void display::showScore(const int score){
+void display::showScore(const uint8_t score){
 	newScorePool.write(score);
 	newScoreFlag.set();
 }
 
 void display::drawScore(){
-	score = newScorePool.read();
-	hwlib::cout << score << hwlib::endl;
-	if(score > 0){
-		scoreTerminal << '\f' << score;
-	}
+	scoreTerminal << '\f' << int(newScorePool.read());
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
@@ -490,44 +398,9 @@ void display::selectedWindow(const int window){
 	}
 }
 
-void display::showFireMode(const int mode){
-	newFireModePool.write(mode);
-	newFireModeFlag.set();
-}
-
-void display::drawFireMode(){
-	fireMode = newFireModePool.read();
-	fireModeWindow.clear();
-	switch(fireMode){
-		case 0:		//Manual
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			break;
-		case 1:		//AutoFire
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(3,6),hwlib::xy(12,6)).draw(fireModeWindow);
-			break;
-		case 2:		//Burst
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(2,7),hwlib::xy(13,7)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(3,4),hwlib::xy(12,4)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
-			break;
-		default:
-			break;
-	}
-	fireModeWindow.flush();
-}
-
 void display::main(){
 	for(;;){
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag);
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -540,8 +413,6 @@ void display::main(){
 			drawPowerUp();
 		} else if (event == newScoreFlag){
 			drawScore();
-		} else if (event == newFireModeFlag){
-			drawFireMode();
 		} else if (event == newWeaponFlag){
 			weaponId = newWeaponPool.read();
 			switch(weaponId){
@@ -550,15 +421,6 @@ void display::main(){
 					break;
 				case 1: 
 					drawPistol();
-					break;
-				case 2:
-					drawSniper();
-					break;
-				case 3:
-					drawAK();
-					break;
-				case 4:
-					drawM16();
 					break;
 				default:
 					drawUnknown();

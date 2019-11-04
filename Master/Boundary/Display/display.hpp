@@ -12,7 +12,6 @@ protected:
 	hwlib::glcd_oled & oled;
 	hwlib::window_part weaponWindow;
 	hwlib::window_part weaponSettingWindow;
-	hwlib::window_part fireModeWindow;
 	hwlib::window_part bulletWindow;
 	hwlib::window_part magazineWindow;
 	hwlib::window_part healthWindow;
@@ -31,9 +30,6 @@ protected:
 	void drawUnknown();
 	void drawShotgun();
 	void drawPistol();
-	void drawSniper();
-	void drawM16();
-	void drawAK();
 	void drawMaxAmmo();
 	void drawInstaKill();
 
@@ -46,8 +42,8 @@ protected:
 	int weaponId;
 
 	rtos::flag newScoreFlag;
-	rtos::pool<int> newScorePool;
-	int score;
+	rtos::pool<uint8_t> newScorePool;
+	uint8_t score;
 
 	rtos::flag newMagazineFlag;
 	rtos::pool<int> newMagazinePool;
@@ -68,10 +64,6 @@ protected:
 	rtos::flag newPowerUpFlag;
 	int powerUpID;
 	rtos::pool<int> newPowerUpPool;
-
-	rtos::flag newFireModeFlag;
-	rtos::pool<int> newFireModePool;
-	int fireMode;
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates);
 
@@ -90,7 +82,7 @@ public:
 
 	void showScoreBoard();
 
-	void showScore(const int score);
+	void showScore(const uint8_t score);
 	void drawScore();
 
 	void showTime(const double remainingSeconds, double totalGameSeconds = 0);
@@ -101,9 +93,6 @@ public:
 
 	void selectedSetting(const int setting);
 	void selectedWindow(const int window);
-
-	void showFireMode(const int mode);
-	void drawFireMode();
 
 	void main() override;
 
