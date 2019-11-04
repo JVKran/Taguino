@@ -1,11 +1,10 @@
 #include "hwlib.hpp"
 #include "entities.hpp"
-#include "interface.hpp"
 #include "scoreboard.hpp"
 #include "input.hpp"
-#include "weapon.hpp"
 #include "game.hpp"
 #include "display.hpp"
+#include "signup.hpp"
 #include <array>
 
 int main( void ){	
@@ -32,8 +31,8 @@ int main( void ){
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    signUp signer = signUp(radio);
    game gameRunner = game(radio);
-   radio.addListener(signer);
-   radio.addListener(gameRunner);
+   radio.addListener(&signer);
+   radio.addListener(&gameRunner);
 
    rtos::run();
 }
