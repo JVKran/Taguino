@@ -6,18 +6,22 @@
 
 class playerData {
 	private:
-		const char * name;
-		const uint8_t playerNumber;
+		char name[8];
+		uint8_t playerNumber;
 		int health = 100;
-		const int teamNumber;
+		int teamNumber;
 		int score = 0;
 		int shots = 0;
 	public:
-		playerData(const char * name, const uint8_t playerNumber, const uint8_t teamNumber = 0);
 
 		const char * getName() const;
+		void setName(const char newName[8]);
+
 		uint8_t getPlayerNumber() const;
+		void setPlayerNumber(const uint8_t newPlayerNumber);
+
 		uint8_t getTeamNumber() const;
+		void setTeamNumber(const uint8_t newTeamNumber);
 
 		uint8_t getHealth() const;
 		void setHealth(const int newHealth);

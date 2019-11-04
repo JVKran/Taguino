@@ -28,20 +28,15 @@ int main( void ){
    constexpr auto xCoordinates = lookup< int, 360>(scaled_sine_from_degrees);
    constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
 
-   //These values would usually be received from the master...
-   const char * playerName = "Jochem";
-   const uint8_t playerNumber = 1;
-   const uint8_t teamNumber = 1;
-
    //This one is device specific
    const uint8_t weaponNumber = 1;
 
-   const long long int infraredPollPeriod = 100;
+   const long long int infraredPollPeriod = 200;
    const long long int infraredTransmitPeriod = 100;
    const long long int inputPollPeriod = 100'000;
-   const long long int radioPollPeriod = 10'000;
+   const long long int radioPollPeriod = 100'000;
    
-   playerData player = playerData(playerName, playerNumber, teamNumber);
+   playerData player = playerData();
    display Display = display(oled, xCoordinates, yCoordinates);
    weaponData weapon = weaponData(2);
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates

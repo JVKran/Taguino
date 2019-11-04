@@ -1,21 +1,29 @@
 #include "entities.hpp"
 
-playerData::playerData(const char * name, const uint8_t playerNumber, const uint8_t teamNumber):
-	name(name),
-	playerNumber(playerNumber),
-	teamNumber(teamNumber)
-{}
-
 const char * playerData::getName() const {
 	return name;
+}
+
+void playerData::setName(const char newName[8]){
+	for(unsigned int i = 0; i < 8; i++){
+		name[i] = newName[i];
+	}
 }
 
 uint8_t playerData::getPlayerNumber() const {
 	return playerNumber;
 }
 
+void playerData::setPlayerNumber(const uint8_t newPlayerNumber){
+	playerNumber = newPlayerNumber;
+}
+
 uint8_t playerData::getTeamNumber() const {
 	return teamNumber;
+}
+
+void playerData::setTeamNumber(const uint8_t newTeamNumber){
+	teamNumber = newTeamNumber;
 }
 
 uint8_t playerData::getHealth() const {

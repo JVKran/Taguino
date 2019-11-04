@@ -15,6 +15,8 @@ private:
   display & Display;
   runGame * game;
 
+  playerData player;
+
   const uint8_t weaponNumber;
 
   scoreBoard board;
@@ -69,7 +71,8 @@ private:
 public:
   runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
   
-  playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
+  playerData getPlayerData() const;                         //Used by weaponManager to get playerNumber for infraredMessage.
+  void setPlayerData(playerData & newPlayer);
 
   virtual void messageReceived(const uint16_t data);
 

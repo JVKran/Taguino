@@ -27,8 +27,12 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 /// Get Player Data
 /// \details
 /// This function returns the current player with its current health and score. Needed for some objects that sometimes need the most updated player object.
-playerData runGame::getPlayerData(){
+playerData runGame::getPlayerData() const {
 	return player;
+}
+
+void runGame::setPlayerData(playerData & newPlayer){
+	player = newPlayer;
 }
 
 void runGame::messageReceived(const uint16_t data){
@@ -57,17 +61,17 @@ void runGame::main(){
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
 			receivedData = receivedDataChannel.read();
-			distance = (receivedData & 0x3F) * 10;
 			playerNumber = (receivedData >> 10);
-			weaponId = ((receivedData & 0x1C0) >> 6);
-			dealtDamage = weaponStats.getDamage((receivedData & 0x1C0) >> 6, (receivedData & 0x3F));
-			hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
-			hwlib::cout << "This resulted in a damage of " << dealtDamage;
-			if(playerNumber != player.getPlayerNumber()){				//If player didn't shoot himself
+			if(playerNumber != player.getPlayerNumber()){			//If player didn't shoot himself
+				distance = (receivedData & 0x3F) * 10;
+				weaponId = ((receivedData & 0x1C0) >> 6);
+				dealtDamage = weaponStats.getDamage((receivedData & 0x1C0) >> 6, (receivedData & 0x3F));
+				// hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
+				// hwlib::cout << "This is equal to a damage of " << dealtDamage << ". " << hwlib::endl;
+				// hwlib::cout << "Hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
 				Display.showHealth(player.getHealth());
-				hwlib::cout << " hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;
@@ -206,6 +210,9 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 				receiveAddress[4] = data[1];
 				radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
 	   			radio.powerUp_rx();
+	   			player = game->getPlayerData();
+	   			player.setPlayerNumber(data[1]);
+	   			game->setPlayerData(player);
 			}
 			break;
 	}
