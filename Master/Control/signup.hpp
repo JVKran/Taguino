@@ -7,8 +7,7 @@ class signUp : public radioListener {
 private:
 	NRF24 radio;
 
-	std::array<int, 31> onlineWeapons;			//Array with weaponNumbers that have been turned on.
-	int assignedWeapons;
+	uint8_t assignedWeapons = 1;
 
 
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
@@ -17,6 +16,8 @@ private:
 	uint8_t dataToTransmit[5];
 public:
 	signUp(NRF24 & radio);
+
+	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;
 };
 

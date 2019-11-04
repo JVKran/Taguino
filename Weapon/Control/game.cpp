@@ -57,16 +57,17 @@ void runGame::main(){
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
 			receivedData = receivedDataChannel.read();
-			hwlib::cout << 'I' << hwlib::endl;
 			distance = (receivedData & 0x3F) * 10;
 			playerNumber = (receivedData >> 10);
 			weaponId = ((receivedData & 0x1C0) >> 6);
 			dealtDamage = weaponStats.getDamage((receivedData & 0x1C0) >> 6, (receivedData & 0x3F));
+			hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
+			hwlib::cout << "This resulted in a damage of " << dealtDamage;
 			if(playerNumber != player.getPlayerNumber()){				//If player didn't shoot himself
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
 				Display.showHealth(player.getHealth());
-				hwlib::cout << "New Health: " << player.getHealth() << hwlib::endl;
+				hwlib::cout << " hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;
@@ -143,10 +144,6 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
 /// Case 6 means that a new player has signed up.
 /// Case 7 means that all powerups have been disabled.
 void exchangeGameData::dataReceived(const uint8_t data[], const int len){
-	for(int i = 0; i < len; i++){
-		hwlib::cout << data[i] << " ";
-	}
-	hwlib::cout << hwlib::endl;
 	switch(data[0]){
 		case 1:
 			// for(int i = 0; i < signedUpPlayers; i++){
@@ -157,6 +154,7 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			// 	hwlib::cout << hwlib::endl;
 			// }
 			game->gameStartSignalReceived(data[1]);
+			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
 			if(data[1] == game->getPlayerData().getPlayerNumber()){
@@ -200,11 +198,15 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			break;
 		case 7:
 			Display.showPowerUp(10);
+			hwlib::cout << "All power-ups have been disabled!" << hwlib::endl;
 			break;
 		case 8:
-			receiveAddress[4] = data[1];
-			radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
-   			radio.powerUp_rx();
+			if(receiveAddress[4] != 100){
+				hwlib::cout << "Received address " << data[1] << "!" << hwlib::endl;
+				receiveAddress[4] = data[1];
+				radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
+	   			radio.powerUp_rx();
+			}
 			break;
 	}
 }

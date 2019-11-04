@@ -1,6 +1,6 @@
 #include "weapon.hpp"
 
-weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, const long long int period):
+weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, infraredTransmitter & irTransmitter):
 	task("Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
@@ -10,7 +10,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	leftManualButton(button(14, &handler, this, 'M', 19)),
 	rightManualButton(button(21, &handler, this, 'M', 18)),
 	handler(handler),
-	irTransmitter(infraredTransmitter(period)),
+	irTransmitter(irTransmitter),
 	game(game),
 	player(player),
 	shootTimer(this, "Shoot Timer"),
@@ -53,7 +53,7 @@ void weaponManager::shootBullet(){
 		dataToSend |= (measuredDistance < 500) ? measuredDistance / 10 : 0;
 		irTransmitter.sendData(dataToSend);
 		hwlib::cout << 'S' << hwlib::endl;
-		weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
+		//weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
 	} else if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
 		//hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
 		if(weapon.getAmountOfMags() > 0){

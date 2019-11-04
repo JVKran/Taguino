@@ -36,10 +36,10 @@ int main( void ){
    //This one is device specific
    const uint8_t weaponNumber = 1;
 
-   const long long int infraredPollPeriod = 200;
-   const long long int infraredTransmitPeriod = 200;
+   const long long int infraredPollPeriod = 100;
+   const long long int infraredTransmitPeriod = 100;
    const long long int inputPollPeriod = 100'000;
-   const long long int radioPollPeriod = 100'000;
+   const long long int radioPollPeriod = 10'000;
    
    playerData player = playerData(playerName, playerNumber, teamNumber);
    display Display = display(oled, xCoordinates, yCoordinates);
@@ -48,7 +48,8 @@ int main( void ){
    runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
-   weaponManager gunManager = weaponManager(Display, handler, game, player, infraredTransmitPeriod);
+   infraredTransmitter Transmitter = infraredTransmitter(infraredTransmitPeriod);
+   weaponManager gunManager = weaponManager(Display, handler, game, player, Transmitter);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
    rtos::run();

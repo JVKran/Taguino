@@ -10,7 +10,7 @@ public:
   {}
 
   virtual void messageReceived(const uint16_t message) override{
-    hwlib::cout << '\f' << int(message) << hwlib::endl;
+    hwlib::cout << int(message) << hwlib::endl;
   }
 };
 
@@ -29,7 +29,7 @@ int main( void ){
 
   messageLogger logger = messageLogger(timeField);
   infraredDecoder decoder = infraredDecoder(logger);
-  infraredReceiver receiver = infraredReceiver(decoder);
+  infraredReceiver receiver = infraredReceiver(decoder, 100);
   // for(;;){
   // 	if(irReceiver.dataAvailable()){
   // 		receivedNumber = irReceiver.readData();

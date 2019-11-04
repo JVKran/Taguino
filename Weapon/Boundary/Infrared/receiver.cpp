@@ -10,7 +10,7 @@
 /// measured and the period to check for a new signal. Then there's also a clock object created which fires every
 /// period and a task.
 infraredReceiver::infraredReceiver(highSignalListener & listener, const long long int period):
-   task("Signal Detecting Task"),
+   task(1, "Signal Detecting Task"),
    listener(listener),
    sampleClock(this, period, "Sample Clock"),
    period(period)

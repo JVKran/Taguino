@@ -481,6 +481,7 @@ void display::selectedWindow(const int window){
 			drawBullets(true);
 			drawMagazines();
 			showHealthBar();
+			drawFireMode();
 			updateHealth();
 			break;
 		case 1:

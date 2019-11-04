@@ -8,7 +8,7 @@
 /// This constructor has one mandatory parameter; the period to check wheter or not
 /// the transmitterPin should change state.
 infraredTransmitter::infraredTransmitter(const long long int period):
-   task("Infrared Transmitting Task"),
+   task(2, "Infrared Transmitting Task"),
    transmitClock(this, period, "Transmitting Clock"),
    messageChannel(this, "Message Channel")
 {}
