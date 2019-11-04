@@ -42,6 +42,7 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	Display.showTime(remainingSeconds, gameSeconds);
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	Display.showHealthBar();
+	Display.showFireMode(0);
 	//Display.showScore(player.getScore());
 }
 

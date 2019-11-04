@@ -46,8 +46,8 @@ protected:
 	int weaponId;
 
 	rtos::flag newScoreFlag;
-	rtos::pool<uint8_t> newScorePool;
-	uint8_t score;
+	rtos::pool<int> newScorePool;
+	int score;
 
 	rtos::flag newMagazineFlag;
 	rtos::pool<int> newMagazinePool;
@@ -90,7 +90,7 @@ public:
 
 	void showScoreBoard();
 
-	void showScore(const uint8_t score);
+	void showScore(const int score);
 	void drawScore();
 
 	void showTime(const double remainingSeconds, double totalGameSeconds = 0);

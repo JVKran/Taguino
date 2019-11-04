@@ -4,7 +4,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
-	fireModeWindow(oled, hwlib::xy(0, 30), hwlib::xy(41, 60)),
+	fireModeWindow(oled, hwlib::xy(0, 42), hwlib::xy(41, 57)),
 	bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
 	magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
@@ -35,7 +35,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 {
 	oled.clear();
 	//scoreTerminal << hwlib::right << '\f' << 1023;
-	//showScore(10);
+	showScore(10);
 }
 
 void display::showBullets(int amountOfBullets){
@@ -291,13 +291,17 @@ void display::drawAK(){
 }
 
 
-void display::showScore(const uint8_t score){
+void display::showScore(const int score){
 	newScorePool.write(score);
 	newScoreFlag.set();
 }
 
 void display::drawScore(){
-	scoreTerminal << '\f' << int(newScorePool.read());
+	score = newScorePool.read();
+	hwlib::cout << score << hwlib::endl;
+	if(score > 0){
+		scoreTerminal << '\f' << score;
+	}
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
@@ -514,6 +518,8 @@ void display::drawFireMode(){
 			hwlib::line(hwlib::xy(2,7),hwlib::xy(13,7)).draw(fireModeWindow);
 			hwlib::line(hwlib::xy(3,4),hwlib::xy(12,4)).draw(fireModeWindow);
 			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
+			break;
+		default:
 			break;
 	}
 	fireModeWindow.flush();

@@ -17,7 +17,6 @@ int main( void ){
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
    auto oled   = hwlib::glcd_oled(i2cBus);
 
-
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d24 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d26 );
    auto miso = hwlib::target::pin_in( hwlib::target::pins::d28 );

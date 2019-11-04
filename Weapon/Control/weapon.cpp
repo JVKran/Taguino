@@ -38,6 +38,7 @@ void weaponManager::newWeaponSelected(const int id){
 	autoFireMode = false;
 	burstFireMode = false;
 	manualFireMode = true;
+	Display.showFireMode(0);
 }
 
 void weaponManager::shootBullet(){
