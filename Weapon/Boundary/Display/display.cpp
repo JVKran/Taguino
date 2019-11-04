@@ -35,7 +35,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 {
 	oled.clear();
 	//scoreTerminal << hwlib::right << '\f' << 1023;
-	showScore(10);
+	//showScore(10);
 }
 
 void display::showBullets(int amountOfBullets){
