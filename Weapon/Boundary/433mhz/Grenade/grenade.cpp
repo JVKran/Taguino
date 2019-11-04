@@ -51,11 +51,16 @@ hwuart::hwuart(){
 	   USART0->US_THR = c;
 
 	}
+void button::addButtonListener( buttonListener*, hwlib::pin_in & sw; ){
+	buttonListener[0] = hwlib::pin_in & sw;
+}
 
-
-mhz433::mhz433( hwlib::pin_in & sw):
-	sw(sw)
+mhz433::mhz433( hwlib::pin_in & sw , const long long int duration):
+	sw(sw),
+	task( "433mhz" ),
+	sampleClock( this, duration, "wait for message clock"),	
 	{}
+
 
 void mhz433::write( uint16_t playerNumber, uint8_t damage ){
 	
@@ -69,61 +74,71 @@ void mhz433::write( uint16_t playerNumber, uint8_t damage ){
 	 // Making the checksum
 	 uint8_t checksum = ( damage / 256 ) ^ ( damage & 0xFF);
 	
-	 // Start bit, player id 1, player id 2, damage, sound, checksum, end bit.
-	 uint8_t explosionData[amount+1] = { 0xFF, playerId, playerId1, damage, 1, checksum }; 
+	 // Start bit, player id 1, player id 2, damage, sound 1-8, checksum, end bit.
+	 uint8_t explosionData[amount+2] = { 0xFF,0xFE, playerId, playerId1, damage, 1, checksum }; 
         
-	 for(;;){
-		 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes, if too short or long, just change it.
-		 for(int i=0; i<amount+1; i++){
-			putc( explosionData[i] );
-			hwlib::wait_us(400);
-		 }
-	 hwlib::cout<<"sending"<<hwlib::endl;
+	 
+	 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes, if too short or long, just change it.
+	 for(int i=0; i<amount+2; i++){
+		putc( explosionData[i] );
+		hwlib::wait_us(400);
 	 }
+	 hwlib::cout<<"sending"<<hwlib::endl;
 }
 
 
 void mhz433::read(){
-   for(;;){
-	   if( char_available() ){
-		   if( getc() == 254 ){												// If it's the start bit
+	if( char_available() ){
+	   if( getc() == 254 ){												// If it's the start bit
 
-			   uint8_t tmpArray[amount] = { 0, 0, 0, 0, 0 };				// Make array where the data is stored
+		   uint8_t tmpArray[amount] = { 0, 0, 0, 0, 0 };				// Make array where the data is stored
 
-			   for(int i=0; i<amount; i++){									
-				   tmpArray[i] = usart_getc();								// Put the data in the array
-				   hwlib::wait_us(800);
-			   }
+		   for(int i=0; i<amount; i++){									
+			   tmpArray[i] = usart_getc();								// Put the data in the array
+			   hwlib::wait_us(800);
+		   }
 
-			   for(int i=0; i<amount; i++){									// Debug( reading the data )
-				  hwlib::cout<<tmpArray[i]<<"\n";
-				   hwlib::wait_us(800);
-			   }
+		   for(int i=0; i<amount; i++){									// Debug( reading the data )
+			  hwlib::cout<<tmpArray[i]<<"\n";
+			   hwlib::wait_us(800);
+		   }
 
-			   uint8_t damage = tmpArray[2];								// tmpArray[2] is tje damage value
+		   uint8_t damage = tmpArray[2];								// tmpArray[2] is the damage value
 
-			   if( tmpArray[4] != ( ( damage / 256 ) ^ ( damage & 0xFF) ) ){		// If the checksum is not the same, it will stop.
-					return;
-			   }
-			   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.
+		   if( tmpArray[4] != ( ( damage / 256 ) ^ ( damage & 0xFF) ) ){		// If the checksum is not the same, it will stop.
+				return;
+		   }
+		   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.
 
-			   // Dit gedeelte nog niet helemaal goed.
-			   uint8_t len =3
-			   uint8_t nrfData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// playerId, playerId, damage, song.
-			   
-			   nrf.write( nrfData, len );
-			}
+		   uint8_t len = 4;
+		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// playerId, playerId, damage, song.
+
+		   for( int i = 0; i < amountOfListeners; i++){
+					mhzListener[i]->dataReceived( mhzData, len );
+		   }
 	   }
-   }
+	}
 }
 	
 uint8_t mhz433::dmgTimer( uint8_t damage ){
 	while( !sw.read() ){
-		damage++;
+		damage+=2;
 		// The grenade dammage cap will be 50, if too low or high just change it.
 	 	if( damage > 51){ damage=50; break; }
 		hwlib::wait_ms(200);			// Add 5 damage every second, up to 50.
 		
 	}
 	return damage;
+}
+
+void mhz433::addListener( mhzListener * listener ){
+	mhzListener[amountOfListeners] = listener;
+	amountOfListeners++;
+}
+
+void mhz433::main(){
+	for(;;)){
+		wait( sampleClock );
+		mhz.read();
+	}
 }
