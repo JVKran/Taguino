@@ -179,10 +179,10 @@ void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
-			// if(data[1] == game->getPlayerData().getPlayerNumber()){
-			// 	game->getPlayerData().setScore(data[2]);
-			// 	Display.showScore(data[2]);
-			// }
+			if(data[1] == game->getPlayerData().getPlayerNumber()){
+				game->getPlayerData().setScore(data[2]);
+				Display.showScore(data[2]);
+			}
 			//What's happening here is just a start. Needs to be fixed; doesn't work.
 
 			for(int i = 0; i < 32; i++){

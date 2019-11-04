@@ -17,6 +17,10 @@ int main( void ){
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
    auto oled   = hwlib::glcd_oled(i2cBus);
 
+   auto scoreFont      = hwlib::font_default_8x8();
+   auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
+   auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
+
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d24 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d26 );
    auto miso = hwlib::target::pin_in( hwlib::target::pins::d28 );
@@ -37,7 +41,7 @@ int main( void ){
    const long long int radioPollPeriod = 100'000;
    
    playerData player = playerData();
-   display Display = display(oled, xCoordinates, yCoordinates);
+   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
    weaponData weapon = weaponData(2);
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
    runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);

@@ -1,6 +1,6 @@
 #include "display.hpp"
 
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal):
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
@@ -10,8 +10,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
 	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
-	scoreWindow(oled, hwlib::xy(88, 9), hwlib::xy(128, 17)),
-	scoreTerminal(scoreWindow, hwlib::font_default_8x8()),
+	scoreWindow(scoreWindow),
+	scoreTerminal(scoreTerminal),
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
@@ -34,8 +34,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newFireModePool("New Fire Mode Pool")
 {
 	oled.clear();
-	//scoreTerminal << hwlib::right << '\f' << 1023;
-	//showScore(10);
+	showScore(0);
 }
 
 void display::showBullets(int amountOfBullets){
@@ -300,7 +299,7 @@ void display::drawScore(){
 	score = newScorePool.read();
 	hwlib::cout << score << hwlib::endl;
 	if(score > 0){
-		scoreTerminal << '\f' << score;
+		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score;
 	}
 }
 
