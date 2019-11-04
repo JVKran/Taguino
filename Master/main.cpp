@@ -17,11 +17,11 @@ int main( void ){
    auto oled   = hwlib::glcd_oled(i2cBus);
 
 
-   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d24 );
-   auto mosi = hwlib::target::pin_out( hwlib::target::pins::d26 );
-   auto miso = hwlib::target::pin_in( hwlib::target::pins::d28 );
-   auto csn  = hwlib::target::pin_out( hwlib::target::pins::d30 );
-   auto ce   = hwlib::target::pin_out( hwlib::target::pins::d32 );
+   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
+   auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
+   auto miso = hwlib::target::pin_in( hwlib::target::pins::d13 );
+   auto csn  = hwlib::target::pin_out( hwlib::target::pins::d11 );
+   auto ce   = hwlib::target::pin_out( hwlib::target::pins::d10 );
 
    auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso);
 

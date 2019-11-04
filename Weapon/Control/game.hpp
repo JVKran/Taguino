@@ -27,6 +27,8 @@ private:
   NRF24 radio;
   uint8_t dataToTransmit[5] = {0, 0, 0, 0, 0};    //Used for storing data to transmit
   uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};    //Used to store the address at which to listen for incoming messages
+  uint8_t startupAddress[5] = {0,0, 0, 0, 100};
+
   uint8_t masterAddress[5] = {0, 0, 0, 0, 0};     //Used to store the address of the master
   const uint8_t amountOfDataToTransmit = 5;       //Contains the length of the data to transmit; always 5.
 public:

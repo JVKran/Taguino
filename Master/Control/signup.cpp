@@ -9,6 +9,7 @@ void signUp::dataReceived(const uint8_t data[], const int len){
 		for(auto & element : onlineWeapons){
 			if(element != 0){
 				element = data[1];
+				hwlib::cout << "Weapon with address " << data[1] << " turned on." << hwlib::endl;
 			}
 		}
 	}
