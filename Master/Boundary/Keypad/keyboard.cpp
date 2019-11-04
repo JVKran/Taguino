@@ -9,6 +9,7 @@ keyboard::keyboard(keyboard & existingKeyboard):
 	keypad(existingKeyboard.keypad)
 {}
 
+<<<<<<< HEAD
 /// \brief
 /// Read Character
 /// \details

@@ -19,7 +19,7 @@ int main(){
    
    auto detector = pauseDetector(receiver, decoder, 100, "Pause detecting task");
 
-   HWLIB_TRACE;
+   // HWLIB_TRACE;
    
    rtos::run();
 }

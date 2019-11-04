@@ -1,6 +1,7 @@
 #include "hwlib.hpp"
 #include "entities.hpp"
 #include "interface.hpp"
+#include "scoreboard.hpp"
 #include "input.hpp"
 #include "weapon.hpp"
 #include "game.hpp"
@@ -10,48 +11,45 @@
 int main( void ){	
    hwlib::wait_ms( 500 );
 
-   auto scl = hwlib::target::pin_oc(hwlib::target::pins::scl);
-   auto sda = hwlib::target::pin_oc(hwlib::target::pins::sda);
+   auto scl    = hwlib::target::pin_oc(hwlib::target::pins::scl);
+   auto sda    = hwlib::target::pin_oc(hwlib::target::pins::sda);
+
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
-   auto oled = hwlib::glcd_oled(i2cBus);
+   auto oled   = hwlib::glcd_oled(i2cBus);
 
-   auto Display = display(oled);
-   oled.clear();   
-   oled.flush();
+   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d24 );
+   auto mosi = hwlib::target::pin_out( hwlib::target::pins::d26 );
+   auto miso = hwlib::target::pin_in( hwlib::target::pins::d28 );
+   auto csn  = hwlib::target::pin_out( hwlib::target::pins::d30 );
+   auto ce   = hwlib::target::pin_out( hwlib::target::pins::d32 );
 
-   const char * playerName1 = "Jochem";	//This would usually be received from the master...
-   playerData player1 = playerData(playerName1, 1, 1);
-   weaponData weapon1 = weaponData(2);
+   auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso);
 
-   const char * playerName2 = "Stefan"; //This would usually be received from the master...
-   playerData player2 = playerData(playerName2, 1, 1);
-   weaponData weapon2 = weaponData(2);
+   constexpr auto xCoordinates = lookup< int, 360>(scaled_sine_from_degrees);
+   constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
 
-   const char * playerName3 = "Joshua"; //This would usually be received from the master...
-   playerData player3 = playerData(playerName3, 1, 1);
-   weaponData weapon3 = weaponData(2);
+   //These values would usually be received from the master...
+   const char * playerName = "Jochem";
+   const uint8_t playerNumber = 1;
+   const uint8_t teamNumber = 1;
 
-   const char * playerName4 = "Faizal"; //This would usually be received from the master...
-   playerData player4 = playerData(playerName4, 1, 1);
-   weaponData weapon4 = weaponData(2);
+   //This one is device specific
+   const uint8_t weaponNumber = 1;
 
-   const char * playerName5 = "Menno"; //This would usually be received from the master...
-   playerData player5 = playerData(playerName5, 1, 1);
-   weaponData weapon5 = weaponData(2);
-
-   std::array<playerData,5> players = {player1, player2, player3, player4, player5};
-   auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
-   scoreboard bord = scoreboard(window, oled, players);
-   oled.flush();
-
-   // hwlib::cout << player << hwlib::endl;
-
-   // hwlib::cout << weapon << hwlib::endl;
-
-   runGame game = runGame(player);
-   inputHandler handler = inputHandler(100'000);
-   weaponManager gunManager = weaponManager(handler, game);
-   interfaceManager interface = interfaceManager(handler);
+   const long long int infraredPollPeriod = 200;
+   const long long int infraredTransmitPeriod = 200;
+   const long long int inputPollPeriod = 100'000;
+   const long long int radioPollPeriod = 100'000;
+   
+   playerData player = playerData(playerName, playerNumber, teamNumber);
+   display Display = display(oled, xCoordinates, yCoordinates);
+   weaponData weapon = weaponData(2);
+   inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
+   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);
+   infraredDecoder decoder = infraredDecoder(game);
+   infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
+   weaponManager gunManager = weaponManager(Display, handler, game, player, infraredTransmitPeriod);
+   interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
    rtos::run();
 }

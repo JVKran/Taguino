@@ -2,45 +2,110 @@
 #define __DISPLAY_HPP
 
 #include "hwlib.hpp"
+#include "rtos.hpp"
 #include "entities.hpp"
 #include "scoreboard.hpp"
+#include "applicationLogic.hpp"
 
-class display{
+class display : public rtos::task<> {
 protected:
 	hwlib::glcd_oled & oled;
 	hwlib::window_part weaponWindow;
+	hwlib::window_part weaponSettingWindow;
+	hwlib::window_part fireModeWindow;
 	hwlib::window_part bulletWindow;
 	hwlib::window_part magazineWindow;
-	hwlib::terminal_from magazineTerminal;
 	hwlib::window_part healthWindow;
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
+	hwlib::window_part scoreWindow;
 	hwlib::terminal_from scoreTerminal;
 
+	displayedData lastData;
+	bool maxBulletsDrawn = false;
+	bool maxMagazinesDrawn = false;	
+	int currentlySelectedWindow = 0;
+
+	const lookup <int, 360> xCoordinates;
+	const lookup <int, 360> yCoordinates;
 	void drawUnknown();
 	void drawShotgun();
 	void drawPistol();
-	
+	void drawSniper();
+	void drawM16();
+	void drawAK();
+	void drawMaxAmmo();
+	void drawInstaKill();
+
+	rtos::flag newBulletFlag;
+	rtos::pool<int> newBulletPool;
+	int amountOfBullets;
+
+	rtos::flag newWeaponFlag;
+	rtos::pool<int> newWeaponPool;
+	int weaponId;
+
+	rtos::flag newScoreFlag;
+	rtos::pool<int> newScorePool;
+	int score;
+
+	rtos::flag newMagazineFlag;
+	rtos::pool<int> newMagazinePool;
+	int amountOfMagazines;
+
+	rtos::flag newHealthFlag;
+	int health;
+	rtos::pool<int> newHealthPool;
+
+	//rtos::flag newScoreBoardFlag;
+	//rtos::pool<scoreboard> newScoreBoardPool;
+
+	rtos::flag newTimeFlag;
+	rtos::pool<double> newTimePool;
+	double totalGameTime = 0;
+	double remainingSeconds;
+
+	rtos::flag newPowerUpFlag;
+	int powerUpID;
+	rtos::pool<int> newPowerUpPool;
+
+	rtos::flag newFireModeFlag;
+	rtos::pool<int> newFireModePool;
+	int fireMode;
 public:
-	display(hwlib::glcd_oled & oled):
-		oled(oled),
-		weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
-		bulletWindow(oled, hwlib::xy(0,16), hwlib::xy(41,26)),
-		magazineWindow(oled, hwlib::xy(0,27), hwlib::xy(41,39)),
-		magazineTerminal(magazineWindow, hwlib::font_default_8x8()),
-		healthWindow(oled, hwlib::xy(0,40), hwlib::xy(40,46)),
-		timeWindow(oled, hwlib::xy(78,0), hwlib::xy(128,39)),
-		powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
-		scoreTerminal(oled, hwlib::font_default_8x8())
-	{
-		oled.clear();
-	}
-	void terminal();
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates);
+
 	void showBullets(int amountOfBullets);
+	void drawBullets(const bool draw);
+
 	void showHealthBar();
-	void updateHealth(const unsigned int prevHealth, const unsigned int health);
+	void showHealth(const int health);
+	void updateHealth();
+
 	void showMagazines(int amountOfMagazines);
+	void drawMagazines();
+
 	void showWeapon(int weaponID);
+	void drawWeapon();
+
+	void showScoreBoard();
+
+	void showScore(const int score);
+	void drawScore();
+
+	void showTime(const double remainingSeconds, double totalGameSeconds = 0);
+	void drawTime();
+
+	void showPowerUp(int powerUpID);
+	void drawPowerUp();
+
+	void selectedSetting(const int setting);
+	void selectedWindow(const int window);
+
+	void showFireMode(const int mode);
+	void drawFireMode();
+
+	void main() override;
 
 };
 

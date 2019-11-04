@@ -1,16 +1,31 @@
 #include "hwlib.hpp"
-#include "transceiver.hpp"
+#include "transmitter.hpp"
 
 #include <array>
+
+class tester : public rtos::task<> {
+private:
+	infraredTransmitter & Transmitter;
+	rtos::clock testClock;
+public:
+	tester(infraredTransmitter & Transmitter):
+		Transmitter(Transmitter),
+		testClock(this, 100'000, "TestClock")
+	{}
+
+	void main() override{
+		for(;;){
+			wait(testClock);
+			Transmitter.sendData(43643);
+		}
+	}
+};
 
 int main( void ){	
 	hwlib::wait_ms( 500 );
 
-	auto irTransmitter = transmitter();
-	const uint16_t data = 43643;
+	auto Transmitter = infraredTransmitter();
+	auto logger = tester(Transmitter);
 
-   	for(;;){
-   		irTransmitter.sendData(data);
-   		hwlib::wait_ms(500);
-   	}
+	rtos::run();
 }
