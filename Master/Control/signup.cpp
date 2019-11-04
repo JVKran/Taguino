@@ -4,7 +4,7 @@ signUp::signUp(NRF24 & radio):
 	radio(radio)
 {}
 
-void signUp::dataReceived(const uint8_t data[], const int len){
+void signUp::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 1){
 		if(assignedWeapons < 31){
 			hwlib::cout << "Weapon turned on. Gave him address " << hwlib::endl;
