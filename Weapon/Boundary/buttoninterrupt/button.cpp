@@ -3,7 +3,10 @@
 #include "hwlib.hpp"
 #include "button.hpp"
 
-
+/// \brief
+/// Constructor
+/// \details
+/// Initialize hardware with required values.
 Buttoninterrupter::Buttoninterrupter(){
     auto inputpin = hwlib::target::pin_in(hwlib::target::pins::a8);             //make pins input to prevent shorting arduino
     auto inputpin2 = hwlib::target::pin_in(hwlib::target::pins::a9);
@@ -13,7 +16,7 @@ Buttoninterrupter::Buttoninterrupter(){
     auto inputpin6 = hwlib::target::pin_in(hwlib::target::pins::d52); 
     auto inputpin7  = hwlib::target::pin_in(hwlib::target::pins::d53);     
     mask = 0x1U << 15;
-    mask |= 0x1U << 17;                      // create mask to cover all pins
+    mask |= 0x1U << 17;                                                         //create mask to cover all pins
     mask |= 0x1U << 18;
     mask |= 0x1U << 19;
     mask |= 0x1U << 20;
@@ -22,29 +25,38 @@ Buttoninterrupter::Buttoninterrupter(){
     mask |= mask2;
     PIOB->PIO_IFER = mask;
     PIOB->PIO_DIFSR = mask;
-    PIOB->PIO_IER = mask;                   //enable interrupts on pins
-    PIOB->PIO_ESR = mask;                   //use edge detection
-    PIOB->PIO_AIMER = mask;                //use FELLSR for mode
+    PIOB->PIO_IER = mask;                                                       //enable interrupts on pins
+    PIOB->PIO_ESR = mask;                                                       //use edge detection
+    PIOB->PIO_AIMER = mask;                                                     //use FELLSR for mode
     PIOB->PIO_REHLSR = mask2;
 }
+
+/// \brief
+/// Refresh Register
+/// \details
+/// This function refreshes the register and stores it in the register variable.
+/// Should be called before read().
 void Buttoninterrupter::refreshregister(){
     registercont = PIOB->PIO_ISR;                   //take content of the interrupt status register and store it in registercont, needed because the registers clears on read
 }
 
-
+/// \brief
+/// Read pin
+/// \details
+/// This function returns the state of the pin read from the register variable.
 bool Buttoninterrupter::read(uint8_t pin){
-    
-    
-    if((pin<22&&pin>16)||(pin==15)||(pin==14)){                                     //check if button is within range
-    return (( registercont & 0x1U << pin ) != 0 );          // read stored copy of the register for given button
-    }
-    else{
-    return(0);
-    hwlib::cout<<"nein";
+    if((pin<22&&pin>16)||(pin==15)||(pin==14)){                 //check if button is within range
+        return (( registercont & 0x1U << pin ) != 0 );          //read stored copy of the register for given button
+    } else {
+        return(0);
     }
 }
+
+/// \brief
+/// Constructor
+/// \details
+/// This constructor initializes values needed to decode the rotaryEncoder
 rotaryEncoder::rotaryEncoder(){
-           
     // activate peripheral functions for quad pins
     PIOB->PIO_PDR = 1 << 25;     // activate peripheral function 
     PIOB->PIO_ABSR |= 1<<25;   // choose peripheral option B   
@@ -60,7 +72,13 @@ rotaryEncoder::rotaryEncoder(){
     // enable the clock (C) and reset the counter ()
     // SWTRG = 1 starts clock
     TC0->TC_CHANNEL[0].TC_CCR = 5;  
-    }
+}
+
+
+/// \brief
+/// Read Encoder Position
+/// \details
+/// Return the position of the rotary encoder; read from the quadrature decoder integrated in the processor.
 int32_t rotaryEncoder::read(){
     return(int32_t(TC0->TC_CHANNEL[0].TC_CV));
 }
