@@ -58,20 +58,25 @@ hwuart::hwuart(){
 
 	}
 	uint16_t hwuart::get_uint(){
-
+		             uint8_t intArray[2] = { 0, 0};
+					 uint8_t curcar;
+		for(;;){
            if(char_available()){                   //needed to stop code from blocking when no message availible
-           if(getc() == 254){                    //look for startbyte
-               uint8_t intArray[2] = { 0, 0};
+		   curcar=getc();
+		   //hwlib::cout<<curcar<<hwlib::endl;
+           if(curcar == 254){                    //look for startbyte
+  
                for(int i=0; i<2; i++){
 					intArray[i] = getc();                // get next bytes and put them in array
+					//hwlib::cout<<intArray[i]<<"   "<<i<<hwlib::endl;
 					hwlib::wait_us(800);
                }
 			   return 0x00 | intArray[0]<<8 | intArray[1];
 			   }
            }
 		   
-			   return 0;
-		   
+			   //return 0;
+		}
 		   
        }
        
@@ -81,9 +86,9 @@ hwuart::hwuart(){
                    //look for startbyte
 			uint8_t byte1 = (uint8_t)(playernumber>>8);
 			uint8_t byte2 = (uint8_t)playernumber;
-            uint8_t intArray[3] = {0xFF, byte1, byte2}; //startbyte+data
+            uint8_t intArray[4] = {0xFF,0xFE, byte1, byte2}; //startbyte+data
 			
-            for(int i=0; i<3; i++){
+            for(int i=0; i<4; i++){
 			putc(intArray[i]);
 				hwlib::wait_us(400);
             }	   
