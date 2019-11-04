@@ -5,7 +5,6 @@
 #include "rtos.hpp"
 #include "button.hpp"
 #include "KY040.hpp"
-#include "keyboard.hpp"
 
 class KY040;
 
@@ -18,11 +17,6 @@ class encoderListener {
 	public:
 		virtual void buttonPressed() = 0;
 		virtual void encoderTurned(const int pos) = 0;
-};
-
-class keyboardListener {
-	public:
-		virtual void keyPressed(const char id) = 0;
 };
 
 class inputHandler;
@@ -57,7 +51,6 @@ class inputHandler : public rtos::task<> {
 
 		void addButton(button * b);
 		void addEncoder(KY040 * e);
-		void addKeyboard(keyboard * k);
 
 		Buttoninterrupter * getRegister();
 
