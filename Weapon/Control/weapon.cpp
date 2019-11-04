@@ -84,9 +84,9 @@ void weaponManager::main(){
 						burstFireMode = false;
 						manualFireMode = false;
 						shotBullets = 0;
-						//Display.drawAutoIcon();
+						Display.showFireMode(1);
 					} else {
-						//Display.drawManualIcon();
+						Display.showFireMode(0);
 					}
 					break;
 				case 'B':
@@ -95,9 +95,9 @@ void weaponManager::main(){
 						autoFireMode = false;
 						burstFireMode = true;
 						manualFireMode = false;
-						//Display.drawBurstIcon();
+						Display.showFireMode(2);
 					} else {
-						//Display.drawManualIcon();
+						Display.showFireMode(0);
 					}
 					break;
 				case 'M':
@@ -105,7 +105,7 @@ void weaponManager::main(){
 					autoFireMode = false;
 					burstFireMode = false;
 					manualFireMode = true;
-					//Display.drawManualIcon
+					Display.showFireMode(0);
 					break;
 				case 'R':
 					Display.showBullets(weapon.getAmountOfBullets());

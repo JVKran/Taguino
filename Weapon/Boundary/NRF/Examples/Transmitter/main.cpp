@@ -31,10 +31,10 @@ int main( void ){
 
    hwlib::wait_ms(10000);
 
-   value[5] = { 2, 1, 10, 0, 0 }; 
+   uint8_t newValue[5] = { 2, 1, 10, 0, 0 }; 
 
    for(;;){
-      nrf.write(value, len);
+      nrf.write(newValue, len);
       hwlib::wait_ms(10000);
    }
 }
