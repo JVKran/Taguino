@@ -4,6 +4,7 @@
 #define __KY040_HPP
 
 #include "input.hpp"
+#include "button.hpp"
 #include "hwlib.hpp"
 
 /// \brief
@@ -39,26 +40,27 @@
 /// ~~~~~~~~~~~~~~~
 
 class encoderListener;
+class inputHandler;
 
 class KY040 {
 	private:
-	   	hwlib::target::pin_in CLK = hwlib::target::pin_in( hwlib::target::pins::d40 );
-	    hwlib::target::pin_in DT = hwlib::target::pin_in( hwlib::target::pins::d38 );
-	    hwlib::target::pin_in SW = hwlib::target::pin_in( hwlib::target::pins::d36 );
-	    int posCounter;
-	    bool swPress;
-	    int lastPos;
-	    int curPos;
+	    rotaryEncoder encoder = rotaryEncoder();
+	    int switchPinNumber;
+
+	    int posCounter = 0;
+	    int lastPos = 0;
 
 	    encoderListener * listener;
+
+	    inputHandler * handler;
+	    Buttoninterrupter * buttonRegister;
   	public:
-	    KY040(encoderListener * listener, const int posCounter = 0, const bool swPress = false);
+	    KY040(const int receivedSwitchPinNumber, encoderListener * listener, inputHandler* handler);
+	    
 	    void update();
+
 	    int getPos();
 	    void setPos(const int newPos);
-	    bool isPressed();
-
-	    bool testCorrectFunctioning();
 };
 
 #endif //__KY040_HPP
