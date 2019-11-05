@@ -19,7 +19,7 @@ class mhzListener{
 public:
 	virtual void dataReceived( const uint8_t data[], const int len )=0;
 };
-/*
+
 class buttonListener{
 public:
 	virtual void buttonPressed()=0;
@@ -33,27 +33,29 @@ public:
 	button( hwlib::pin_in & sw, buttonListener* listener );
 	void update();
 };
-*/
-class mhz433Read : public hwuart, public mhzListener, public rtos::task<>{
+
+class mhz433Read : public mhzListener, public rtos::task<>, public hwuart{
 private:
 	rtos::clock sampleClock;
 	
 	std::array< mhzListener*, 5> listenMhz;
 	int amountMhzListeners = 0;
 	
-	const int amount = 5;
+	const int amount = 4;
 	
 public:
 	mhz433Read( long long int duration );
 	
 	void addMhzListener( mhzListener * listener );
 	
+	void dataReceived( const uint8_t data[], const int len ) override;
+	
 	void read();
 	
 	void main() override;
 	
 };
-/*
+
 class mhz433Write : public buttonListener, public rtos::task<>, public hwuart{
 private:
 	rtos::flag buttonFlag;
@@ -66,7 +68,7 @@ private:
 	button b;
 	buttonListener * listener;
 	
-	const int amount = 5;
+	const int amount = 4;
 	enum class states{ IDLE, WRITE };
 	states state;
 	
@@ -81,5 +83,5 @@ public:
 	
 	void main() override;
 }; 
-*/
+
 #endif // GRENADE_HPP

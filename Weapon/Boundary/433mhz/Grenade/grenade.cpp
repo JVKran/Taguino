@@ -51,7 +51,7 @@ hwuart::hwuart(){
 	   USART0->US_THR = c;
 
 	}
-/*
+
 //======================< Button >===============================
 button::button( hwlib::pin_in & sw, buttonListener* listener ):
 	sw( sw ),
@@ -69,7 +69,6 @@ void button::update(){
 mhz433Write::mhz433Write(  hwlib::pin_in & sw, uint8_t player, uint8_t damage ):
 	task( "433mhzWrite" ),
 	buttonFlag(this),
-	
 	sw(sw),
 	player(player),
 	damage(damage),
@@ -88,7 +87,7 @@ void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 	 uint8_t protocol = 2; 
 	
 	 // Start bit, player id 1, player id 2, damage, sound 1-8, checksum, end bit.
-	 uint8_t explosionData[amount+2] = { 0xFF,0xFE, protocol, playerNumber, damage, 1, checksum }; 
+	 uint8_t explosionData[amount+2] = { 0xFF,0xFE, protocol, playerNumber, damage, checksum }; 
         
 	 
 	 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes, if too short or long, just change it.
@@ -98,7 +97,7 @@ void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 	 }
 	 hwlib::cout<<"sending"<<hwlib::endl;
 }
-
+/*
 uint8_t mhz433Write::dmgTimer( uint8_t damage ){
 	while( !sw.read() ){
 		damage+=2;
@@ -109,10 +108,11 @@ uint8_t mhz433Write::dmgTimer( uint8_t damage ){
 	}
 	return damage;
 }
-
+*/
 	
 void mhz433Write::buttonPressed(){
 	buttonFlag.set();
+	hwlib::cout<<"Flag Set\n";
 }
 
 void mhz433Write::main(){
@@ -120,10 +120,17 @@ void mhz433Write::main(){
     for(;;){
 		switch( state ){
 			case states::IDLE:
-				wait(buttonFlag);			// Wait for button press
-				state = states::WRITE;
-				break;
+				for(;;){
+					b.update();
+					auto event = wait( buttonFlag );
+					if( event == buttonFlag){
+						state = states::WRITE;
+						hwlib::cout<<"State = write \n";
+						break;
+					}
+				}
 			case states::WRITE:
+				hwlib::cout<<"In Write\n";
 				write( player, damage );
 				state = states::IDLE;
 				break;
@@ -131,7 +138,7 @@ void mhz433Write::main(){
 	}
 }
 
-*/
+
 //======================< Read >===============================
 
 mhz433Read::mhz433Read( long long int duration):
@@ -144,7 +151,7 @@ void mhz433Read::read(){
 	if( char_available() ){
 	   if( getc() == 254 ){												// If it's the start bit
 
-		   uint8_t tmpArray[amount] = { 0, 0, 0, 0, 0 };				// Make array where the data is stored
+		   uint8_t tmpArray[amount] = { 0, 0, 0, 0 };				// Make array where the data is stored
 
 		   for(int i=0; i<amount; i++){									
 			   tmpArray[i] = getc();								// Put the data in the array
@@ -163,8 +170,8 @@ void mhz433Read::read(){
 		   }
 		   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.
 
-		   uint8_t len = 4;
-		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// Protocol, playerId, damage, song.
+		   uint8_t len = 3;
+		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2]};		// Protocol, playerId, damage.
 
 		   for( int i = 0; i < amountMhzListeners; i++){
 					listenMhz[i]->dataReceived( mhzData, len );
@@ -178,10 +185,15 @@ void mhz433Read::addMhzListener( mhzListener * listener ){
 	amountMhzListeners++;
 }
 
+void mhz433Read::dataReceived( const uint8_t data[], const int len ){
+	for( int i =0; i<len; i++){
+		hwlib::cout<< data[i] <<"\n";
+	}
+}
+
 void mhz433Read::main(){
 	for(;;){
 		wait( sampleClock );
 		read();
 	}
 }
-
