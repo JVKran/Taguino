@@ -51,31 +51,44 @@ hwuart::hwuart(){
 	   USART0->US_THR = c;
 
 	}
-void button::addButtonListener( buttonListener*, hwlib::pin_in & sw; ){
-	buttonListener[0] = hwlib::pin_in & sw;
-}
-
-mhz433::mhz433( hwlib::pin_in & sw , const long long int duration):
-	sw(sw),
-	task( "433mhz" ),
-	sampleClock( this, duration, "wait for message clock"),	
+/*
+//======================< Button >===============================
+button::button( hwlib::pin_in & sw, buttonListener* listener ):
+	sw( sw ),
+	listener( listener )
 	{}
 
+void button::update(){
+	if( !sw.read() ){
+		listener->buttonPressed();
+	}
+}
 
-void mhz433::write( uint16_t playerNumber, uint8_t damage ){
+//======================< Write >===============================
+
+mhz433Write::mhz433Write(  hwlib::pin_in & sw, uint8_t player, uint8_t damage ):
+	task( "433mhzWrite" ),
+	buttonFlag(this),
 	
-	 // Split the uint16_t playerNumber into two uint8_t, to be able to transmit it
-	 uint8_t playerId = (uint8_t)(playerNumber>>8);
-	 uint8_t playerId1 = (uint8_t) playerNumber;
-	
+	sw(sw),
+	player(player),
+	damage(damage),
+	b( sw, listener)
+	{}
+
+void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
+
 	 // The grenade dammage cap will be 50, if too low or high just change it.
 	 if( damage > 51){ damage=50; }
 	
 	 // Making the checksum
 	 uint8_t checksum = ( damage / 256 ) ^ ( damage & 0xFF);
+	 
+	 // Sending to the master, the number 2 is the protocol for newScore
+	 uint8_t protocol = 2; 
 	
 	 // Start bit, player id 1, player id 2, damage, sound 1-8, checksum, end bit.
-	 uint8_t explosionData[amount+2] = { 0xFF,0xFE, playerId, playerId1, damage, 1, checksum }; 
+	 uint8_t explosionData[amount+2] = { 0xFF,0xFE, protocol, playerNumber, damage, 1, checksum }; 
         
 	 
 	 hwlib::wait_ms(1500); 						// Wait 1.5 seconds until it explodes, if too short or long, just change it.
@@ -86,15 +99,55 @@ void mhz433::write( uint16_t playerNumber, uint8_t damage ){
 	 hwlib::cout<<"sending"<<hwlib::endl;
 }
 
+uint8_t mhz433Write::dmgTimer( uint8_t damage ){
+	while( !sw.read() ){
+		damage+=2;
+		// The grenade dammage cap will be 50, if too low or high just change it.
+	 	if( damage > 51){ damage=50; break; }
+		hwlib::wait_ms(200);			// Add 5 damage every second, up to 50.
+		
+	}
+	return damage;
+}
 
-void mhz433::read(){
+	
+void mhz433Write::buttonPressed(){
+	buttonFlag.set();
+}
+
+void mhz433Write::main(){
+	state = states::IDLE;
+    for(;;){
+		switch( state ){
+			case states::IDLE:
+				wait(buttonFlag);			// Wait for button press
+				state = states::WRITE;
+				break;
+			case states::WRITE:
+				write( player, damage );
+				state = states::IDLE;
+				break;
+		}
+	}
+}
+
+*/
+//======================< Read >===============================
+
+mhz433Read::mhz433Read( long long int duration):
+	task( "433mhzRead" ),
+	sampleClock( this, duration, "wait for message clock")	
+	{}
+
+
+void mhz433Read::read(){
 	if( char_available() ){
 	   if( getc() == 254 ){												// If it's the start bit
 
 		   uint8_t tmpArray[amount] = { 0, 0, 0, 0, 0 };				// Make array where the data is stored
 
 		   for(int i=0; i<amount; i++){									
-			   tmpArray[i] = usart_getc();								// Put the data in the array
+			   tmpArray[i] = getc();								// Put the data in the array
 			   hwlib::wait_us(800);
 		   }
 
@@ -111,34 +164,24 @@ void mhz433::read(){
 		   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.
 
 		   uint8_t len = 4;
-		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// playerId, playerId, damage, song.
+		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2], tmpArray[3] };		// Protocol, playerId, damage, song.
 
-		   for( int i = 0; i < amountOfListeners; i++){
-					mhzListener[i]->dataReceived( mhzData, len );
+		   for( int i = 0; i < amountMhzListeners; i++){
+					listenMhz[i]->dataReceived( mhzData, len );
 		   }
 	   }
 	}
 }
-	
-uint8_t mhz433::dmgTimer( uint8_t damage ){
-	while( !sw.read() ){
-		damage+=2;
-		// The grenade dammage cap will be 50, if too low or high just change it.
-	 	if( damage > 51){ damage=50; break; }
-		hwlib::wait_ms(200);			// Add 5 damage every second, up to 50.
-		
-	}
-	return damage;
+
+void mhz433Read::addMhzListener( mhzListener * listener ){
+	listenMhz[amountMhzListeners] = listener;
+	amountMhzListeners++;
 }
 
-void mhz433::addListener( mhzListener * listener ){
-	mhzListener[amountOfListeners] = listener;
-	amountOfListeners++;
-}
-
-void mhz433::main(){
-	for(;;)){
+void mhz433Read::main(){
+	for(;;){
 		wait( sampleClock );
-		mhz.read();
+		read();
 	}
 }
+

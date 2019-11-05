@@ -3,21 +3,19 @@
 
 int main(){
 	hwlib::wait_ms(500);
-	namespace target = hwlib::target;
-	auto grenadeSw = target::pin_in( target::pin::d7);
+	/*	
+	uint8_t player = 2;
+	uint8_t damage = 50;
+	*/
+	/*namespace target = hwlib::target;
+	auto grenadeSw = target::pin_in( target::pins::d7);
 	
-    auto mhz = mhz433( grenadeSw );
+    auto mhzWrite = mhz433Write( grenadeSw, player, damage );
+	(void) mhzWrite;
+	*/
+	auto mhzRead = mhz433Read( 1000 );
+	(void) mhzRead;
+	rtos::run();
+
 	
-	uint16_t player = 12345;
-	uint8_t damage = 20;
-	
-	// Transmit
-	if( !grenadeSw.read() ){
-		damage = mhz.dmgTimer( damage );		// When the button is pressed it adds 5 damage every second, up to 50. 
-		mhz.write( player, damage );		    // This will now loop.
-	}
-	
-	// Receive
-	
-	mhz.read();						// This will now loop
 }

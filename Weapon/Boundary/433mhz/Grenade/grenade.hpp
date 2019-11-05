@@ -15,46 +15,71 @@ class hwuart{
 
 };
 
+class mhzListener{
+public:
+	virtual void dataReceived( const uint8_t data[], const int len )=0;
+};
+/*
 class buttonListener{
 public:
-	buttonPressed( button b );
-}
+	virtual void buttonPressed()=0;
+};
 
 class button{
 private:
 	hwlib::pin_in & sw;
-	std::array< buttonListener*, 1> buttonListener;
+	buttonListener* listener;
 public:
-	button( hwlib::pin_in & sw );
-	void addButtonListener( buttonListener* );
-}
-
-class mhzListener{
-public:
-	virtual void dataReceived( const uint8_t data[], const int len )=0;
-}
-
-class mhz433 : public hwuart, public rtos::task<>{
+	button( hwlib::pin_in & sw, buttonListener* listener );
+	void update();
+};
+*/
+class mhz433Read : public hwuart, public mhzListener, public rtos::task<>{
 private:
 	rtos::clock sampleClock;
 	
-	std::array< mhzListener*, 5> mhzListener;
-	const int amountOfListeners = 0;
+	std::array< mhzListener*, 5> listenMhz;
+	int amountMhzListeners = 0;
 	
 	const int amount = 5;
-	uint16_t player = 12345;
-	uint8_t damage = 20;
 	
 public:
-	mhz433( hwlib::pin_in & sw, const long long int duration );
+	mhz433Read( long long int duration );
 	
-	void write( uint8_t playerNumber, uint8_t damage );
+	void addMhzListener( mhzListener * listener );
+	
 	void read();
-	uint8_t dmgTimer( uint8_t damage );
 	
-	void addListener( mhzListener * listener );
-	void main () override;
+	void main() override;
 	
 };
+/*
+class mhz433Write : public buttonListener, public rtos::task<>, public hwuart{
+private:
+	rtos::flag buttonFlag;
 
+	hwlib::pin_in & sw;
+	
+	uint8_t player;
+	uint8_t damage;
+	
+	button b;
+	buttonListener * listener;
+	
+	const int amount = 5;
+	enum class states{ IDLE, WRITE };
+	states state;
+	
+	
+public:
+	mhz433Write( hwlib::pin_in & sw, uint8_t player, uint8_t damage );
+	
+	void buttonPressed() override ;
+	
+	void write( uint8_t playerNumber, uint8_t damage );
+	//uint8_t dmgTimer( uint8_t damage );
+	
+	void main() override;
+}; 
+*/
 #endif // GRENADE_HPP
