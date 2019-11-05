@@ -22,7 +22,7 @@ int main( void ){
    auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
    auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
 
-   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
+   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d7 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
    auto miso = hwlib::target::pin_in( hwlib::target::pins::d7 );
    auto csn  = hwlib::target::pin_out( hwlib::target::pins::d11 );
@@ -30,19 +30,19 @@ int main( void ){
 
    auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso);
 
-
-   const long long int radioPollPeriod = 10'000;
+   const long long int radioPollPeriod = 100'000;
    const uint8_t addressToListenTo = 0;
    const long long int inputPollPeriod = 100'000;
 
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
-   signUp signer = signUp(radio);
+
    game gameRunner = game(radio);
-   inputHandler handler = inputHandler(inputPollPeriod); 
+   inputHandler handler = inputHandler(inputPollPeriod);
+   signUp signer = signUp(radio,handler); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
-
+   HWLIB_TRACE;
    rtos::run();
 }
