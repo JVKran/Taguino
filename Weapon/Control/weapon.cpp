@@ -34,6 +34,14 @@ void weaponManager::buttonPressed(const char id){
 void weaponManager::newWeaponSelected(const int id){
 	weapon.setId(id);
 	Display.showWeapon(id);
+	
+	// hwlib::cout<<int(Display.showBullets(weaponStats.getBulletsPerMag(id)))<< hwlib::endl;
+	// hwlib::cout<<int(Display.showMagazines(weaponStats.getAmountOfMags(id)))<< hwlib::endl;
+	Display.showMagazines(weaponStats.getAmountOfMags(id));
+	Display.showBullets(weaponStats.getBulletsPerMag(id));
+	
+	hwlib::cout<<"getAmountOfBullets "<<weaponStats.getBulletsPerMag(id)<<hwlib::endl;
+	hwlib::cout<<"getAmountOfMagazines "<<weaponStats.getAmountOfMags(id)<<hwlib::endl;
 	autoFireMode = false;
 	burstFireMode = false;
 	manualFireMode = true;

@@ -36,7 +36,7 @@ private:
 public:
   exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber);
 
-  virtual void dataReceived(const uint8_t data[10], const int len) override;
+  virtual void dataReceived(uint8_t data[10], const int len);
 
   void updateScore(const uint8_t playerNumber, const uint8_t dealtDamage);
   void signalOnline();

@@ -48,7 +48,9 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		rtos::channel<char, 5> buttonsChannel;
 	public:
 		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
-
+		//CHECK IF WEAPONSTATS NEEDS TO BE PRIVATE OR CAN STAY PUBLIC!!!!
+		weaponSettings weaponStats = weaponSettings();
+		//CHECK IF WEAPONSTATS NEEDS TO BE PRIVATE OR CAN STAY PUBLIC!!!!
 		virtual void buttonPressed(const char id) override;
 
 		void newWeaponSelected(const int id);

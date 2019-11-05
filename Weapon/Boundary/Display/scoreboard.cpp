@@ -2,7 +2,16 @@
 
 scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
 	scoreTerminal(scoreTerminal)
-{}
+{
+    for(auto element : playerNumbers){
+        element = 0;
+        hwlib::cout<<element;
+    }
+    for(auto element : playerScores){
+        element = 0;
+        hwlib::cout<<element;
+    }
+}
 
 void scoreboard::updateScoreBoard(uint8_t data[5]){
     bool insert=true;
@@ -27,11 +36,17 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
 }
 
 void scoreboard::printScoreboard(){
-	scoreTerminal<<"Scoreboard";
-    scoreTerminal<<"Player\tScore\n" << 
-        "\t0002" <<int(playerNumbers[29])<<"\t" <<int(playerScores[29])<<
-        "\t0003" <<int(playerNumbers[28])<<"\t" <<int(playerScores[28])<<
-        "\t0004" <<int(playerNumbers[27])<<"\t" <<int(playerScores[27])<<
-        "\t0005" <<int(playerNumbers[26])<<"\t" <<int(playerScores[26])<<
-        "\t0005" <<int(playerNumbers[25])<<"\t" <<int(playerScores[25])<<hwlib::flush;
+    hwlib::cout<<int(playerNumbers[0])<<hwlib::endl;
+    hwlib::cout<<int(playerNumbers[1])<<hwlib::endl;
+    hwlib::cout<<int(playerNumbers[2])<<hwlib::endl;
+    hwlib::cout<<int(playerNumbers[3])<<hwlib::endl;
+    hwlib::cout<<int(playerNumbers[4])<<hwlib::endl;
+
+    scoreTerminal <<
+    int(playerNumbers[0])<<'\t'<<int(playerNumbers[0])<<'\n'<<
+    int(playerNumbers[1])<<'\t'<<int(playerNumbers[1])<<'\n'<<
+    int(playerNumbers[2])<<'\t'<<int(playerNumbers[2])<<'\n'<<
+    int(playerNumbers[3])<<'\t'<<int(playerNumbers[3])<<'\n'<<
+    int(playerNumbers[4])<<'\t'<<int(playerNumbers[4])<<'\n'<<
+    hwlib::flush;
 }

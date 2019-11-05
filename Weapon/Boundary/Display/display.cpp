@@ -290,6 +290,9 @@ void display::drawAK(){
 
 }
 
+void drawUpdatedWeaponData(){
+	
+}
 
 void display::showScore(const int score){
 	newScorePool.write(score);

@@ -64,7 +64,11 @@ void interfaceManager::main(){
 				//Else if we're setting anything we want to determine what we're setting and perform actions based on the position.
 				switch(inWhichSetting){
 					case 0:
-						weapon.newWeaponSelected(currentPosition % 5);		//We have 5 weapons so perform % 5 to create a possibility of 1, 2, 3, 4, 5 as weapon.
+						if(currentPosition>0){
+							weapon.newWeaponSelected(currentPosition % 5);		//We have 5 weapons so perform % 5 to create a possibility of 1, 2, 3, 4, 5 as weapon.
+						}else{
+							weapon.newWeaponSelected((currentPosition % 5)/-1);
+						}
 						break;
 				}
 			}
