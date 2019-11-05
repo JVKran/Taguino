@@ -4,6 +4,7 @@
 #include "input.hpp"
 #include "game.hpp"
 #include "display.hpp"
+#include "interface.hpp"
 #include "signup.hpp"
 #include <array>
 
@@ -12,10 +13,14 @@ int main( void ){
 
    auto scl    = hwlib::target::pin_oc(hwlib::target::pins::scl);
    auto sda    = hwlib::target::pin_oc(hwlib::target::pins::sda);
-
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
    auto oled   = hwlib::glcd_oled(i2cBus);
 
+   constexpr auto xCoordinates = lookup< int, 360>(scaled_sine_from_degrees);
+   constexpr auto yCoordinates = lookup< int, 360>(scaled_cosine_from_degrees);
+   auto scoreFont      = hwlib::font_default_8x8();
+   auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
+   auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
 
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
@@ -28,9 +33,14 @@ int main( void ){
 
    const long long int radioPollPeriod = 100;
    const uint8_t addressToListenTo = 0;
+   const long long int inputPollPeriod = 100'000;
+
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
+   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
    signUp signer = signUp(radio);
    game gameRunner = game(radio);
+   inputHandler handler = inputHandler(inputPollPeriod); 
+   interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
 
