@@ -1,8 +1,10 @@
 #include "signup.hpp"
 
-signUp::signUp(NRF24 & radio):
-	radio(radio)
-{}
+signUp::signUp(NRF24 & radio, inputHandler &handler):
+	radio(radio),
+	toetsenbord(this)
+
+{handler.addkeypad(&toetsenbord);}
 
 void signUp::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 1){
@@ -22,6 +24,12 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 		hwlib::wait_ms(5000);
 		startGame(100);
 	}
+}
+void signUp::keyPressed(char karakter){
+			//HWLIB_TRACE;
+
+	hwlib::cout<<karakter<<hwlib::endl;
+
 }
 
 void signUp::startGame(const uint8_t gameTime){
