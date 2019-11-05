@@ -20,7 +20,9 @@ protected:
 	hwlib::window_part powerUpWindow;
 	hwlib::window_part scoreWindow;
 	hwlib::terminal_from scoreTerminal;
-	scoreboard Scoreboard = scoreboard(scoreTerminal);
+	hwlib::terminal_from scoreBoardTerminal;
+
+	scoreboard Scoreboard = scoreboard(scoreBoardTerminal);
 
 	displayedData lastData;
 	bool maxBulletsDrawn = false;
@@ -74,7 +76,7 @@ protected:
 	rtos::pool<int> newFireModePool;
 	int fireMode;
 public:
-	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal);
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal);
 
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
@@ -88,8 +90,6 @@ public:
 
 	void showWeapon(int weaponID);
 	void drawWeapon();
-
-	void showScoreBoard();
 
 	void showScore(const int score);
 	void drawScore();

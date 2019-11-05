@@ -58,10 +58,30 @@ void interfaceManager::main(){
 		if(event == newPositionFlag){
 			currentPosition = positionPool.read();
 			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
+			//If button is pressed while not currently setting anything; we want to enter settingmode.
+			if(!currentlyInSetting){
+			 	Display.selectedWindow((currentPosition >= 0) ? currentPosition % 4 : (currentPosition / -1) % 4);
+			} else {
+				//Else if we're setting anything we want to determine what we're setting and perform actions based on the position.
+				// switch(inWhichSetting){
+				// 	case 0:
+				// 		weapon.newWeaponSelected(currentPosition % 5);		//We have 5 weapons so perform % 5 to create a possibility of 1, 2, 3, 4, 5 as weapon.
+				// 		break;
+				// }
+			}
 		} else {
 			hwlib::cout << "Encoder Pressed!" << hwlib::endl;
-			//gameRunner.startGame();
-			//signUp.stopPossibilityToSignUp();
+			if(((currentPosition >= 0) ? currentPosition % 4 : (currentPosition / -1) % 4) == 2){
+				signer.startGame(100);			//Start a game with duration of 100 * 10 = 1000 seconds
+			}
+			// if(currentlyInSetting){
+			// 	Display.selectedSetting(-1);
+			// 	rotaryEncoder.setPos(inWhichSetting);
+			// } else {
+			// 	Display.selectedSetting(currentPosition % 2);				//We have 2 settings; weapon and power-up
+			// 	inWhichSetting = currentPosition % 2;
+			// }
+			// currentlyInSetting = !currentlyInSetting;
 		}
 	}
 }

@@ -28,10 +28,10 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
 
 void scoreboard::printScoreboard(){
 	scoreTerminal<<"Scoreboard";
-    // scoreTerminal<<"Player\tScore\n"
-    //     <<"\t0002" <<int(playerNumbers[29])<<"\t" <<int(playerScores[29])<<'\n'
-    //     <<"\t0003" <<int(playerNumbers[28])<<"\t" <<int(playerScores[28])<<'\n'
-    //     <<"\t0004" <<int(playerNumbers[27])<<"\t" <<int(playerScores[27])<<'\n'
-    //     <<"\t0005" <<int(playerNumbers[26])<<"\t" <<int(playerScores[26])<<'\n'
-    //     <<"\t0005" <<int(playerNumbers[25])<<"\t" <<int(playerScores[25])<<'\n';
+    scoreTerminal<<"Player\tScore\n" << 
+        "\t0002" <<int(playerNumbers[29])<<"\t" <<int(playerScores[29])<<
+        "\t0003" <<int(playerNumbers[28])<<"\t" <<int(playerScores[28])<<
+        "\t0004" <<int(playerNumbers[27])<<"\t" <<int(playerScores[27])<<
+        "\t0005" <<int(playerNumbers[26])<<"\t" <<int(playerScores[26])<<
+        "\t0005" <<int(playerNumbers[25])<<"\t" <<int(playerScores[25])<<hwlib::flush;
 }
