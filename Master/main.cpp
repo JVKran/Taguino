@@ -24,7 +24,7 @@ int main( void ){
 
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
-   auto miso = hwlib::target::pin_in( hwlib::target::pins::d13 );
+   auto miso = hwlib::target::pin_in( hwlib::target::pins::d7 );
    auto csn  = hwlib::target::pin_out( hwlib::target::pins::d11 );
    auto ce   = hwlib::target::pin_out( hwlib::target::pins::d10 );
 

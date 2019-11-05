@@ -299,7 +299,7 @@ void display::drawScore(){
 	score = newScorePool.read();
 	hwlib::cout << score << hwlib::endl;
 	if(score > 0){
-		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score;
+		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score << hwlib::flush;
 	}
 }
 
