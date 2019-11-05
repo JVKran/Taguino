@@ -19,6 +19,8 @@ NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, c
 
 void NRF24::main(){
    for(;;){
+      		//HWLIB_TRACE;
+
       wait(sampleClock);
       if( checkRXfifo() ){                                      //checks if there is something in the RX FIFO
          read(receivedData, amountOfBytes);                                    //reads the RX FIFO

@@ -30,19 +30,19 @@ int main( void ){
 
    auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso);
 
-
-   const long long int radioPollPeriod = 10'000;
+   const long long int radioPollPeriod = 100'000;
    const uint8_t addressToListenTo = 0;
    const long long int inputPollPeriod = 100'000;
 
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
-   signUp signer = signUp(radio);
+
    game gameRunner = game(radio);
-   inputHandler handler = inputHandler(inputPollPeriod); 
+   inputHandler handler = inputHandler(inputPollPeriod);
+   signUp signer = signUp(radio,handler); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
-
+   HWLIB_TRACE;
    rtos::run();
 }

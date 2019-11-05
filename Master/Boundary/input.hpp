@@ -1,10 +1,13 @@
 #ifndef __INPUT_HPP
 #define __INPUT_HPP
 
+
 #include "hwlib.hpp"
 #include "rtos.hpp"
 #include "button.hpp"
 #include "KY040.hpp"
+#include "keypad.hpp"
+//#include "signup.hpp"
 
 class KY040;
 
@@ -46,11 +49,13 @@ class inputHandler : public rtos::task<> {
 		Buttoninterrupter buttonInterrupter;
 
 		rtos::clock updateClock;
+		T9Keys* toetsenbord;
 	public:
 		inputHandler(unsigned long long int period = 100'000, const char * name = "Input Handler");
 
 		void addButton(button * b);
 		void addEncoder(KY040 * e);
+		void addkeypad(T9Keys *t);
 
 		Buttoninterrupter * getRegister();
 

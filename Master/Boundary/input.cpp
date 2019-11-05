@@ -35,6 +35,9 @@ void inputHandler::addButton(button * b){
 void inputHandler::addEncoder(KY040 * e){
 	encoder = e;
 }
+void inputHandler::addkeypad(T9Keys * t){
+	toetsenbord = t;
+}
 
 Buttoninterrupter * inputHandler::getRegister(){
 	return &buttonInterrupter;
@@ -42,12 +45,17 @@ Buttoninterrupter * inputHandler::getRegister(){
 
 void inputHandler::main(){
 	for(;;){
+				//HWLIB_TRACE;
+
 		wait(updateClock);
+
 		buttonInterrupter.refreshregister();
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
 		encoder->update();
 		buttonInterrupter.refreshregister();
+
+		toetsenbord->update();
 	}
 }
