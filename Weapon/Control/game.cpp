@@ -191,11 +191,11 @@ void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
 					break;
 				}
 				if(i == 31){
-					for(int i = 0; i < 32; i++){
+					for(int i = 0; i < 31; i++){
 						if(board.playerScores[i] < data[2]){
-							for(int j = 32; j > i; j--){
-								board.playerScores[j] = board.playerScores[j + 1];
-								board.playerNumbers[j] = board.playerNumbers[j + 1];
+							for(int j = 32; j >= i; j--){
+								board.playerScores[j] = board.playerScores[j - 1];
+								board.playerNumbers[j] = board.playerNumbers[j - 1];
 							}
 							board.playerScores[i] = data[2];
 							board.playerNumbers[i] = data[1];
@@ -204,11 +204,12 @@ void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
 					}
 				}
 			}
-			bubbleSort(board.playerScores, board.playerNumbers, 31);
+
+			bubbleSort(board.playerScores, board.playerNumbers, 30);
 			hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
 			for(int i = 0; i < 31; i++){
-				hwlib::cout << board.playerNumbers[i] << "\t\t\t" << board.playerScores[i] << hwlib::endl;
-			}
+				hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
+        		}
 			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
