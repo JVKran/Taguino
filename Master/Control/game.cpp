@@ -4,24 +4,6 @@ game::game(NRF24 & radio):
 	radio(radio)
 {}
 
-void game::swap(uint8_t *xp, uint8_t *yp){  
-	uint8_t temp = *xp;  
-	*xp = *yp;  
-	*yp = temp;  
-}  
-
-void game::bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n){  
-    int i, j;  
-    for (i = 0; i < n-1; i++){
-      	for (j = 0; j < n-i-1; j++){
-      		if (scores[j] < scores[j+1]){
-              	swap(&scores[j], &scores[j+1]); 
-              	swap(&numbers[j], &numbers[j+1]);
-      		}
-      	}  
-    }
-}
-
 void game::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 2){
 		hwlib::cout << "Player " << data[1] << " dealt " << int(data[2]) << " damage!" << hwlib::endl;
@@ -58,7 +40,7 @@ void game::dataReceived(const uint8_t data[10], const int len){
 		}
 		bubbleSort(board.playerScores, board.playerNumbers, 31);
 		hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-		for(int i = 0; i < 31; i++){
+		for(int i = 24; i < 30; i++){
 			hwlib::cout << board.playerNumbers[i] << "\t\t\t" << board.playerScores[i] << hwlib::endl;
 		}
 	}
