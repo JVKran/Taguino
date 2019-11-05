@@ -1,13 +1,13 @@
 
 #include "keypad.hpp"
-    void testlistner::dataReceived(char karakter){
+    void testlistner::keyPressed(char karakter){
         hwlib::cout<<karakter<<hwlib::endl;
     }
 
 
-T9Keys::T9Keys(keypadListener* listen,unsigned long long int period, const char * name):
-	task(name),
-	updateClock(this, period, "Update Clock"),
+T9Keys::T9Keys(keypadListener* listen/*,unsigned long long int period, const char * name*/):
+	//task(name),
+	//updateClock(this, period, "Update Clock"),
     listen(listen)
 {}
 
@@ -15,19 +15,21 @@ T9Keys::T9Keys(keypadListener* listen,unsigned long long int period, const char 
 
 
 
-void T9Keys::main(){
-    char karakter =0;
-    char i;
-    uint8_t count=0;
-    bool returned= false;
-    int multiplier=0;
-    int maxcount=2;
-    uint_fast64_t lastpress= hwlib::now_us();
-	for(;;){
-		wait(updateClock);
+void T9Keys::update(){
+               //HWLIB_TRACE;
+    // char karakter;
+    // char i;
+    // uint8_t count=0;
+    // bool returned=0;
+    // int multiplier=0;
+    // int maxcount=2;
+    // uint_fast64_t lastpress= hwlib::now_us();
+	//for(;;){
+	//	wait(updateClock);
         if(((hwlib::now_us()-lastpress) > 1000000)&&returned==false){
-            listen->dataReceived(karakter);
+            listen->keyPressed(karakter);
             returned=true;
+ 
         }
         else{
         if(numpad.char_available()){
@@ -87,7 +89,7 @@ void T9Keys::main(){
         
         
 
-}
+//}
 
 
 

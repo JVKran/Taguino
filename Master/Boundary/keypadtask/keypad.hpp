@@ -8,10 +8,10 @@ public:
     virtual void keyPressed(char karakter) = 0;
 };
 class testlistner : public keypadListener{
-     void dataReceived(char karakter);
+     void keyPressed (char karakter);
 };
 
-class T9Keys : public rtos::task<> {
+class T9Keys  {
 	private:
 
 
@@ -43,12 +43,15 @@ class T9Keys : public rtos::task<> {
         char i;
         uint8_t count=0;
         uint_fast64_t lastpress= hwlib::now_us();
+		bool returned=0;
+		int multiplier=0;
+		int maxcount=2;
 
 
-		rtos::clock updateClock;
-                keypadListener* listen;
+		//rtos::clock updateClock;
+        keypadListener* listen;
 	public:
-		T9Keys(keypadListener* listen,unsigned long long int period = 10'000, const char * name = "Input Handler");
+		T9Keys(keypadListener* listen/*,unsigned long long int period = 10'000, const char * name = "Input Handler"*/);
 
 		char readChar();
 		char readKey();
@@ -56,8 +59,8 @@ class T9Keys : public rtos::task<> {
 		void debug();
 
 		
-
-		void main() override;
+		void update();
+		//void main() override;
 };
 
 #endif //__INPUT_HPP

@@ -2,8 +2,9 @@
 #define __SIGNUP_HPP
 
 #include "NRF24.hpp"
+#include "keypad.hpp"
 
-class signUp : public radioListener {
+class signUp : public radioListener, public keypadListener  {
 private:
 	NRF24 radio;
 
@@ -19,6 +20,7 @@ public:
 
 	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;
+	virtual void keyPressed(char karakter) override;
 };
 
 #endif //__SIGNUP_HPP

@@ -7,6 +7,7 @@
 #include "signup.hpp"
 #include "game.hpp"
 #include "display.hpp"
+#include "keypad.hpp"
 
 class interfaceManager : public encoderListener, public rtos::task<> {
 	private:
@@ -26,6 +27,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 		int currentPosition = 0;
 
 		rtos::pool<int> positionPool;
+		T9Keys toetsenbord;
 	public:
 		interfaceManager(display & Display, inputHandler & handler, signUp & signer, game & gameRunner);
 

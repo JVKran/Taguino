@@ -23,6 +23,12 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 		startGame(100);
 	}
 }
+void signUp::keyPressed(char karakter){
+			//HWLIB_TRACE;
+
+	hwlib::cout<<karakter<<hwlib::endl;
+
+}
 
 void signUp::startGame(const uint8_t gameTime){
 	radio.powerDown_rx();

@@ -16,9 +16,11 @@ interfaceManager::interfaceManager(display & Display, inputHandler & handler, si
 	encoderPressedFlag(this),
 	resetPositionFlag(this),
 	newPositionFlag(this),
-	positionPool("New Position Pool")
+	positionPool("New Position Pool"),
+	toetsenbord(&signer)
 {
 	handler.addEncoder(&rotaryEncoder);
+	handler.addkeypad(&toetsenbord);
 }
 
 /// \brief
@@ -54,6 +56,7 @@ void interfaceManager::encoderTurned(const int pos){
 /// A function is then called to change the weapon.
 void interfaceManager::main(){
 	for(;;){
+		//HWLIB_TRACE;
 		auto event = wait(newPositionFlag+encoderPressedFlag);
 		if(event == newPositionFlag){
 			currentPosition = positionPool.read();
