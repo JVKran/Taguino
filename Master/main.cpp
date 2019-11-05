@@ -22,7 +22,7 @@ int main( void ){
    auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
    auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
 
-   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d7 );
+   auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
    auto miso = hwlib::target::pin_in( hwlib::target::pins::d7 );
    auto csn  = hwlib::target::pin_out( hwlib::target::pins::d11 );
