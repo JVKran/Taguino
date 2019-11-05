@@ -19,7 +19,9 @@ int main( void ){
 
    auto scoreFont      = hwlib::font_default_8x8();
    auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
+   auto scoreBoardWindow    = hwlib::window_part(oled, hwlib::xy(0, 0), hwlib::xy(128, 64));
    auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
+   auto scoreBoardTerminal = hwlib::terminal_from( scoreBoardWindow, scoreFont );
 
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d24 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d26 );
@@ -41,7 +43,7 @@ int main( void ){
    const long long int radioPollPeriod = 100'000;
    
    playerData player = playerData();
-   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
+   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
    weaponData weapon = weaponData(2);
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
    runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);

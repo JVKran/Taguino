@@ -3,15 +3,18 @@
 
 #include "hwlib.hpp"
 #include "entities.hpp"
+#include "applicationLogic.hpp"
 #include <array>
 
 class scoreboard {
 private:
-	hwlib::window & window;
-	hwlib::glcd_oled & oled;
-	std::array<playerData, 5> & players;
+	hwlib::terminal & scoreTerminal;
+	std::array<uint8_t, 32> playerNumbers;
+    std::array<uint8_t, 32> playerScores;
 public:
-	scoreboard(hwlib::window & window, hwlib::glcd_oled & oled, std::array<playerData, 5> players);
+	scoreboard(hwlib::terminal & scoreTerminal);
+	void updateScoreBoard(uint8_t data[5]);
+	void printScoreboard();
 };
 
 #endif /* scoreboard.hpp */

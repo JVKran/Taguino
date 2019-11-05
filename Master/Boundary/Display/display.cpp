@@ -475,17 +475,22 @@ void display::selectedWindow(const int window){
 			currentlySelectedWindow = 0;
 			oled.clear();
 			showTime(remainingSeconds, totalGameTime);
-			drawWeapon();
-			drawBullets(true);
-			drawMagazines();
-			showHealthBar();
-			drawFireMode();
-			updateHealth();
 			break;
 		case 1:
 			currentlySelectedWindow = 1;
 			oled.clear();
-			showScoreBoard();
+			scoreTerminal << '\f' << "name" << hwlib::flush;
+			break;
+		case 2:
+			currentlySelectedWindow = 2;
+			oled.clear();
+			scoreTerminal << '\f' << "start" << hwlib::flush;
+			break;
+		case 3:
+			currentlySelectedWindow = 1;
+			oled.clear();
+			scoreTerminal << '\f' << "3" << hwlib::flush;
+			break;
 	}
 }
 
