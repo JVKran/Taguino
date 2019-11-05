@@ -33,7 +33,7 @@ void T9Keys::update(){
         }
         else{
         if(numpad.char_available()){
-            hwlib::wait_ms(10);
+            //hwlib::wait_ms(10);
             if((hwlib::now_us()-lastpress) > 1000000){
                 returned= false;
                 count=0;
@@ -67,7 +67,7 @@ void T9Keys::update(){
         }
         else
         {
-            hwlib::wait_ms(10);
+            //hwlib::wait_ms(10);
 
             if((numpad.getc()==i)&&(count<maxcount)){
                 count++;

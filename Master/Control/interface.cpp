@@ -16,11 +16,11 @@ interfaceManager::interfaceManager(display & Display, inputHandler & handler, si
 	encoderPressedFlag(this),
 	resetPositionFlag(this),
 	newPositionFlag(this),
-	positionPool("New Position Pool"),
-	toetsenbord(&signer)
+	positionPool("New Position Pool")
+	//toetsenbord(&signer)
 {
 	handler.addEncoder(&rotaryEncoder);
-	handler.addkeypad(&toetsenbord);
+	//handler.addkeypad(&toetsenbord);
 }
 
 /// \brief

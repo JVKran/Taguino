@@ -27,7 +27,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 		int currentPosition = 0;
 
 		rtos::pool<int> positionPool;
-		T9Keys toetsenbord;
+		//T9Keys toetsenbord;
 	public:
 		interfaceManager(display & Display, inputHandler & handler, signUp & signer, game & gameRunner);
 
