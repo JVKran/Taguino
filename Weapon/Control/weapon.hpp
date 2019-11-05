@@ -21,7 +21,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		inputHandler handler;
 		bool triggerPressed = false;
 
-		infraredTransmitter irTransmitter;
+		infraredTransmitter & irTransmitter;
 		uint16_t dataToSend;
 
 		runGame & game;
@@ -47,7 +47,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
 	public:
-		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, const long long int period = 100);
+		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
 
 		virtual void buttonPressed(const char id) override;
 

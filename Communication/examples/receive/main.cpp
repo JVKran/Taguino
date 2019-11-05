@@ -17,22 +17,15 @@ int main( void ){
    auto spi_bus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(          //the spi_bus
       sclk, mosi, miso );
 
-   uint8_t address[5] = { 0x05, 0x00, 0x00, 0x00, 0x00 };
-   uint8_t address1[5] = { 0x00, 0x02, 0x03, 0x04, 0x05 };
+   uint8_t address[5] = { 0x05, 0x04, 0x03, 0x02, 0x01 };
 
    auto nrf = NRF24( spi_bus, ce, csn );                             //create a object of NRF24 with default constructor
    nrf.start();                                                      //initialize default things
-   //nrf.read_pipe( 1, address1 );
-   nrf.write_register(RX_ADDR_P1, address1, 5);
    nrf.read_pipe( 3, address );                                         //on which pipe we are going to listen
    nrf.rx_mode( 3 );                                                    //go into rx_mode to be able to receive data
 
    uint8_t value[5] = {};                                            //the array in which we will put the data
    uint8_t len = 5;                                                  //the length of the data
-
-   //hwlib::cout << nrf.read_register(RX_ADDR_P3) << hwlib::endl;
-   //hwlib::cout << nrf.read_register(RX_ADDR_P1) << hwlib::endl;
-   //hwlib::cout << nrf.read_register(TX_ADDR) << hwlib::endl;
 
    for(;;){                                                           
       if( nrf.checkRXfifo() ){                                       //checks if there is something in the RX FIFO

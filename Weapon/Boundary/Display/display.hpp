@@ -73,7 +73,7 @@ protected:
 	rtos::pool<int> newFireModePool;
 	int fireMode;
 public:
-	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates);
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal);
 
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);

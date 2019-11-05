@@ -6,18 +6,22 @@
 
 class playerData {
 	private:
-		const char * name;
-		const uint8_t playerNumber;
+		char name[8];
+		uint8_t playerNumber;
 		int health = 100;
-		const int teamNumber;
+		int teamNumber;
 		int score = 0;
 		int shots = 0;
 	public:
-		playerData(const char * name, const uint8_t playerNumber, const uint8_t teamNumber = 0);
 
 		const char * getName() const;
+		void setName(const char newName[8]);
+
 		uint8_t getPlayerNumber() const;
+		void setPlayerNumber(const uint8_t newPlayerNumber);
+
 		uint8_t getTeamNumber() const;
+		void setTeamNumber(const uint8_t newTeamNumber);
 
 		uint8_t getHealth() const;
 		void setHealth(const int newHealth);
@@ -42,12 +46,12 @@ class playerData {
 //Hence it actually is another layer of abstraction; ApplicationLogic.
 class weaponSettings {
 	private:
-		std::array<const char *, 5> weaponNames = 	{	"Shotgun", "Pistol", 	"Sniper", 	"AK-47", 	"M16"	};
-		std::array<int, 5> damageFactors = 			{		10,		15, 		40, 		6, 			10		};
-		std::array<int, 5> bulletsPerMag = 			{		6,		17, 		5, 			30, 		30		};
-		std::array<int, 5> maxShotsPerTenSeconds = 	{		40, 	100, 		20,			100, 		140		};
-		std::array<bool, 5> autoAllowed = 			{		false, 	false, 		false, 		true, 		true	};
-		std::array<bool, 5> burstAllowed = 			{		false, 	false, 		false, 		true, 		true	};
+		std::array<const char *, 5> weaponNames = 		{	"Shotgun", "Pistol", 	"Sniper", 	"AK-47", 	"M16"	};
+		std::array<uint8_t, 5> damageFactors = 			{		10,		15, 		40, 		6, 			10		};
+		std::array<uint8_t, 5> bulletsPerMag = 			{		6,		17, 		5, 			30, 		30		};
+		std::array<uint8_t, 5> maxShotsPerTenSeconds = 	{		40, 	100, 		20,			100, 		140		};
+		std::array<bool, 5> autoAllowed = 				{		false, 	false, 		false, 		true, 		true	};
+		std::array<bool, 5> burstAllowed = 				{		false, 	false, 		false, 		true, 		true	};
 	public:
 		const char * getName(const int weaponId) const;
 		const int getDamage(const int weaponId, const int distance) const;

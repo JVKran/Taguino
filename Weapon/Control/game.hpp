@@ -15,10 +15,15 @@ private:
   display & Display;
   runGame * game;
 
+  playerData player;
+
   const uint8_t weaponNumber;
 
   scoreBoard board;
   int signedUpPlayers = 0;
+
+  void swap(uint8_t *xp, uint8_t *yp);
+  void bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n);
 
   //Used for the NRF24L01+
   hwlib::target::pin_out csn  = hwlib::target::pin_out( hwlib::target::pins::d30 );
@@ -27,12 +32,14 @@ private:
   NRF24 radio;
   uint8_t dataToTransmit[5] = {0, 0, 0, 0, 0};    //Used for storing data to transmit
   uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};    //Used to store the address at which to listen for incoming messages
+  uint8_t startupAddress[5] = {0,0, 0, 0, 100};
+
   uint8_t masterAddress[5] = {0, 0, 0, 0, 0};     //Used to store the address of the master
   const uint8_t amountOfDataToTransmit = 5;       //Contains the length of the data to transmit; always 5.
 public:
   exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber);
 
-  virtual void dataReceived(const uint8_t data[], const int len) override;
+  virtual void dataReceived(const uint8_t data[10], const int len) override;
 
   void updateScore(const uint8_t playerNumber, const uint8_t dealtDamage);
   void signalOnline();
@@ -64,10 +71,27 @@ private:
   rtos::timer updateClockTimer;
 
   rtos::task<> & handler;
+
+  void swap(int *xp, int *yp)  {  
+    int temp = *xp;  
+    *xp = *yp;  
+    *yp = temp;  
+  }  
+   
+  void bubbleSort(int arr[], int n)  {  
+      int i, j;  
+      for (i = 0; i < n-1; i++)      
+        
+      // Last i elements are already in place  
+      for (j = 0; j < n-i-1; j++)  
+          if (arr[j] > arr[j+1])  
+              swap(&arr[j], &arr[j+1]);  
+  } 
 public:
   runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
   
-  playerData getPlayerData();                         //Used by weaponManager to get playerNumber for infraredMessage.
+  playerData getPlayerData() const;                         //Used by weaponManager to get playerNumber for infraredMessage.
+  void setPlayerData(playerData & newPlayer);
 
   virtual void messageReceived(const uint16_t data);
 

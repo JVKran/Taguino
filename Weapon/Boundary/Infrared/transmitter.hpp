@@ -34,8 +34,8 @@ public:
 
 	void main() override;
 
-   void sendData(const uint16_t data);
-   uint8_t calculateControlBits(const uint16_t data);
+   	void sendData(const uint16_t data);
+   	uint8_t calculateControlBits(const uint16_t data);
 };
 
 #endif //__TRANSMITTER_HPP

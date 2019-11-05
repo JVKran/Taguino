@@ -7,7 +7,7 @@
 
 class radioListener {
 public:
-    virtual void dataReceived(const uint8_t data[], const int len) = 0;
+    virtual void dataReceived(const uint8_t data[10], const int len) = 0;
 };
 
 class exchangeGameData;

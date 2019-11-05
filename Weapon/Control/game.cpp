@@ -27,8 +27,12 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 /// Get Player Data
 /// \details
 /// This function returns the current player with its current health and score. Needed for some objects that sometimes need the most updated player object.
-playerData runGame::getPlayerData(){
+playerData runGame::getPlayerData() const {
 	return player;
+}
+
+void runGame::setPlayerData(playerData & newPlayer){
+	player = newPlayer;
 }
 
 void runGame::messageReceived(const uint16_t data){
@@ -57,16 +61,17 @@ void runGame::main(){
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
 			receivedData = receivedDataChannel.read();
-			hwlib::cout << 'I' << hwlib::endl;
-			distance = (receivedData & 0x3F) * 10;
 			playerNumber = (receivedData >> 10);
-			weaponId = ((receivedData & 0x1C0) >> 6);
-			dealtDamage = weaponStats.getDamage((receivedData & 0x1C0) >> 6, (receivedData & 0x3F));
-			if(playerNumber != player.getPlayerNumber()){				//If player didn't shoot himself
+			if(playerNumber != player.getPlayerNumber()){			//If player didn't shoot himself
+				distance = (receivedData & 0x3F) * 10;
+				weaponId = ((receivedData & 0x1C0) >> 6);
+				dealtDamage = weaponStats.getDamage(weaponId, distance);
+				// hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
+				// hwlib::cout << "This is equal to a damage of " << dealtDamage << ". " << hwlib::endl;
+				// hwlib::cout << "Hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
 				Display.showHealth(player.getHealth());
-				hwlib::cout << "New Health: " << player.getHealth() << hwlib::endl;
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;
@@ -108,7 +113,7 @@ void exchangeGameData::signalOnline(){
    	dataToTransmit[1] = weaponNumber;					//Byte two should containt weaponNumber which also is the playerNumber
    	radio.write(dataToTransmit, amountOfDataToTransmit);
 
-   	radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
+   	radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
    	radio.powerUp_rx();
 }
 
@@ -131,6 +136,24 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
    	radio.powerUp_rx();								//Enable RX Mode
 }
 
+void exchangeGameData::swap(uint8_t *xp, uint8_t *yp){  
+	uint8_t temp = *xp;  
+	*xp = *yp;  
+	*yp = temp;  
+}  
+
+void exchangeGameData::bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n){  
+    int i, j;  
+    for (i = 0; i < n-1; i++){
+      	for (j = 0; j < n-i-1; j++){
+      		if (scores[j] < scores[j+1]){
+              	swap(&scores[j], &scores[j+1]); 
+              	swap(&numbers[j], &numbers[j+1]);
+      		}
+      	}  
+    }
+}
+
 /// \brief
 /// Data Received
 /// \details
@@ -142,11 +165,7 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
 /// Case 4 means that instaDeath has been activated.
 /// Case 6 means that a new player has signed up.
 /// Case 7 means that all powerups have been disabled.
-void exchangeGameData::dataReceived(const uint8_t data[], const int len){
-	for(int i = 0; i < len; i++){
-		hwlib::cout << data[i] << " ";
-	}
-	hwlib::cout << hwlib::endl;
+void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
 	switch(data[0]){
 		case 1:
 			// for(int i = 0; i < signedUpPlayers; i++){
@@ -157,6 +176,7 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			// 	hwlib::cout << hwlib::endl;
 			// }
 			game->gameStartSignalReceived(data[1]);
+			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
 			if(data[1] == game->getPlayerData().getPlayerNumber()){
@@ -164,19 +184,32 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 				Display.showScore(data[2]);
 			}
 			//What's happening here is just a start. Needs to be fixed; doesn't work.
-			hwlib::cout << "Player";
-			for(int i = 0; i < 31; i++){
+
+			for(int i = 0; i < 32; i++){
 				if(board.playerNumbers[i] == data[1]){
-					for(int j = 0; j < 8; j++){
-						hwlib::cout << board.playerNames[i][j];
+					board.playerScores[i] += data[2];
+					break;
+				}
+				if(i == 31){
+					for(int i = 0; i < 31; i++){
+						if(board.playerScores[i] < data[2]){
+							for(int j = 32; j >= i; j--){
+								board.playerScores[j] = board.playerScores[j - 1];
+								board.playerNumbers[j] = board.playerNumbers[j - 1];
+							}
+							board.playerScores[i] = data[2];
+							board.playerNumbers[i] = data[1];
+							break;
+						}
 					}
 				}
 			}
 
-			hwlib::cout << " has a score of " << data[2] << " hence his position is " << data[3] << hwlib::endl;
-			for(int i = 30; i > data[3]; i--){
-				board.playerNumbers[i] = board.playerNumbers[i - i];
-			}
+			bubbleSort(board.playerScores, board.playerNumbers, 30);
+			hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
+			for(int i = 0; i < 31; i++){
+				hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
+        		}
 			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
@@ -200,6 +233,19 @@ void exchangeGameData::dataReceived(const uint8_t data[], const int len){
 			break;
 		case 7:
 			Display.showPowerUp(10);
+			hwlib::cout << "All power-ups have been disabled!" << hwlib::endl;
+			break;
+		case 8:
+			if(startupAddress[4] == 100){
+				hwlib::cout << "Received address " << data[1] << "!" << hwlib::endl;
+				receiveAddress[4] = data[1];
+				radio.read_pipe(receiveAddress);					//Start listening to playerNumber address again.
+	   			radio.powerUp_rx();
+	   			player = game->getPlayerData();
+	   			player.setPlayerNumber(data[1]);
+	   			game->setPlayerData(player);
+	   			startupAddress[4] = 0;
+			}
 			break;
 	}
 }

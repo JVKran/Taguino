@@ -1,6 +1,6 @@
 #include "display.hpp"
 
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal):
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
@@ -10,8 +10,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	healthWindow(oled, hwlib::xy(88,0), hwlib::xy(128,6)),
 	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
-	scoreWindow(oled, hwlib::xy(88, 9), hwlib::xy(128, 17)),
-	scoreTerminal(scoreWindow, hwlib::font_default_8x8()),
+	scoreWindow(scoreWindow),
+	scoreTerminal(scoreTerminal),
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
@@ -34,8 +34,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newFireModePool("New Fire Mode Pool")
 {
 	oled.clear();
-	//scoreTerminal << hwlib::right << '\f' << 1023;
-	//showScore(10);
+	showScore(0);
 }
 
 void display::showBullets(int amountOfBullets){
@@ -300,7 +299,7 @@ void display::drawScore(){
 	score = newScorePool.read();
 	hwlib::cout << score << hwlib::endl;
 	if(score > 0){
-		scoreTerminal << '\f' << score;
+		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score << hwlib::flush;
 	}
 }
 
@@ -419,56 +418,56 @@ void display::selectedSetting(const int setting){
 }
 
 void display::showScoreBoard(){
-	const char * playerName1 = "Jochem";	//This would usually be received from the master...
-   playerData player1 = playerData(playerName1, 1, 1);
-   weaponData weapon1 = weaponData(2);
+	// const char * playerName1 = "Jochem";	//This would usually be received from the master...
+ //   playerData player1 = playerData(playerName1, 1, 1);
+ //   weaponData weapon1 = weaponData(2);
 
-   const char * playerName2 = "Stefan"; //This would usually be received from the master...
-   playerData player2 = playerData(playerName2, 1, 1);
-   weaponData weapon2 = weaponData(2);
+ //   const char * playerName2 = "Stefan"; //This would usually be received from the master...
+ //   playerData player2 = playerData(playerName2, 1, 1);
+ //   weaponData weapon2 = weaponData(2);
 
-   const char * playerName3 = "Joshua"; //This would usually be received from the master...
-   playerData player3 = playerData(playerName3, 1, 1);
-   weaponData weapon3 = weaponData(2);
+ //   const char * playerName3 = "Joshua"; //This would usually be received from the master...
+ //   playerData player3 = playerData(playerName3, 1, 1);
+ //   weaponData weapon3 = weaponData(2);
 
-   const char * playerName4 = "Faizal"; //This would usually be received from the master...
-   playerData player4 = playerData(playerName4, 1, 1);
-   weaponData weapon4 = weaponData(2);
+ //   const char * playerName4 = "Faizal"; //This would usually be received from the master...
+ //   playerData player4 = playerData(playerName4, 1, 1);
+ //   weaponData weapon4 = weaponData(2);
 
-   const char * playerName5 = "Menno"; //This would usually be received from the master...
-   playerData player5 = playerData(playerName5, 1, 1);
-   weaponData weapon5 = weaponData(2);
+ //   const char * playerName5 = "Menno"; //This would usually be received from the master...
+ //   playerData player5 = playerData(playerName5, 1, 1);
+ //   weaponData weapon5 = weaponData(2);
 
-   std::array<playerData,5> players = {player1, player2, player3, player4, player5};
-   auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
+ //   std::array<playerData,5> players = {player1, player2, player3, player4, player5};
+ //   auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
 
-	auto windowFont 			= hwlib::font_default_8x8();
-	auto windowName 			= hwlib::window_part(window, hwlib::xy(114, 3), hwlib::xy(122, 12));
-	auto windowNameTerminal 	= hwlib::terminal_from(windowName, windowFont);
-	hwlib::circle nameCircle	= hwlib::circle(hwlib::xy(117, 6), 5);
+	// auto windowFont 			= hwlib::font_default_8x8();
+	// auto windowName 			= hwlib::window_part(window, hwlib::xy(114, 3), hwlib::xy(122, 12));
+	// auto windowNameTerminal 	= hwlib::terminal_from(windowName, windowFont);
+	// hwlib::circle nameCircle	= hwlib::circle(hwlib::xy(117, 6), 5);
 
-	auto windowPartFirstPlace 	= hwlib::window_part(window, hwlib::xy(0,10), hwlib::xy(124, 20));
-	auto windowPartSecondPlace 	= hwlib::window_part(window, hwlib::xy(0,21), hwlib::xy(124, 31));
-	auto windowPartThirdPlace 	= hwlib::window_part(window, hwlib::xy(0,32), hwlib::xy(124, 42));
-	auto windowPartFourthPlace 	= hwlib::window_part(window, hwlib::xy(0,43), hwlib::xy(124, 53));
-	auto windowPartFifthPlace 	= hwlib::window_part(window, hwlib::xy(0,54), hwlib::xy(124, 64));
+	// auto windowPartFirstPlace 	= hwlib::window_part(window, hwlib::xy(0,10), hwlib::xy(124, 20));
+	// auto windowPartSecondPlace 	= hwlib::window_part(window, hwlib::xy(0,21), hwlib::xy(124, 31));
+	// auto windowPartThirdPlace 	= hwlib::window_part(window, hwlib::xy(0,32), hwlib::xy(124, 42));
+	// auto windowPartFourthPlace 	= hwlib::window_part(window, hwlib::xy(0,43), hwlib::xy(124, 53));
+	// auto windowPartFifthPlace 	= hwlib::window_part(window, hwlib::xy(0,54), hwlib::xy(124, 64));
 
-	auto terminalFirstPlace 	= hwlib::terminal_from(windowPartFirstPlace, windowFont);
-	auto terminalSecondPlace 	= hwlib::terminal_from(windowPartSecondPlace, windowFont);
-	auto terminalThirdPlace 	= hwlib::terminal_from(windowPartThirdPlace, windowFont);
-	auto terminalFourthPlace 	= hwlib::terminal_from(windowPartFourthPlace, windowFont);
-	auto terminalFifthPlace 	= hwlib::terminal_from(windowPartFifthPlace, windowFont);
+	// auto terminalFirstPlace 	= hwlib::terminal_from(windowPartFirstPlace, windowFont);
+	// auto terminalSecondPlace 	= hwlib::terminal_from(windowPartSecondPlace, windowFont);
+	// auto terminalThirdPlace 	= hwlib::terminal_from(windowPartThirdPlace, windowFont);
+	// auto terminalFourthPlace 	= hwlib::terminal_from(windowPartFourthPlace, windowFont);
+	// auto terminalFifthPlace 	= hwlib::terminal_from(windowPartFifthPlace, windowFont);
 
 
-	terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) << players[0].getName() << players[0].getScore();
-	terminalSecondPlace << hwlib::left <<hwlib::setw(11) << players[1].getName() << players[1].getScore();
-	terminalThirdPlace 	<< hwlib::left <<hwlib::setw(11) << players[2].getName() << players[2].getScore();
-	terminalFourthPlace << hwlib::left <<hwlib::setw(11) << players[3].getName() << players[3].getScore();
-	terminalFifthPlace 	<< hwlib::left <<hwlib::setw(11) << players[4].getName() << players[4].getScore();
+	// terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) << players[0].getName() << players[0].getScore();
+	// terminalSecondPlace << hwlib::left <<hwlib::setw(11) << players[1].getName() << players[1].getScore();
+	// terminalThirdPlace 	<< hwlib::left <<hwlib::setw(11) << players[2].getName() << players[2].getScore();
+	// terminalFourthPlace << hwlib::left <<hwlib::setw(11) << players[3].getName() << players[3].getScore();
+	// terminalFifthPlace 	<< hwlib::left <<hwlib::setw(11) << players[4].getName() << players[4].getScore();
 	
-	windowNameTerminal 	<< 'B';
-	windowNameTerminal.flush();
-	nameCircle.draw(oled);
+	// windowNameTerminal 	<< 'B';
+	// windowNameTerminal.flush();
+	// nameCircle.draw(oled);
 }
 
 void display::selectedWindow(const int window){
@@ -481,6 +480,7 @@ void display::selectedWindow(const int window){
 			drawBullets(true);
 			drawMagazines();
 			showHealthBar();
+			drawFireMode();
 			updateHealth();
 			break;
 		case 1:
