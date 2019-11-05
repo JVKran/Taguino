@@ -20,6 +20,7 @@ protected:
 	hwlib::window_part powerUpWindow;
 	hwlib::window_part scoreWindow;
 	hwlib::terminal_from scoreTerminal;
+	scoreboard Scoreboard = scoreboard(scoreTerminal);
 
 	displayedData lastData;
 	bool maxBulletsDrawn = false;

@@ -22,9 +22,6 @@ private:
   scoreBoard board;
   int signedUpPlayers = 0;
 
-  void swap(uint8_t *xp, uint8_t *yp);
-  void bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n);
-
   //Used for the NRF24L01+
   hwlib::target::pin_out csn  = hwlib::target::pin_out( hwlib::target::pins::d30 );
   hwlib::target::pin_out ce   = hwlib::target::pin_out( hwlib::target::pins::d32 );
@@ -72,21 +69,6 @@ private:
 
   rtos::task<> & handler;
 
-  void swap(int *xp, int *yp)  {  
-    int temp = *xp;  
-    *xp = *yp;  
-    *yp = temp;  
-  }  
-   
-  void bubbleSort(int arr[], int n)  {  
-      int i, j;  
-      for (i = 0; i < n-1; i++)      
-        
-      // Last i elements are already in place  
-      for (j = 0; j < n-i-1; j++)  
-          if (arr[j] > arr[j+1])  
-              swap(&arr[j], &arr[j+1]);  
-  } 
 public:
   runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
   

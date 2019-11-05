@@ -473,6 +473,7 @@ void display::showScoreBoard(){
 void display::selectedWindow(const int window){
 	switch(window){
 		case 0:
+			hwlib::cout<<"weapon window";
 			currentlySelectedWindow = 0;
 			oled.clear();
 			showTime(remainingSeconds, totalGameTime);
@@ -484,8 +485,10 @@ void display::selectedWindow(const int window){
 			updateHealth();
 			break;
 		case 1:
+			hwlib::cout<<"score window";
 			currentlySelectedWindow = 1;
 			oled.clear();
+			oled.flush();
 			showScoreBoard();
 	}
 }
