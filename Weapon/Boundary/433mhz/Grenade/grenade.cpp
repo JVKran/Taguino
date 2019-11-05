@@ -53,27 +53,41 @@ hwuart::hwuart(){
 	}
 
 //======================< Button >===============================
-button::button( hwlib::pin_in & sw, buttonListener* listener ):
-	sw( sw ),
+button::button( buttonListen* listener ):
 	listener( listener )
 	{}
 
 void button::update(){
 	if( !sw.read() ){
+		hwlib::cout<<"In update\n";
 		listener->buttonPressed();
+		hwlib::cout<<"na buttonPressed()\n";
 	}
+}
+
+void buttonListen::buttonPressed(){
+	hwlib::cout<<"Flag Set in listen\n";
+	
+}
+
+void mhz433Write::buttonPressed(){
+	hwlib::cout<<"Flag Set in write\n";
+	buttonFlag.set();
+	
 }
 
 //======================< Write >===============================
 
-mhz433Write::mhz433Write(  hwlib::pin_in & sw, uint8_t player, uint8_t damage ):
+
+
+mhz433Write::mhz433Write( uint8_t player, uint8_t damage  ):
 	task( "433mhzWrite" ),
 	buttonFlag(this),
-	sw(sw),
 	player(player),
-	damage(damage),
-	b( sw, listener)
-	{}
+	damage(damage)
+	{ 
+		
+	}
 
 void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 
@@ -109,11 +123,6 @@ uint8_t mhz433Write::dmgTimer( uint8_t damage ){
 	return damage;
 }
 */
-	
-void mhz433Write::buttonPressed(){
-	buttonFlag.set();
-	hwlib::cout<<"Flag Set\n";
-}
 
 void mhz433Write::main(){
 	state = states::IDLE;
@@ -121,7 +130,9 @@ void mhz433Write::main(){
 		switch( state ){
 			case states::IDLE:
 				for(;;){
-					b.update();
+					//wait(updateClock);
+					bl.update();
+					buttonFlag.set();
 					auto event = wait( buttonFlag );
 					if( event == buttonFlag){
 						state = states::WRITE;
@@ -195,5 +206,6 @@ void mhz433Read::main(){
 	for(;;){
 		wait( sampleClock );
 		read();
+		hwlib::cout<<"in read\n";
 	}
 }

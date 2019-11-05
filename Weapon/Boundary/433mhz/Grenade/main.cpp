@@ -8,14 +8,9 @@ int main(){
 	uint8_t damage = 50;
 	
 	namespace target = hwlib::target;
-	auto grenadeSw = target::pin_in( target::pins::d4);
-	
-    auto mhzWrite = mhz433Write( grenadeSw, player, damage );
+    auto mhzWrite = mhz433Write( player, damage );
 	(void) mhzWrite;
-	
-	//auto mhzRead = mhz433Read( 1000 );
-	//(void) mhzRead;
 	rtos::run();
-
-	
-}
+	//auto mhzRead = mhz433Read( 1000 );
+	//(//void) mhzRead;
+		}

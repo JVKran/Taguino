@@ -25,12 +25,17 @@ public:
 	virtual void buttonPressed()=0;
 };
 
+class buttonListen : public buttonListener{
+public:
+	void buttonPressed();
+};
+
 class button{
 private:
-	hwlib::pin_in & sw;
-	buttonListener* listener;
+	hwlib::target::pin_in sw = hwlib::target::pin_in( hwlib::target::pins::d4);
+	buttonListen* listener;
 public:
-	button( hwlib::pin_in & sw, buttonListener* listener );
+	button( buttonListen * listener );
 	void update();
 };
 
@@ -56,25 +61,24 @@ public:
 	
 };
 
-class mhz433Write : public buttonListener, public rtos::task<>, public hwuart{
+class mhz433Write : public buttonListen, public rtos::task<>, public hwuart{
 private:
+	//rtos::clock updateClock;
 	rtos::flag buttonFlag;
-
-	hwlib::pin_in & sw;
 	
 	uint8_t player;
 	uint8_t damage;
 	
-	button b;
-	buttonListener * listener;
-	
+	buttonListen * buttonList;
+	button bl = button( buttonList);
+    
 	const int amount = 4;
 	enum class states{ IDLE, WRITE };
 	states state;
 	
 	
 public:
-	mhz433Write( hwlib::pin_in & sw, uint8_t player, uint8_t damage );
+	mhz433Write( uint8_t player, uint8_t damage );
 	
 	void buttonPressed() override ;
 	
