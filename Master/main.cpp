@@ -31,7 +31,7 @@ int main( void ){
    auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso);
 
 
-   const long long int radioPollPeriod = 100;
+   const long long int radioPollPeriod = 10'000;
    const uint8_t addressToListenTo = 0;
    const long long int inputPollPeriod = 100'000;
 
