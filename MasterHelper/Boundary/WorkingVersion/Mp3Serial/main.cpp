@@ -9,7 +9,7 @@ int main(){
 	auto sw2 = target::pin_in( target::pins::d5 );	
 	
 	// Amount of songs on the sd
-	const int amount=8;
+	const int amount=2;
 	
 	// Mp3 wacht 4 seconden na het aanroepen van een functie die verzend naar de module
 	auto mp3Player = mp3Control<amount>();
@@ -26,7 +26,7 @@ int main(){
 	for(;;){
 		if( !sw1.read() ){
 			hwlib::cout<<"Play sound\n";	
-			mp3Player.startPlayingSound( 5 ); // Data van nrf moet hier, er staat nu dummy data
+			mp3Player.startPlayingSound( 1 ); // Data van nrf moet hier, er staat nu dummy data
 			
 		}
 		if( !sw2.read() ){

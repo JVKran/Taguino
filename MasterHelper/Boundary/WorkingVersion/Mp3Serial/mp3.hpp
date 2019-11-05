@@ -103,6 +103,7 @@ public:
 	void setVolume( int volume ); //Van 0-30
 };
 
+
 /// \brief
 /// The mp3Control class inherits mp3 and sounds<N>, it has a template "<int N>" and is used to play songs for given data in NRF
 /// \details
@@ -112,8 +113,8 @@ public:
 template< int N >
 class mp3Control : public mp3, public sounds<N>{
 private:
-	int JAZZ=1; int SHOT=2; int ACTION=3; int AAAH=4; int DISCORD=5; int MONSTER=6; int TROMBONE=7; int LASER=8;
-	std::array< int, N > soundTmp = { JAZZ, SHOT, ACTION, AAAH, DISCORD, MONSTER, TROMBONE, LASER };
+	int JAZZ=1; int ACTION=2; 
+	std::array< int, N > soundTmp = { JAZZ, ACTION };
 	sounds<N> sound;
 public:
 	mp3Control()
@@ -128,7 +129,7 @@ public:
 /// This function will compare the data to the values in the array, if they are the same it will play the corresponding sound.
 	void startPlayingSound( int data ){
 		for( int i=1; i<sound.size()+1; i++){ 
-			if(data == sound.play(i+1)){ 			// If data is a song, play it. +1 because .play will return value -1;
+			if( data == i ){ 			// If data is a song, play it. +1 because .play will return value -1;
 				playSound( sound.play( i ) );
 				break;
 			}
