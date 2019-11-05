@@ -7,10 +7,11 @@ int main(){
 	uint8_t player = 2;
 	uint8_t damage = 50;
 	
-	namespace target = hwlib::target;
+	
+	
     auto mhzWrite = mhz433Write( player, damage );
 	(void) mhzWrite;
 	rtos::run();
 	//auto mhzRead = mhz433Read( 1000 );
 	//(//void) mhzRead;
-		}
+}

@@ -4,6 +4,7 @@
 #include "rtos.hpp"
 #include <array>
 #include "hwlib.hpp"
+#include "input.hpp"
 
 class hwuart{
 	//Usart * hw_usart = USART0;
@@ -20,15 +21,14 @@ public:
 	virtual void dataReceived( const uint8_t data[], const int len )=0;
 };
 
-class buttonListener{
-public:
-	virtual void buttonPressed()=0;
+
+
+/*
+class buttonListener {
+	public:
+		virtual void buttonPressed(const char id) = 0;
 };
 
-class buttonListen : public buttonListener{
-public:
-	void buttonPressed();
-};
 
 class button{
 private:
@@ -38,6 +38,7 @@ public:
 	button( buttonListen * listener );
 	void update();
 };
+*/
 
 class mhz433Read : public mhzListener, public rtos::task<>, public hwuart{
 private:
@@ -61,7 +62,7 @@ public:
 	
 };
 
-class mhz433Write : public buttonListen, public rtos::task<>, public hwuart{
+class mhz433Write : public inputHandler, public buttonListener, public hwuart{
 private:
 	//rtos::clock updateClock;
 	rtos::flag buttonFlag;
@@ -69,9 +70,11 @@ private:
 	uint8_t player;
 	uint8_t damage;
 	
-	buttonListen * buttonList;
-	button bl = button( buttonList);
-    
+	buttonListener * butt;
+	inputHandler * input;
+	button b = button(input, butt, 1);
+	
+	
 	const int amount = 4;
 	enum class states{ IDLE, WRITE };
 	states state;
@@ -80,7 +83,7 @@ private:
 public:
 	mhz433Write( uint8_t player, uint8_t damage );
 	
-	void buttonPressed() override ;
+	void buttonPressed(const char id)override;
 	
 	void write( uint8_t playerNumber, uint8_t damage );
 	//uint8_t dmgTimer( uint8_t damage );

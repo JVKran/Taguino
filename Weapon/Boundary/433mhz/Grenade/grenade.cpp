@@ -53,7 +53,8 @@ hwuart::hwuart(){
 	}
 
 //======================< Button >===============================
-button::button( buttonListen* listener ):
+/*
+button::button( buttonListen* listener, inputHandler * handler ):
 	listener( listener )
 	{}
 
@@ -69,8 +70,9 @@ void buttonListen::buttonPressed(){
 	hwlib::cout<<"Flag Set in listen\n";
 	
 }
+*/
 
-void mhz433Write::buttonPressed(){
+void mhz433Write::buttonPressed(const char id){
 	hwlib::cout<<"Flag Set in write\n";
 	buttonFlag.set();
 	
@@ -81,12 +83,11 @@ void mhz433Write::buttonPressed(){
 
 
 mhz433Write::mhz433Write( uint8_t player, uint8_t damage  ):
-	task( "433mhzWrite" ),
 	buttonFlag(this),
 	player(player),
 	damage(damage)
 	{ 
-		
+		inputHandler::addButton( &b);
 	}
 
 void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
@@ -131,7 +132,6 @@ void mhz433Write::main(){
 			case states::IDLE:
 				for(;;){
 					//wait(updateClock);
-					bl.update();
 					buttonFlag.set();
 					auto event = wait( buttonFlag );
 					if( event == buttonFlag){
