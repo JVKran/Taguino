@@ -5,7 +5,7 @@
 #include "rtos.hpp"
 class keypadListener {
 public:
-    virtual void dataReceived(char karakter) = 0;
+    virtual void keyPressed(char karakter) = 0;
 };
 class testlistner : public keypadListener{
      void dataReceived(char karakter);
