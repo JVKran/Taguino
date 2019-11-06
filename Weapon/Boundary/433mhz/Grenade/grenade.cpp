@@ -162,8 +162,9 @@ mhz433Read::mhz433Read( unsigned long long int duration, const char * name):
 
 
 void mhz433Read::read(){
-	
+
 	if( char_available() ){
+			HWLIB_TRACE;
 	   if( getc() == 254 ){												// If it's the start bit
 
 		   uint8_t tmpArray[amount] = { 0, 0, 0, 0 };				// Make array where the data is stored
@@ -181,6 +182,7 @@ void mhz433Read::read(){
 		   uint8_t damage = tmpArray[2];								// tmpArray[2] is the damage value
 
 		   if( tmpArray[4] != ( ( damage / 256 ) ^ ( damage & 0xFF) ) ){		// If the checksum is not the same, it will stop.
+				hwlib::cout<<"invalid checksum"<<hwlib::endl;
 				return;
 		   }
 		   //uint16_t playerID = (uint16_t)( tmpArray[0]<<8 | tmpArray[1] );					// Assemble the player number.

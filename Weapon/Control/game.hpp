@@ -89,7 +89,7 @@ private:
           if (arr[j] > arr[j+1])  
               swap(&arr[j], &arr[j+1]);  
   } 
-  //mhz433Read & granaat;
+  mhz433Read & granaat;
 public:
   runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber, mhz433Read & granaat);
   

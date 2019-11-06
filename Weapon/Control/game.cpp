@@ -17,7 +17,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer"),
-	handler(handler)//,
+	handler(handler),
 	granaat(granaat)
 	
 {
@@ -57,6 +57,8 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	//Display.showScore(player.getScore());
 }
  void runGame::mhzdataReceived( const uint8_t data[], const int len){
+	 HWLIB_TRACE;
+	 hwlib::cout<<"BOOOOOOOOM!!!"<<hwlib::endl;
 	for(int i=0; i<len; i++){
 		
 		hwlib::cout<<data[i]<<hwlib::endl;

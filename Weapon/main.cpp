@@ -59,7 +59,9 @@ int main( void ){
    HWLIB_TRACE;  
       //display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
    HWLIB_TRACE;
-   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber /*granaat*/);
+      mhz433Read granaat(grenadePollPeriod); 
+   HWLIB_TRACE;
+   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber, granaat);
    HWLIB_TRACE;
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
@@ -67,7 +69,6 @@ int main( void ){
    weaponManager gunManager = weaponManager(Display, handler, game, player, Transmitter);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
    HWLIB_TRACE;
-   mhz433Read granaat(grenadePollPeriod); 
    HWLIB_TRACE;
    rtos::run();
 }
