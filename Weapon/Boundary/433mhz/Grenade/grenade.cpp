@@ -82,12 +82,14 @@ void mhz433Write::buttonPressed(const char id){
 
 
 
-mhz433Write::mhz433Write( uint8_t player, uint8_t damage  ):
+mhz433Write::mhz433Write( uint8_t player, uint8_t damage, inputHandler * input  ):
 	buttonFlag(this),
 	player(player),
-	damage(damage)
+	damage(damage),
+	input(input),
+	b(input, listener 1)
 	{ 
-		inputHandler::addButton( &b);
+		addButton( &b);
 	}
 
 void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
@@ -132,7 +134,7 @@ void mhz433Write::main(){
 			case states::IDLE:
 				for(;;){
 					//wait(updateClock);
-					buttonFlag.set();
+					hwlib::cout<<"idle \n";
 					auto event = wait( buttonFlag );
 					if( event == buttonFlag){
 						state = states::WRITE;

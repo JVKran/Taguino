@@ -30,7 +30,7 @@ void inputHandler::addButton(button * b){
 void inputHandler::main(){
 	for(;;){
 		wait(updateClock);
-		hwlib::cout<<"in handler\n";
+								hwlib::cout<<"handler\n";
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}

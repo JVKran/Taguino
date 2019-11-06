@@ -70,10 +70,8 @@ private:
 	uint8_t player;
 	uint8_t damage;
 	
-	buttonListener * butt;
 	inputHandler * input;
-	button b = button(input, butt, 1);
-	
+	button b;	
 	
 	const int amount = 4;
 	enum class states{ IDLE, WRITE };
@@ -81,7 +79,7 @@ private:
 	
 	
 public:
-	mhz433Write( uint8_t player, uint8_t damage );
+	mhz433Write( uint8_t player, uint8_t damage, inputHandler * input );
 	
 	void buttonPressed(const char id)override;
 	

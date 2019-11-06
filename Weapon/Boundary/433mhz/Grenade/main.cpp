@@ -8,9 +8,8 @@ int main(){
 	uint8_t damage = 50;
 	
 	
-	
-    auto mhzWrite = mhz433Write( player, damage );
-	(void) mhzWrite;
+	inputHandler handler = inputHandler(100'000);
+    auto mhzWrite = mhz433Write( player, damage, &handler );
 	rtos::run();
 	//auto mhzRead = mhz433Read( 1000 );
 	//(//void) mhzRead;
