@@ -2,9 +2,11 @@
 
 
 // Lobby muziek in constructor en in start game actie
-signUp::signUp(NRF24 & radio, inputHandler &handler):
+signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game):
 	radio(radio),
-	toetsenbord(this)
+	toetsenbord(this),
+	Game(Game)
+
 
 	{
 		mp3Player.startPlayingSound(1); // Start lobby music once.
@@ -26,8 +28,8 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 			radio.powerUp_rx();
 			assignedWeapons++;
 		}
-		hwlib::wait_ms(5000);
-		startGame(100);
+		//hwlib::wait_ms(5000);
+		//startGame(100);
 	}
 }
 void signUp::keyPressed(char karakter){
@@ -37,16 +39,22 @@ void signUp::keyPressed(char karakter){
 
 }
 
+/// \brief
+/// StartGame
+/// \details
+/// Starts Game for all online weapons based on protocol as defined in documentation.
 void signUp::startGame(const uint8_t gameTime){
+	HWLIB_TRACE;
+	Game.gamestarted =1;
 	mp3Player.startPlayingSound(2);	// Start action music once.
 	
 	radio.powerDown_rx();
-	hwlib::wait_ms(100);
+	hwlib::wait_ms(1000);
 	for(uint8_t i = 1; i < assignedWeapons; i++){
 		transmitAddress[4] = i;
 		radio.write_pipe( transmitAddress );
 		dataToTransmit[0] = 1;					//2 is defined as newScoreMessage
-		dataToTransmit[1] = gameTime;
+		dataToTransmit[1] = Game.getGameTime();
 		hwlib::cout << "Started game for player " << i << "!" << hwlib::endl;
 		radio.write( dataToTransmit, amountOfDataToTransmit );
 	}

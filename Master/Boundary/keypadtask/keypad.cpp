@@ -1,23 +1,11 @@
 
 #include "keypad.hpp"
 
-T9Keys::T9Keys(keypadListener* listen/*,unsigned long long int period, const char * name*/):
-	//task(name),
-	//updateClock(this, period, "Update Clock"),
+T9Keys::T9Keys(keypadListener* listen):
     listen(listen)
 {}
 
 void T9Keys::update(){
-               //HWLIB_TRACE;
-    // char karakter;
-    // char i;
-    // uint8_t count=0;
-    // bool returned=0;
-    // int multiplier=0;
-    // int maxcount=2;
-    // uint_fast64_t lastpress= hwlib::now_us();
-	//for(;;){
-	//	wait(updateClock);
         if(((hwlib::now_us()-lastpress) > 1000000)&&returned==false){
             listen->keyPressed(karakter);
             returned=true;
@@ -87,50 +75,7 @@ void T9Keys::update(){
 
 
 char T9Keys::readChar(){
-    
-	//if(numpad.char_available()){
-
-        return 0;
-        
-	// 	newCharacter = numpad.getc();
-	// 	keyPressPeriod = hwlib::now_us() - lastKeyPress;
-	// 	lastKeyPress = hwlib::now_us();
-	// 	lastKey = newCharacter;
-	// 	lastCharacter = (((newCharacter - '0') - 2) * 3) + 97;
-	// 	//hwlib::wait_ms(200);
-	// 	// while(hwlib::now_us() - lastKeyPress < 500'000){
-	// 	// 	if(numpad.char_available()){
-	// 	// 		newCharacter = numpad.getc();
-	// 	// 		if(newCharacter != '\0' && letterIncrements < 2 && newCharacter == lastKey && newCharacter < '7'){
-	// 	// 			lastCharacter++;
-	// 	// 			letterIncrements++;
-	// 	// 			lastKeyPress = hwlib::now_us();
-	// 	// 			hwlib::wait_ms(100);
-	// 	// 		} else if(newCharacter == '7' && letterIncrements < 3 && newCharacter == lastKey){
-	// 	// 			lastCharacter++;
-	// 	// 			letterIncrements++;
-	// 	// 			lastKeyPress = hwlib::now_us();
-	// 	// 			hwlib::wait_ms(100);
-	// 	// 		} else if(newCharacter == '8' && letterIncrements < 2 && newCharacter == lastKey){
-	// 	// 			lastCharacter++;
-	// 	// 			letterIncrements++;
-	// 	// 			lastKeyPress = hwlib::now_us();
-	// 	// 			hwlib::wait_ms(100);
-	// 	// 		} else if(newCharacter == '9' && letterIncrements < 3 && newCharacter == lastKey){
-	// 	// 			lastCharacter++;
-	// 	// 			letterIncrements++;
-	// 	// 			lastKeyPress = hwlib::now_us();
-	// 	// 			hwlib::wait_ms(100);
-	// 	// 		} else {
-	// 	// 			break; 
-	// 	// 		}
-	// 	// 	}
-	// 	// }
-	// 	letterIncrements = 0;
-	// 	return lastCharacter;
-	// } else {
-	// 	return 0;
-	// }
+    return 0;
 }
 
 /// \brief

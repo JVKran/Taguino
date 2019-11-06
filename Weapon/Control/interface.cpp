@@ -36,12 +36,12 @@ void interfaceManager::buttonPressed(){
 /// Then, we want to divide that by two to simulate a 0, 1, 2, 3 steppattern when in reality it would be 0, 2, 4, 6, etc.
 void interfaceManager::encoderTurned(const int pos){
 	if(pos%2==0){
-		newPositionFlag.set();
 		if(pos != 0){
 			positionPool.write(pos / 2);
 		} else {
 			positionPool.write(pos);
 		}
+		newPositionFlag.set();
 	}
 }
 

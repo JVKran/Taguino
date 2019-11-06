@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	exchanger.signalOnline();
 	
 	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
-	gameStartSignalReceived(100);
+	//gameStartSignalReceived(100);
 	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
 	
 }
@@ -203,7 +203,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 			// for(int i = 0; i < 31; i++){
 			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
    //      		}
-			// break;
+			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
 			Display.showPowerUp(0);
@@ -238,6 +238,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	   			player.setPlayerNumber(data[1]);
 	   			game->setPlayerData(player);
 	   			startupAddress[4] = 0;
+				
 			}
 			break;
 	}
