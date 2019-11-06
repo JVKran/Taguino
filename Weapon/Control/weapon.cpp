@@ -39,9 +39,6 @@ void weaponManager::newWeaponSelected(const int id){
 	// hwlib::cout<<int(Display.showMagazines(weaponStats.getAmountOfMags(id)))<< hwlib::endl;
 	Display.showMagazines(weapon.getAmountOfMags());
 	Display.showBullets(weapon.getAmountOfBullets());
-	
-	hwlib::cout<<"getAmountOfBullets "<<weaponStats.getBulletsPerMag(id)<<hwlib::endl;
-	hwlib::cout<<"getAmountOfMagazines "<<weaponStats.getAmountOfMags(id)<<hwlib::endl;
 	autoFireMode = false;
 	burstFireMode = false;
 	manualFireMode = true;

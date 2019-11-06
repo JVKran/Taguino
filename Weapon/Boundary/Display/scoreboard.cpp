@@ -5,11 +5,9 @@ scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
 {
     for(auto element : playerNumbers){
         element = 0;
-        hwlib::cout<<element;
     }
     for(auto element : playerScores){
         element = 0;
-        hwlib::cout<<element;
     }
 }
 
