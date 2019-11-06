@@ -21,11 +21,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 {
 	handler.suspend();
 	exchanger.signalOnline();
-	/*
-	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
-	gameStartSignalReceived(100);
-	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
-	*/
+	// gameStartSignalReceived(100);
 }
 
 /// \brief
@@ -45,6 +41,7 @@ void runGame::messageReceived(const uint16_t data){
 }
 
 void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
+	HWLIB_TRACE;
 	handler.resume();
 	gameSeconds = timeToPlay * 10;
 	remainingSeconds = timeToPlay * 10;

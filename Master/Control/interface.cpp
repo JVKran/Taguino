@@ -75,6 +75,8 @@ void interfaceManager::main(){
 		} else {
 			hwlib::cout << "Encoder Pressed!" << hwlib::endl;
 			if(((currentPosition >= 0) ? currentPosition % 4 : (currentPosition / -1) % 4) == 2){
+				hwlib::cout<<"Started the game!";
+				hwlib::now_us();
 				signer.startGame(100);			//Start a game with duration of 100 * 10 = 1000 seconds
 			}
 			// if(currentlyInSetting){

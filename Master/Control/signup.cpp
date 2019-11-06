@@ -26,8 +26,6 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 			radio.powerUp_rx();
 			assignedWeapons++;
 		}
-		hwlib::wait_ms(5000);
-		startGame(100);
 	}
 }
 void signUp::keyPressed(char karakter){
