@@ -1,12 +1,27 @@
 #include "game.hpp"
 
-game::game(NRF24 & radio):
-	radio(radio)
+game::game(display & Display, NRF24 & radio, scoreboard &board):
+	task(7,"gamerunning"),
+	Display(Display),
+	radio(radio),
+	secondClock(this, 1'000'000, "Second Clock for time keeping"),
+	updateClockTimer(this, "update Clock Timer"),
+	board(board)
 {}
+void game::setgametime(int time){
+  	gameSeconds= time;                                   
+  	 remainingSeconds =time;
+}
+uint8_t game::getGameTime(){
+	return gameSeconds;
+}
 
 void game::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 2){
 		hwlib::cout << "Player " << data[1] << " dealt " << int(data[2]) << " damage!" << hwlib::endl;
+		//board.playerScores[data[1]]=data[2];
+		board.updateScoreBoard(data);
+		board.printScoreboard();
 
 		radio.powerDown_rx();
 		dataToTransmit[0] = 2;
@@ -19,6 +34,7 @@ void game::dataReceived(const uint8_t data[10], const int len){
 		}
 		radio.read_pipe(receiveAddress);
 		radio.powerUp_rx();
+		/*
 		for(int i = 0; i < 32; i++){
 			if(board.playerNumbers[i] == data[1]){
 				board.playerScores[i] += data[2];
@@ -40,13 +56,36 @@ void game::dataReceived(const uint8_t data[10], const int len){
 		}
 		bubbleSort(board.playerScores, board.playerNumbers, 31);
 		hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-		for(int i = 24; i < 30; i++){
+		for(int i = 0; i < 30; i++){
 			hwlib::cout << board.playerNumbers[i] << "\t\t\t" << board.playerScores[i] << hwlib::endl;
 		}
+		*/
 	} else if(data[0] == 1){
 		assignedWeapons++;
 		if(assignedWeapons > 31){
 			assignedWeapons = 31;
 		}
+	}
+}
+
+void game::main(){
+			Display.showTime(remainingSeconds);							
+			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
+	for(;;){
+				//HWLIB_TRACE;
+
+		auto event= wait(secondClock/*+updateClockTimer*/);
+
+		if ((event == secondClock)&&(gamestarted)) {
+			//HWLIB_TRACE;
+			remainingSeconds--;
+						Display.showTime(remainingSeconds);	
+						//Display.showTime(remainingSeconds);			
+		} /*else {
+			//HWLIB_TRACE;
+			//hwlib::cout<<remainingSeconds<<hwlib::endl;
+			Display.showTime(remainingSeconds);							
+			//updateClockTimer.set((gameSeconds / 100 )* 1'000100000);
+		}*/
 	}
 }

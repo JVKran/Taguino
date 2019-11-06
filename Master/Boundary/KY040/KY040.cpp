@@ -24,6 +24,7 @@ KY040::KY040(const int receivedSwitchPinNumber, encoderListener * listener, inpu
 /// Rotary Encoder outputs a grey-code and this function tries to interpret that outputted
 /// code. It's very basic though.
 void KY040::update(){
+	//HWLIB_TRACE;
 	posCounter = encoder.read();
 	if(posCounter != lastPos){
 		lastPos = posCounter;

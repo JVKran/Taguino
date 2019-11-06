@@ -1,6 +1,7 @@
 #include "input.hpp"
 
 button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id, const int buttonNotToBeSet):
+
 	pinNumber(pinNumber),
 	listener(listener),
 	handler(handler),
@@ -21,7 +22,7 @@ void button::update(){
 
 
 inputHandler::inputHandler(unsigned long long int period, const char * name):
-	task(name),
+	task(6, name),
 	updateClock(this, period, "Update Clock")
 {
 	buttonInterrupter.refreshregister();

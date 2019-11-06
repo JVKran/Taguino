@@ -8,6 +8,7 @@
 /// This function creates a refrence for display, inputHandler and weaponManager.
 /// It also initializes some concurrency mechanisms.
 interfaceManager::interfaceManager(display & Display, inputHandler & handler, signUp & signer, game & gameRunner):
+	task(5,"intermanagment"),
 	Display(Display),
 	handler(handler),
 	rotaryEncoder(KY040(15, this, &handler)),
@@ -28,6 +29,7 @@ interfaceManager::interfaceManager(display & Display, inputHandler & handler, si
 /// \details
 /// This constructor has no mandatory parameters; we only have one Rotary Encoder hence one button to be pressed.
 void interfaceManager::buttonPressed(){
+	HWLIB_TRACE;
 	encoderPressedFlag.set();
 }
 
@@ -38,12 +40,15 @@ void interfaceManager::buttonPressed(){
 /// One rotaryEncoder step creates two pulses; hence we only want to know when the position is even.
 /// Then, we want to divide that by two to simulate a 0, 1, 2, 3 steppattern when in reality it would be 0, 2, 4, 6, etc.
 void interfaceManager::encoderTurned(const int pos){
+	HWLIB_TRACE;
 	if(pos%2==0){
-		newPositionFlag.set();
+
 		if(pos != 0){
 			positionPool.write(pos / 2);
+					newPositionFlag.set();
 		} else {
 			positionPool.write(pos);
+					newPositionFlag.set();
 		}
 	}
 }
@@ -56,15 +61,25 @@ void interfaceManager::encoderTurned(const int pos){
 /// A function is then called to change the weapon.
 void interfaceManager::main(){
 	for(;;){
-		//HWLIB_TRACE;
+	
 		auto event = wait(newPositionFlag+encoderPressedFlag);
+		HWLIB_TRACE;
+		hwlib::cout<<event<<hwlib::endl;
+
 		if(event == newPositionFlag){
+			HWLIB_TRACE;
 			currentPosition = positionPool.read();
 			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
 			//If button is pressed while not currently setting anything; we want to enter settingmode.
-			if(!currentlyInSetting){
+			if(!currentlyInSetting&&currentPosition<3){
 			 	Display.selectedWindow((currentPosition >= 0) ? currentPosition % 4 : (currentPosition / -1) % 4);
-			} else {
+			} else if(!currentlyInSetting){
+				
+
+				Display.scoreTerminal << '\f' << currentPosition << hwlib::flush;
+			
+			}
+			else {
 				//Else if we're setting anything we want to determine what we're setting and perform actions based on the position.
 				// switch(inWhichSetting){
 				// 	case 0:
@@ -74,8 +89,11 @@ void interfaceManager::main(){
 			}
 		} else {
 			hwlib::cout << "Encoder Pressed!" << hwlib::endl;
-			if(((currentPosition >= 0) ? currentPosition % 4 : (currentPosition / -1) % 4) == 2){
+			if((((currentPosition >= 0)&&(currentPosition<3)) ? currentPosition % 4 : (currentPosition / -1) % 4) == 2){
 				signer.startGame(100);			//Start a game with duration of 100 * 10 = 1000 seconds
+			}
+			else if(currentPosition>=0){
+				gameRunner.setgametime(currentPosition*10);
 			}
 			// if(currentlyInSetting){
 			// 	Display.selectedSetting(-1);
