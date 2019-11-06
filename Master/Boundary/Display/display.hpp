@@ -62,8 +62,8 @@ protected:
 
 	rtos::flag newTimeFlag;
 	rtos::pool<double> newTimePool;
-	double totalGameTime = 0;
-	double remainingSeconds;
+	double totalGameTime = 40;
+	double remainingSeconds=40;
 
 	rtos::flag newPowerUpFlag;
 	int powerUpID;

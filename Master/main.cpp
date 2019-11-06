@@ -43,6 +43,6 @@ int main( void ){
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
-   
+   HWLIB_TRACE;
    rtos::run();
 }

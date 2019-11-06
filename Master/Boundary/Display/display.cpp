@@ -303,9 +303,13 @@ void display::drawScore(){
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
+	HWLIB_TRACE;
+	hwlib::cout<<"sec"<<int64_t(totalGameSeconds)<<"     "<<int64_t(remainingSeconds)<<hwlib::endl;
 	if(totalGameSeconds != 0){
 		totalGameTime = totalGameSeconds;
+		HWLIB_TRACE;
 	}
+	HWLIB_TRACE;
 	newTimePool.write(remainingSeconds);
 	newTimeFlag.set();
 }

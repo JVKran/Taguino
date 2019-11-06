@@ -13,8 +13,8 @@ private:
 	scoreBoard board;
 
 	rtos::clock secondClock;                           //Activates main() every second to substract 1 from remainingTime.
-  	int gameSeconds;                                   //After initialization remainingSeconds and gameSeconds are equal.
-  	int remainingSeconds;
+  	int gameSeconds= 40;                                   //After initialization remainingSeconds and gameSeconds are equal.
+  	int remainingSeconds =40;
   	rtos::timer updateClockTimer;
 
 
