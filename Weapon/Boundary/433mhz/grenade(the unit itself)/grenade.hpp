@@ -4,7 +4,7 @@
 #include "rtos.hpp"
 #include <array>
 #include "hwlib.hpp"
-#include "input.hpp"
+#include "NRF24.hpp"
 
 class hwuart{
 	//Usart * hw_usart = USART0;
@@ -23,24 +23,7 @@ public:
 
 
 
-/*
-class buttonListener {
-	public:
-		virtual void buttonPressed(const char id) = 0;
-};
-
-
-class button{
-private:
-	hwlib::target::pin_in sw = hwlib::target::pin_in( hwlib::target::pins::d4);
-	buttonListener* listener;
-public:
-	button( buttonListener * listener );
-	void update();
-};
-*/
-
-class mhz433Read : /*public mhzListener,*/ public rtos::task<256>, public hwuart{
+class mhz433Read : public rtos::task<256>, public hwuart{
 private:
 	rtos::clock updategraClock;
 	
@@ -62,31 +45,38 @@ public:
 	
 };
 
-class mhz433Write : public inputHandler, public buttonListener, public hwuart{
+class mhz433Write : public hwuart{
 private:
 	//rtos::clock updateClock;
-	rtos::flag buttonFlag;
 	
 	uint8_t player;
 	uint8_t damage;
-	
-	inputHandler * input;
-	button b;	
-	
+
 	const int amount = 4;
-	enum class states{ IDLE, WRITE };
-	states state;
+
 	
 	
 public:
-	mhz433Write( uint8_t player, uint8_t damage, inputHandler * input );
-	
-	void buttonPressed(const char id)override;
+	mhz433Write( uint8_t player , uint8_t damage );
 	
 	void write( uint8_t playerNumber, uint8_t damage );
-	//uint8_t dmgTimer( uint8_t damage );
 	
-	void main() override;
+	//void main() override;
 }; 
+
+class exchangeGrenadeData : public radioListener {
+private:
+	NRF24 radio;
+	mhz433Write mhz;
+	uint8_t receiveAddress[5] = {0, 0, 0, 0, 101};
+public:
+	exchangeGrenadeData( NRF24 & radio, mhz433Write &mhz );
+	
+	virtual void dataReceived(const uint8_t data[], const int len) override;
+	
+	void explode( uint8_t player, uint8_t damage);
+	
+
+};
 
 #endif // GRENADE_HPP

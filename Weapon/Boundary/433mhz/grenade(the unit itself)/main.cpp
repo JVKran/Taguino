@@ -1,17 +1,35 @@
 #include "grenade.hpp"
 #include "hwlib.hpp"
+#include "rtos.hpp"
 
 int main(){
 	
 	hwlib::wait_ms(500);
+	
+	namespace target = hwlib::target;
 		
-	uint8_t player = 2;
+	uint8_t player = 0;
 	uint8_t damage = 50;
 	
+    auto sclk = target::pin_out( target::pins::d9 );
+  	auto mosi = target::pin_out( target::pins::d12 );
+   	auto miso = target::pin_in( target::pins::d13 );
+   	auto csn  = target::pin_out( target::pins::d11 );
+   	auto ce   = target::pin_out( target::pins::d10 );
 	
-	inputHandler handler = inputHandler(100'000);
-    auto mhzWrite = mhz433Write( player, damage, &handler );
+    auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso );
+	
+	const long long int radioPollPeriod = 100'000;
+	const uint8_t addressToListenTo = 0;
+	
+  	NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
+	
+	mhz433Write mhz = mhz433Write(player, damage);
+		
+	exchangeGrenadeData grenade = exchangeGrenadeData( radio, mhz );
+	
+	radio.addListener(&grenade);
+	
 	rtos::run();
-	//auto mhzRead = mhz433Read( 1000 );
-	//(//void) mhzRead;
+	
 }

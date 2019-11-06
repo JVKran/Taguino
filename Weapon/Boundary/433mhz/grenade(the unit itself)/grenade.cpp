@@ -52,46 +52,31 @@ hwuart::hwuart(){
 	   USART0->US_THR = c;
 
 	}
+//======================< Grenade >===============================
 
-//======================< Button >===============================
-/*
-button::button( buttonListener* listener, inputHandler * handler ):
-	listener( listener )
+exchangeGrenadeData::exchangeGrenadeData( NRF24 &radio, mhz433Write& mhz):
+	radio(radio),
+	mhz(mhz)
 	{}
 
-void button::update(){
-	if( !sw.read() ){
-		hwlib::cout<<"In update\n";
-		listener->buttonPressed();
-		hwlib::cout<<"na buttonPressed()\n";
+void exchangeGrenadeData::dataReceived(const uint8_t data[10], const int len){
+	if(data[0] == 12){
+		explode( data[1], data[2] );
 	}
 }
-*/
-void buttonListener::buttonPressed(char id){
-	hwlib::cout<<"Flag Set in listen\n";
-	
-}
 
-
-void mhz433Write::buttonPressed(const char id){
-	hwlib::cout<<"Flag Set in write\n";
-	buttonFlag.set();
-	
-}
+void exchangeGrenadeData::explode( uint8_t player, uint8_t damage ){
+	mhz.write( player, damage );
+};
 
 //======================< Write >===============================
 
 
 
-mhz433Write::mhz433Write( uint8_t player, uint8_t damage, inputHandler * input  ):
-	buttonFlag(this),
+mhz433Write::mhz433Write( uint8_t player, uint8_t damage):
 	player(player),
-	damage(damage),
-	input(input),
-	b(input, this,0)
-	{ 
-		addButton( &b);
-	}
+	damage(damage)
+{}
 
 void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 
@@ -113,7 +98,7 @@ void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 		putc( explosionData[i] );
 		hwlib::wait_us(400);
 	 }
-	 hwlib::cout<<"sending"<<hwlib::endl;
+	 hwlib::cout<<"sending mhz"<<hwlib::endl;
 }
 /*
 uint8_t mhz433Write::dmgTimer( uint8_t damage ){
@@ -127,36 +112,17 @@ uint8_t mhz433Write::dmgTimer( uint8_t damage ){
 	return damage;
 }
 */
-
+/*
 void mhz433Write::main(){
 	//state = states::IDLE;
     for(;;){
 		hwlib::wait_ms(100);
 		write(player, damage);
 		hwlib::cout<<"boom"<<hwlib::endl;
-		/*
-		switch( state ){
-			case states::IDLE:
-				for(;;){
-					//wait(updateClock);
-					hwlib::cout<<"idle \n";
-					auto event = wait( buttonFlag );
-					if( event == buttonFlag){
-						state = states::WRITE;
-						hwlib::cout<<"State = write \n";
-						break;
-					}
-				}
-			case states::WRITE:
-				hwlib::cout<<"In Write\n";
-				write( player, damage );
-				state = states::IDLE;
-				break;
-		}*/
 	}
 }
 
-
+*/
 //======================< Read >===============================
 
 mhz433Read::mhz433Read( unsigned long long int duration, const char * name):
