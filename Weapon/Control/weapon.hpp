@@ -50,6 +50,9 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		rtos::flag newWeaponFlag;
 		rtos::pool<int> newWeaponPool;
 		int weaponId;
+
+		enum class states {IDLE, SHOOTING};
+		states state = states::IDLE;
 	public:
 		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
 		virtual void buttonPressed(const char id) override;

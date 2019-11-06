@@ -46,6 +46,8 @@ class inputHandler : public rtos::task<> {
 		buttonRegister buttonsRegister;
 
 		rtos::clock updateClock;
+		enum class states {IDLE, UPDATING};
+		states state = states::IDLE;
 	public:
 		inputHandler(unsigned long long int period = 100'000, const char * name = "Input Handler");
 

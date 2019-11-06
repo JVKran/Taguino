@@ -78,67 +78,74 @@ void weaponManager::shootBullet(){
 void weaponManager::main(){
 	for(;;){
 		auto event = wait(buttonsChannel+shootTimer+newWeaponFlag);
-		if(event == buttonsChannel){
-			readButton = buttonsChannel.read();
-			switch(readButton){
-				case 'T':
-					shootTimer.set(100);
-					shotBullets = 0;
-					triggerPressed = true;
-					break;
-				case 'A':
-					hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
-					if(weapon.autoAllowed()){
-						autoFireMode = true;
-						burstFireMode = false;
-						manualFireMode = false;
+		switch(state){
+			case states::IDLE:
+				if(event == buttonsChannel){
+				readButton = buttonsChannel.read();
+				switch(readButton){
+					case 'T':
+						shootTimer.set(100);
 						shotBullets = 0;
-						Display.showFireMode(1);
-					} else {
-						Display.showFireMode(0);
-					}
-					break;
-				case 'B':
-					hwlib::cout << "Burstfire-Mode selected" << hwlib::endl;
-					if(weapon.burstAllowed()){
+						triggerPressed = true;
+						break;
+					case 'A':
+						hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
+						if(weapon.autoAllowed()){
+							autoFireMode = true;
+							burstFireMode = false;
+							manualFireMode = false;
+							shotBullets = 0;
+							Display.showFireMode(1);
+						} else {
+							Display.showFireMode(0);
+						}
+						break;
+					case 'B':
+						hwlib::cout << "Burstfire-Mode selected" << hwlib::endl;
+						if(weapon.burstAllowed()){
+							autoFireMode = false;
+							burstFireMode = true;
+							manualFireMode = false;
+							Display.showFireMode(2);
+						} else {
+							Display.showFireMode(0);
+						}
+						break;
+					case 'M':
+						hwlib::cout << "Manualfire-Mode selected" << hwlib::endl;
 						autoFireMode = false;
-						burstFireMode = true;
-						manualFireMode = false;
-						Display.showFireMode(2);
-					} else {
+						burstFireMode = false;
+						manualFireMode = true;
 						Display.showFireMode(0);
+						break;
+					case 'R':
+						Display.showBullets(weapon.getAmountOfBullets());
+						triggerPressed = false;
+						break;
+					default:
+						hwlib::cout << "Unknown button pressed?" << hwlib::endl;
+						break;
 					}
-					break;
-				case 'M':
-					hwlib::cout << "Manualfire-Mode selected" << hwlib::endl;
-					autoFireMode = false;
-					burstFireMode = false;
-					manualFireMode = true;
-					Display.showFireMode(0);
-					break;
-				case 'R':
-					Display.showBullets(weapon.getAmountOfBullets());
-					triggerPressed = false;
-					break;
-				default:
-					hwlib::cout << "Unknown button pressed?" << hwlib::endl;
-					break;
-			}
-		} else if(event == shootTimer){
-			if(manualFireMode){
-				shootBullet();
-			} else if(burstFireMode && triggerPressed){
-				if(shotBullets < 5){
-					shotBullets++;
-					shootBullet();
-					shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
+				} else if(event == shootTimer){
+					if(manualFireMode){
+						state = states::SHOOTING;
+					} else if(burstFireMode && triggerPressed){
+						if(shotBullets < 5){
+							shotBullets++;
+							state = states::SHOOTING;
+							shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
+						}
+					} else if(autoFireMode && triggerPressed){
+						state = states::SHOOTING;
+						shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
+					}
+				} else {
+					selectNewWeapon();
 				}
-			} else if(autoFireMode && triggerPressed){
+				break;
+			case states::SHOOTING:
 				shootBullet();
-				shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
-			}
-		} else {
-			selectNewWeapon();
+				break;
 		}
 	}
 }

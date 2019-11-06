@@ -176,7 +176,6 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 				game->getPlayerData().setScore(data[2]);
 				Display.showScore(data[2]);
 			}
-			Display.Scoreboard.updateScoreBoard(data);
 
 			// for(int i = 0; i < 32; i++){
 			// 	if(board.playerNumbers[i] == data[1]){
@@ -203,7 +202,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 			// for(int i = 0; i < 31; i++){
 			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
    //      		}
-			// break;
+			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
 			Display.showPowerUp(0);

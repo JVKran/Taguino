@@ -13,7 +13,6 @@ interfaceManager::interfaceManager(display & Display, inputHandler & handler, we
 	rotaryEncoder(KY040(15, this, &handler)),
 	weapon(weapon),
 	encoderPressedFlag(this),
-	resetPositionFlag(this),
 	newPositionFlag(this),
 	positionPool("New Position Pool")
 {
@@ -36,12 +35,12 @@ void interfaceManager::buttonPressed(){
 /// Then, we want to divide that by two to simulate a 0, 1, 2, 3 steppattern when in reality it would be 0, 2, 4, 6, etc.
 void interfaceManager::encoderTurned(const int pos){
 	if(pos%2==0){
-		newPositionFlag.set();
 		if(pos != 0){
 			positionPool.write(pos / 2);
 		} else {
 			positionPool.write(pos);
 		}
+		newPositionFlag.set();
 	}
 }
 
@@ -54,33 +53,31 @@ void interfaceManager::encoderTurned(const int pos){
 void interfaceManager::main(){
 	for(;;){
 		auto event = wait(newPositionFlag+encoderPressedFlag);
-		if(event == newPositionFlag){
-			currentPosition = positionPool.read();
-			hwlib::cout << "Encoder Turned to position " << currentPosition << "." << hwlib::endl;
-			//If button is pressed while not currently setting anything; we want to enter settingmode.
-			if(!currentlyInSetting){
-				Display.selectedWindow((currentPosition >= 0) ? currentPosition % 2 : (currentPosition / -1) % 2);
-			} else {
-				//Else if we're setting anything we want to determine what we're setting and perform actions based on the position.
-				switch(inWhichSetting){
-					case 0:
-						if(currentPosition>0){
-							weapon.newWeaponSelected(currentPosition % 5);		//We have 5 weapons so perform % 5 to create a possibility of 1, 2, 3, 4, 5 as weapon.
-						}else{
-							weapon.newWeaponSelected((currentPosition % 5)/-1);
-						}
-						break;
+		switch(state){
+			case states::IDLE:
+				if(event == newPositionFlag){
+					currentPosition = positionPool.read();
+					Display.selectedWindow((currentPosition >= 0) ? currentPosition % 2 : (currentPosition / -1) % 2);
+				} else {
+					state = states::SETTING;
+					inWhichSetting = currentPosition % 2;
+					Display.selectedSetting(currentPosition % 2);
 				}
-			}
-		} else {
-			if(currentlyInSetting){
-				Display.selectedSetting(-1);
-				rotaryEncoder.setPos(inWhichSetting);
-			} else {
-				Display.selectedSetting(currentPosition % 2);				//We have 2 settings; weapon and power-up
-				inWhichSetting = currentPosition % 2;
-			}
-			currentlyInSetting = !currentlyInSetting;
+				break;
+			case states::SETTING:
+				if(event == newPositionFlag){
+					currentPosition = positionPool.read();
+					if(currentPosition>0){
+						weapon.newWeaponSelected(currentPosition % 5);		//We have 5 weapons so perform % 5 to create a possibility of 1, 2, 3, 4, 5 as weapon.
+					}else{
+						weapon.newWeaponSelected((currentPosition % 5)/-1);
+					}
+				} else {
+					state = states::IDLE;
+					Display.selectedSetting(-1);
+					rotaryEncoder.setPos(inWhichSetting);
+				}
+				break;
 		}
 	}
 }

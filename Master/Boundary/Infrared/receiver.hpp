@@ -15,7 +15,6 @@ public:
 	virtual void messageReceived(const uint16_t message) = 0;
 };
 
-
 class infraredReceiver : public rtos::task<> {
 private:
 	hwlib::target::pin_in irReceiver = hwlib::target::pin_in(hwlib::target::pins::d5);
@@ -33,8 +32,6 @@ public:
 
 	void main() override;
 };
-
-
 
 class infraredDecoder : public rtos::task<>, public highSignalListener {
 private:

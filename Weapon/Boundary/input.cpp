@@ -42,12 +42,20 @@ buttonRegister * inputHandler::getRegister(){
 
 void inputHandler::main(){
 	for(;;){
-		wait(updateClock);
-		buttonsRegister.refreshregister();
-		for(int i = 0; i < addedButtons; i++){
-			buttons[i]->update();
+		switch(state){
+			case states::IDLE:
+				wait(updateClock);
+				state = states::UPDATING;
+				break;
+			case states::UPDATING:
+				buttonsRegister.refreshregister();
+				for(int i = 0; i < addedButtons; i++){
+					buttons[i]->update();
+				}
+				encoder->update();
+				buttonsRegister.refreshregister();
+				state = states::IDLE;
+				break;
 		}
-		encoder->update();
-		buttonsRegister.refreshregister();
 	}
 }

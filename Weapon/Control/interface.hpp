@@ -19,11 +19,13 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 		int inWhichSetting;
 		bool currentlyInSetting = false;
 
-		rtos::flag resetPositionFlag;
 		rtos::flag newPositionFlag;
 		int currentPosition = 0;
 
 		rtos::pool<int> positionPool;
+
+		enum class states {IDLE, SETTING};
+		states state = states::IDLE;
 	public:
 		interfaceManager(display & Display, inputHandler & handler, weaponManager & weapon);
 
