@@ -49,7 +49,7 @@ private:
   playerData player;
 
   hwlib::color initColor = hwlib::color(52, 112, 90);
-  hwlib::color healthColor = hwlib::color(255, 0, 0);
+  hwlib::color healthColor = hwlib::color(0, 255, 0);
   RGBLed Led = RGBLed(initColor);
 
   uint16_t receivedData;
