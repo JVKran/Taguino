@@ -80,8 +80,8 @@ void runGame::main(){
 					player.setHealth(0);
 				}
 				Display.showHealth(player.getHealth());
-				healthColor.red = (player.getHealth() * 25) / 10;
-				healthColor.green = 255 - ((player.getHealth() * 25) / 10);
+				healthColor.red = 255 - ((player.getHealth() * 25) / 10);
+				healthColor.green = (player.getHealth() * 25) / 10;
 				Led.setColor(healthColor);
 			}
 		} else if (event == secondClock) {
