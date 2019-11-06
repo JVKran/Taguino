@@ -12,6 +12,7 @@ private:
 	NRF24 & radio;
 	scoreBoard board;
 
+
 	rtos::clock secondClock;                           //Activates main() every second to substract 1 from remainingTime.
   	int gameSeconds= 40;                                   //After initialization remainingSeconds and gameSeconds are equal.
   	int remainingSeconds =40;
@@ -27,6 +28,9 @@ private:
 	uint8_t assignedWeapons = 1;
 
 public:
+	void setgametime(int time);
+	uint8_t getGameTime();
+	bool gamestarted =0;
 	game(display & Display, NRF24 & radio);
 	virtual void dataReceived(const uint8_t data[10], const int len) override;
 	void main() override;

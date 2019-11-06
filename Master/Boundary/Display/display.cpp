@@ -1,6 +1,7 @@
 #include "display.hpp"
 
 display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal):
+	task(4, "display"),
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
@@ -11,7 +12,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 	scoreWindow(scoreWindow),
-	scoreTerminal(scoreTerminal),
+
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
 	newBulletFlag(this),
@@ -31,7 +32,9 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newPowerUpFlag(this),
 	newPowerUpPool("New Powerup Pool"),
 	newFireModeFlag(this),
-	newFireModePool("New Fire Mode Pool")
+	
+	newFireModePool("New Fire Mode Pool"),
+		scoreTerminal(scoreTerminal)
 {
 	oled.clear();
 }
@@ -303,18 +306,20 @@ void display::drawScore(){
 }
 
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
-	HWLIB_TRACE;
-	hwlib::cout<<"sec"<<int64_t(totalGameSeconds)<<"     "<<int64_t(remainingSeconds)<<hwlib::endl;
+
+	//HWLIB_TRACE;
+	//hwlib::cout<<"sec"<<int64_t(totalGameSeconds)<<"     "<<int64_t(remainingSeconds)<<hwlib::endl;
 	if(totalGameSeconds != 0){
 		totalGameTime = totalGameSeconds;
-		HWLIB_TRACE;
+	//	HWLIB_TRACE;
 	}
-	HWLIB_TRACE;
+	//HWLIB_TRACE;
 	newTimePool.write(remainingSeconds);
 	newTimeFlag.set();
 }
 
 void display::drawTime(){
+	//HWLIB_TRACE;
 	if(currentlySelectedWindow == 0){
 		remainingSeconds = newTimePool.read();
 		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
@@ -491,7 +496,7 @@ void display::selectedWindow(const int window){
 			scoreTerminal << '\f' << "start" << hwlib::flush;
 			break;
 		case 3:
-			currentlySelectedWindow = 1;
+			currentlySelectedWindow = 3;
 			oled.clear();
 			scoreTerminal << '\f' << "3" << hwlib::flush;
 			break;
@@ -535,7 +540,10 @@ void display::drawFireMode(){
 
 void display::main(){
 	for(;;){
+				//HWLIB_TRACE;
+
 		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag);
+		//hwlib::cout<<"display "<<event<<hwlib::endl;
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){

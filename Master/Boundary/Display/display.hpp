@@ -19,12 +19,11 @@ protected:
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
 	hwlib::window_part scoreWindow;
-	hwlib::terminal_from scoreTerminal;
 
 	displayedData lastData;
 	bool maxBulletsDrawn = false;
 	bool maxMagazinesDrawn = false;	
-	int currentlySelectedWindow = 0;
+
 
 	const lookup <int, 360> xCoordinates;
 	const lookup <int, 360> yCoordinates;
@@ -73,6 +72,9 @@ protected:
 	rtos::pool<int> newFireModePool;
 	int fireMode;
 public:
+	hwlib::terminal_from scoreTerminal;
+		int currentlySelectedWindow = 0;
+
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal);
 
 	void showBullets(int amountOfBullets);

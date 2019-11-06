@@ -6,7 +6,11 @@
 #include "input.hpp"
 #include "mp3.hpp"
 
+#include "game.hpp"
+
 class signUp : public radioListener, public keypadListener  {
+
+
 private:
 	NRF24 radio;
 
@@ -20,8 +24,10 @@ private:
 	T9Keys toetsenbord;
 	mp3Control<2> mp3Player = mp3Control<2>(); 
 	//inputHandler handler;
+	game & Game;
+
 public:
-	signUp(NRF24 & radio, inputHandler &handler);
+	signUp(NRF24 & radio, inputHandler &handler, game &Game);
 
 	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;
