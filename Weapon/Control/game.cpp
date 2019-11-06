@@ -22,9 +22,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler.suspend();
 	exchanger.signalOnline();
 	
-	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
-	//gameStartSignalReceived(100);
-	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
+
 	
 }
 
@@ -78,6 +76,7 @@ void runGame::main(){
 				player.setHealth(player.getHealth() - dealtDamage);
 				if(player.getHealth() < 0){
 					player.setHealth(0);
+					Display.showPowerUp(1);
 				}
 				Display.showHealth(player.getHealth());
 				healthColor.red = (player.getHealth() * 25) / 10;
