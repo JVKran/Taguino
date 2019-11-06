@@ -24,6 +24,7 @@ inputHandler::inputHandler(unsigned long long int period, const char * name):
 	task(name),
 	updateClock(this, period, "Update Clock")
 {
+	
 	buttonInterrupter.refreshregister();
 }
 

@@ -33,9 +33,9 @@ class buttonListener {
 class button{
 private:
 	hwlib::target::pin_in sw = hwlib::target::pin_in( hwlib::target::pins::d4);
-	buttonListen* listener;
+	buttonListener* listener;
 public:
-	button( buttonListen * listener );
+	button( buttonListener * listener );
 	void update();
 };
 */
@@ -61,7 +61,7 @@ public:
 	void main() override;
 	
 };
-/*
+
 class mhz433Write : public inputHandler, public buttonListener, public hwuart{
 private:
 	//rtos::clock updateClock;
@@ -88,5 +88,5 @@ public:
 	
 	void main() override;
 }; 
-*/
+
 #endif // GRENADE_HPP

@@ -34,8 +34,10 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newFireModeFlag(this),
 	newFireModePool("New Fire Mode Pool")
 {
+	HWLIB_TRACE;
 	oled.clear();
 	showScore(0);
+	HWLIB_TRACE;
 }
 
 void display::showBullets(int amountOfBullets){

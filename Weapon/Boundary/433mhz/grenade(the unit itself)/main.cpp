@@ -2,7 +2,7 @@
 #include "hwlib.hpp"
 
 int main(){
-	kfdmgamo
+	
 	hwlib::wait_ms(500);
 		
 	uint8_t player = 2;

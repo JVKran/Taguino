@@ -10,17 +10,24 @@
 /// exchangeGameData object because runGame is the only object controlling it, an inputHandler Task to suspend and resume the possibility to shoot
 /// and a weaponNumber which is initialized in the main().
 /// After constructing the inputHanlder is suspended to prevent shooting and getting hit and the master is informed about this specific weapon beeing online.
-runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber):
+runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber, mhz433Read & granaat):
 	Display(Display),
 	player(player),
 	exchanger(exchangeGameData(Display, this, spiBus, duration, weaponNumber)),
 	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer"),
-	handler(handler)
+	handler(handler)//,
+	granaat(granaat)
+	
 {
+	
 	handler.suspend();
 	exchanger.signalOnline();
+	granaat.addMhzListener(this);
+	
+	 gameStartSignalReceived(100);
+	
 }
 
 /// \brief
@@ -49,6 +56,13 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	Display.showFireMode(0);
 	//Display.showScore(player.getScore());
 }
+ void runGame::mhzdataReceived( const uint8_t data[], const int len){
+	for(int i=0; i<len; i++){
+		
+		hwlib::cout<<data[i]<<hwlib::endl;
+	}
+ }
+
 
 /// \brief
 /// Game Running Task
@@ -58,6 +72,7 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 /// he is hit.
 void runGame::main(){
 	for(;;){
+		
 		auto event = wait(receivedDataChannel+secondClock+updateClockTimer);
 		if(event == receivedDataChannel){
 			receivedData = receivedDataChannel.read();

@@ -7,10 +7,11 @@
 #include "RGBLed.hpp"
 #include "display.hpp"
 #include "rtos.hpp"
+#include "grenade.hpp"
 
 class runGame;
 
-class exchangeGameData : public radioListener {
+class exchangeGameData : public radioListener{
 private:
   display & Display;
   runGame * game;
@@ -46,7 +47,7 @@ public:
 
 };
 
-class runGame : public messageListener, public rtos::task<> {
+class runGame : public messageListener, public mhzListener,  public rtos::task<> {
 private:
   display & Display;
   playerData player;
@@ -72,6 +73,7 @@ private:
 
   rtos::task<> & handler;
 
+
   void swap(int *xp, int *yp)  {  
     int temp = *xp;  
     *xp = *yp;  
@@ -87,13 +89,15 @@ private:
           if (arr[j] > arr[j+1])  
               swap(&arr[j], &arr[j+1]);  
   } 
+  //mhz433Read & granaat;
 public:
-  runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
+  runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber, mhz433Read & granaat);
   
   playerData getPlayerData() const;                         //Used by weaponManager to get playerNumber for infraredMessage.
   void setPlayerData(playerData & newPlayer);
 
   virtual void messageReceived(const uint16_t data);
+  virtual void mhzdataReceived( const uint8_t data[], const int len) override;
 
   void gameStartSignalReceived(const uint8_t timeToPlay);
 

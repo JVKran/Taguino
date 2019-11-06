@@ -17,6 +17,7 @@ interfaceManager::interfaceManager(display & Display, inputHandler & handler, we
 	newPositionFlag(this),
 	positionPool("New Position Pool")
 {
+	
 	handler.addEncoder(&rotaryEncoder);
 }
 
@@ -53,6 +54,7 @@ void interfaceManager::encoderTurned(const int pos){
 /// A function is then called to change the weapon.
 void interfaceManager::main(){
 	for(;;){
+		
 		auto event = wait(newPositionFlag+encoderPressedFlag);
 		if(event == newPositionFlag){
 			currentPosition = positionPool.read();

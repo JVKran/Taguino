@@ -9,9 +9,9 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := grenade.cpp input_grenade.cpp 
+SOURCES := grenade.cpp input.cpp 
 # header files in this project
-HEADERS := grenade.hpp input_grenade.hpp 
+HEADERS := grenade.hpp input.hpp 
 
 # other places to look for files for this project
 SEARCH  := 

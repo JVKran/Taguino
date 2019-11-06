@@ -5,6 +5,7 @@ const char * playerData::getName() const {
 }
 
 void playerData::setName(const char newName[8]){
+	
 	for(unsigned int i = 0; i < 8; i++){
 		name[i] = newName[i];
 	}

@@ -61,7 +61,7 @@ public:
    /// The default is white foreground on black background
    window( xy size, color foreground = white, color background = black )
       : size{ size }, background{ background }, foreground{ foreground }
-   {}
+   {/*HWLIB_TRACE;*/}
    
    /// write a pixel
    /// 

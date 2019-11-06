@@ -11,6 +11,7 @@ NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, c
    addr_width( 5 ),
    sampleClock(this, duration, "Clock to check for messages")
 {
+   HWLIB_TRACE;
    address[4] = addressToListenTo;
    start();                                                     //sets the registers to a default value
    read_pipe(address);                                        //sets the pipe, address and payload size
@@ -19,6 +20,7 @@ NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, c
 
 void NRF24::main(){
    for(;;){
+      //HWLIB_TRACE;
       wait(sampleClock);
       if( checkRXfifo() ){                                      //checks if there is something in the RX FIFO
          read(receivedData, amountOfBytes);                                    //reads the RX FIFO

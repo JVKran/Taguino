@@ -5,7 +5,9 @@
 #include "input.hpp"
 #include "weapon.hpp"
 #include "game.hpp"
+#include "grenade.hpp"
 #include "display.hpp"
+
 #include <array>
 
 int main( void ){	
@@ -15,7 +17,7 @@ int main( void ){
    auto sda    = hwlib::target::pin_oc(hwlib::target::pins::sda);
 
    auto i2cBus = hwlib::i2c_bus_bit_banged_scl_sda(scl, sda);
-   auto oled   = hwlib::glcd_oled(i2cBus);
+   hwlib::glcd_oled oled   = hwlib::glcd_oled(i2cBus);
 
    auto scoreFont      = hwlib::font_default_8x8();
    auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
@@ -41,17 +43,31 @@ int main( void ){
    const long long int infraredTransmitPeriod = 100;
    const long long int inputPollPeriod = 100'000;
    const long long int radioPollPeriod = 100'000;
-   
+   const long long int grenadePollPeriod = 100'000;
+   HWLIB_TRACE;
    playerData player = playerData();
+   HWLIB_TRACE;
+   HWLIB_TRACE;
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
+   HWLIB_TRACE;
    weaponData weapon = weaponData(2);
+   HWLIB_TRACE;
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
-   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);
+   HWLIB_TRACE;
+   HWLIB_TRACE;
+
+   HWLIB_TRACE;  
+      //display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
+   HWLIB_TRACE;
+   runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber /*granaat*/);
+   HWLIB_TRACE;
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
    infraredTransmitter Transmitter = infraredTransmitter(infraredTransmitPeriod);
    weaponManager gunManager = weaponManager(Display, handler, game, player, Transmitter);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
-
+   HWLIB_TRACE;
+   mhz433Read granaat(grenadePollPeriod); 
+   HWLIB_TRACE;
    rtos::run();
 }

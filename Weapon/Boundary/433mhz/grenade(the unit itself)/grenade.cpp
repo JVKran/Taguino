@@ -55,7 +55,7 @@ hwuart::hwuart(){
 
 //======================< Button >===============================
 /*
-button::button( buttonListen* listener, inputHandler * handler ):
+button::button( buttonListener* listener, inputHandler * handler ):
 	listener( listener )
 	{}
 
@@ -66,13 +66,13 @@ void button::update(){
 		hwlib::cout<<"na buttonPressed()\n";
 	}
 }
-
-void buttonListen::buttonPressed(){
+*/
+void buttonListener::buttonPressed(char id){
 	hwlib::cout<<"Flag Set in listen\n";
 	
 }
-*/
-/*
+
+
 void mhz433Write::buttonPressed(const char id){
 	hwlib::cout<<"Flag Set in write\n";
 	buttonFlag.set();
@@ -88,7 +88,7 @@ mhz433Write::mhz433Write( uint8_t player, uint8_t damage, inputHandler * input  
 	player(player),
 	damage(damage),
 	input(input),
-	b(input, this)
+	b(input, this,0)
 	{ 
 		addButton( &b);
 	}
@@ -115,9 +115,9 @@ void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 	 }
 	 hwlib::cout<<"sending"<<hwlib::endl;
 }
-
+/*
 uint8_t mhz433Write::dmgTimer( uint8_t damage ){
-	while( !sw.read() ){
+	while( !b.read() ){
 		damage+=2;
 		// The grenade dammage cap will be 50, if too low or high just change it.
 	 	if( damage > 51){ damage=50; break; }
@@ -126,11 +126,15 @@ uint8_t mhz433Write::dmgTimer( uint8_t damage ){
 	}
 	return damage;
 }
-
+*/
 
 void mhz433Write::main(){
-	state = states::IDLE;
+	//state = states::IDLE;
     for(;;){
+		hwlib::wait_ms(100);
+		write(player, damage);
+		hwlib::cout<<"boom"<<hwlib::endl;
+		/*
 		switch( state ){
 			case states::IDLE:
 				for(;;){
@@ -148,10 +152,10 @@ void mhz433Write::main(){
 				write( player, damage );
 				state = states::IDLE;
 				break;
-		}
+		}*/
 	}
 }
-*/
+
 
 //======================< Read >===============================
 

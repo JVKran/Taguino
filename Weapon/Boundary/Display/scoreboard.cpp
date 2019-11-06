@@ -2,7 +2,7 @@
 
 scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
 	scoreTerminal(scoreTerminal)
-{}
+{HWLIB_TRACE;}
 
 void scoreboard::updateScoreBoard(uint8_t data[5]){
     bool insert=true;

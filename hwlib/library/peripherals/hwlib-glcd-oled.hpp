@@ -313,6 +313,7 @@ public:
       ssd1306_i2c( bus, address ),
       window( wsize, white, black )
    {
+      HWLIB_TRACE;
       bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
@@ -379,6 +380,7 @@ public:
       ssd1306_spi_res_dc_cs( bus, res, dc, cs ),
       window( wsize, white, black )
    {
+      HWLIB_TRACE;
       command( ssd1306_commands::display_off );
       command( ssd1306_commands::set_display_clock_div, 0x80 );
       command( ssd1306_commands::set_multiplex,         0x3f ); 
@@ -451,6 +453,7 @@ public:
       ssd1306_i2c( bus, address ),
       window( wsize, white, black )
    {
+      HWLIB_TRACE;
       bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
@@ -524,6 +527,7 @@ public:
       ssd1306_i2c( bus, address ),
       window( wsize, white, black )
    {
+      HWLIB_TRACE;
       bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 

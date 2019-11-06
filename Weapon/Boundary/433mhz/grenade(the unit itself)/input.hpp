@@ -1,5 +1,5 @@
-#ifndef __INPUT_HPP
-#define __INPUT_HPP
+#ifndef __INPUTG_HPP
+#define __INPUTG_HPP
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
@@ -7,7 +7,7 @@
 
 class buttonListener {
 	public:
-		virtual void buttonPressed(const char id) = 0;
+		virtual void buttonPressed(const char id=0) = 0;
 };
 
 

@@ -16,6 +16,7 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	shootTimer(this, "Shoot Timer"),
 	buttonsChannel(this, "Pressed Buttons Channel")
 {
+	
 	handler.addButton(&triggerButton);
 	handler.addButton(&leftManualButton);
 	handler.addButton(&rightManualButton);
@@ -67,6 +68,7 @@ void weaponManager::shootBullet(){
 
 void weaponManager::main(){
 	for(;;){
+		
 		auto event = wait(buttonsChannel+shootTimer);
 		if(event == buttonsChannel){
 			readButton = buttonsChannel.read();
