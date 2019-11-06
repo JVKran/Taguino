@@ -34,6 +34,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newFireModePool("New Fire Mode Pool")
 {
 	oled.clear();
+	oled.flush();
 }
 
 void display::showBullets(int amountOfBullets){
@@ -306,14 +307,18 @@ void display::showTime(const double remainingSeconds, double totalGameSeconds){
 	if(totalGameSeconds != 0){
 		totalGameTime = totalGameSeconds;
 	}
+	hwlib::cout<<"Pos1"<<hwlib::endl;
 	newTimePool.write(remainingSeconds);
 	newTimeFlag.set();
 }
 
 void display::drawTime(){
+	hwlib::cout<<"Pos2"<<hwlib::endl;
 	if(currentlySelectedWindow == 0){
+		hwlib::cout<<"Pos3"<<hwlib::endl;
 		remainingSeconds = newTimePool.read();
 		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
+		hwlib::cout<<"Pos4"<<hwlib::endl;
 		double LocationToBeFilled = (1-(remainingSeconds/ totalGameTime)) * 360;
 		for(int i = 0;i <LocationToBeFilled; i++){
 			if(i < 181){
@@ -322,6 +327,7 @@ void display::drawTime(){
 				hwlib::line(hwlib::xy(10,10), hwlib::xy(xCoordinates.get(i-179) + 10, yCoordinates.get(i-179) + 10)).draw(timeWindow);
 			}
 		}
+		hwlib::cout<<"Pos5"<<hwlib::endl;
 		timeWindow.flush();
 	}
 }
@@ -474,7 +480,8 @@ void display::selectedWindow(const int window){
 		case 0:
 			currentlySelectedWindow = 0;
 			oled.clear();
-			showTime(remainingSeconds, totalGameTime);
+			oled.flush();
+			// showTime(remainingSeconds, totalGameTime);
 			break;
 		case 1:
 			currentlySelectedWindow = 1;
@@ -487,9 +494,9 @@ void display::selectedWindow(const int window){
 			scoreTerminal << '\f' << "start" << hwlib::flush;
 			break;
 		case 3:
-			currentlySelectedWindow = 1;
+			currentlySelectedWindow = 3;
 			oled.clear();
-			scoreTerminal << '\f' << "3" << hwlib::flush;
+			scoreTerminal << '\f' << "win3" << hwlib::flush;
 			break;
 	}
 }
