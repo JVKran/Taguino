@@ -4,6 +4,7 @@
 #include "NRF24.hpp"
 #include "keypad.hpp"
 #include "input.hpp"
+#include "mp3.hpp"
 
 class signUp : public radioListener, public keypadListener  {
 private:
@@ -17,6 +18,7 @@ private:
 	int amountOfDataToTransmit = 5;
 	uint8_t dataToTransmit[5];
 	T9Keys toetsenbord;
+	mp3Control<2> mp3Player = mp3Control<2>(); 
 	//inputHandler handler;
 public:
 	signUp(NRF24 & radio, inputHandler &handler);
