@@ -6,6 +6,7 @@
 #include "weapon.hpp"
 #include "game.hpp"
 #include "display.hpp"
+#include "scoreboard.hpp"
 #include <array>
 
 int main( void ){	

@@ -6,6 +6,7 @@
 #include "display.hpp"
 #include "interface.hpp"
 #include "signup.hpp"
+#include "scoreboard.hpp"
 #include <array>
 
 int main( void ){	
@@ -36,8 +37,10 @@ int main( void ){
 
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
+      scoreboard bord;
+      bord.printScoreboard();
 
-   game gameRunner = game(Display, radio);
+   game gameRunner = game(Display, radio,bord);
    inputHandler handler = inputHandler(inputPollPeriod);
    signUp signer = signUp(radio,handler,gameRunner); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
