@@ -1,24 +1,24 @@
 
-#ifndef __BUTTON_INTERRUPTER_HPP
-#define __BUTTON_INTERRUPTER_HPP
+#ifndef __BUTTON_REGISTER_HPP
+#define __BUTTON_REGISTER_HPP
 
 
-class Buttoninterrupter{
+class buttonRegister {
 private:
     uint32_t registercont;
     uint32_t mask;
-    uint32_t mask2;
+    uint32_t doubleMask;
 public:
     void refreshregister();
     bool read(uint8_t pin);
 
-    Buttoninterrupter();
+    buttonRegister();
 };
 
-class rotaryEncoder{
-    public:
+class rotaryDecoder{
+public:
     int32_t read();
-    rotaryEncoder();
+    rotaryDecoder();
 };
 
-#endif //__BUTTON_INTERRUPTER_HPP
+#endif //__BUTTON_REGISTER_HPP

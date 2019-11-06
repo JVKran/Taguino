@@ -18,7 +18,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		button burstButton;
 		button leftManualButton;
 		button rightManualButton;
-		inputHandler handler;
+		inputHandler & handler;
 		bool triggerPressed = false;
 
 		infraredTransmitter & irTransmitter;

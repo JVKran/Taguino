@@ -15,7 +15,7 @@ private:
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 
-	uint8_t assignedWeapons = 5;
+	uint8_t assignedWeapons = 1;
 
 	void swap(uint8_t *xp, uint8_t *yp);
   	void bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n);
