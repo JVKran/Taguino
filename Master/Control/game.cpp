@@ -43,5 +43,10 @@ void game::dataReceived(const uint8_t data[10], const int len){
 		for(int i = 24; i < 30; i++){
 			hwlib::cout << board.playerNumbers[i] << "\t\t\t" << board.playerScores[i] << hwlib::endl;
 		}
+	} else if(data[0] == 1){
+		assignedWeapons++;
+		if(assignedWeapons > 31){
+			assignedWeapons = 31;
+		}
 	}
 }

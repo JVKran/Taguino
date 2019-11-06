@@ -44,7 +44,7 @@ class inputHandler;
 
 class KY040 {
 	private:
-	    rotaryEncoder encoder = rotaryEncoder();
+	    rotaryDecoder decoder = rotaryDecoder();
 	    int switchPinNumber;
 
 	    int posCounter = 0;
@@ -53,7 +53,7 @@ class KY040 {
 	    encoderListener * listener;
 
 	    inputHandler * handler;
-	    Buttoninterrupter * buttonRegister;
+	    buttonRegister * buttonsRegister;
   	public:
 	    KY040(const int receivedSwitchPinNumber, encoderListener * listener, inputHandler* handler);
 	    

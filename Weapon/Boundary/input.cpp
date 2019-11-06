@@ -7,11 +7,11 @@ button::button(const int pinNumber, inputHandler* handler, buttonListener * list
 	buttonNotToBeSet(buttonNotToBeSet),
 	id(id)
 {
-	buttonRegister = handler->getRegister();
+	buttonsRegister = handler->getRegister();
 }
 
 void button::update(){
-	if(buttonRegister->read(pinNumber) && (buttonNotToBeSet == 0 || !buttonRegister->read(buttonNotToBeSet))){
+	if(buttonsRegister->read(pinNumber) && (buttonNotToBeSet == 0 || !buttonsRegister->read(buttonNotToBeSet))){
 		listener->buttonPressed(id);
 	}
 }
@@ -24,7 +24,7 @@ inputHandler::inputHandler(unsigned long long int period, const char * name):
 	task(name),
 	updateClock(this, period, "Update Clock")
 {
-	buttonInterrupter.refreshregister();
+	buttonsRegister.refreshregister();
 }
 
 void inputHandler::addButton(button * b){
@@ -36,18 +36,18 @@ void inputHandler::addEncoder(KY040 * e){
 	encoder = e;
 }
 
-Buttoninterrupter * inputHandler::getRegister(){
-	return &buttonInterrupter;
+buttonRegister * inputHandler::getRegister(){
+	return &buttonsRegister;
 }
 
 void inputHandler::main(){
 	for(;;){
 		wait(updateClock);
-		buttonInterrupter.refreshregister();
+		buttonsRegister.refreshregister();
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
 		encoder->update();
-		buttonInterrupter.refreshregister();
+		buttonsRegister.refreshregister();
 	}
 }
