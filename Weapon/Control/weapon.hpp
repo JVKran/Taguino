@@ -52,7 +52,6 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		int weaponId;
 	public:
 		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
-
 		virtual void buttonPressed(const char id) override;
 
 		void newWeaponSelected(const int id);

@@ -22,7 +22,6 @@ protected:
 	hwlib::terminal_from scoreTerminal;
 	hwlib::terminal_from scoreBoardTerminal;
 
-	scoreboard Scoreboard = scoreboard(scoreBoardTerminal);
 
 	displayedData lastData;
 	bool maxBulletsDrawn = false;
@@ -39,6 +38,7 @@ protected:
 	void drawAK();
 	void drawMaxAmmo();
 	void drawInstaKill();
+	void drawUpdatedWeaponData();
 
 	rtos::flag newBulletFlag;
 	rtos::pool<int> newBulletPool;
@@ -86,6 +86,7 @@ protected:
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal);
 
+	scoreboard Scoreboard = scoreboard(scoreBoardTerminal);
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
 

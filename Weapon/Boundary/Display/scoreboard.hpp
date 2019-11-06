@@ -9,10 +9,10 @@
 class scoreboard {
 private:
 	hwlib::terminal & scoreTerminal;
-	std::array<uint8_t, 32> playerNumbers;
-    std::array<uint8_t, 32> playerScores;
 public:
 	scoreboard(hwlib::terminal & scoreTerminal);
+	std::array<uint8_t, 32> playerNumbers;
+    std::array<uint8_t, 32> playerScores;
 	void updateScoreBoard(uint8_t data[5]);
 	void printScoreboard();
 };

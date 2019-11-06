@@ -47,15 +47,17 @@ class playerData {
 class weaponSettings {
 	private:
 		std::array<const char *, 5> weaponNames = 		{	"Shotgun", "Pistol", 	"Sniper", 	"AK-47", 	"M16"	};
-		std::array<uint8_t, 5> damageFactors = 			{		10,		15, 		40, 		6, 			10		};
-		std::array<uint8_t, 5> bulletsPerMag = 			{		6,		17, 		5, 			30, 		30		};
+		std::array<uint8_t, 5> damageFactors = 			{		65,		18, 		80, 		30, 		25		};
+		std::array<uint8_t, 5> bulletsPerMag = 			{		4,		17, 		5, 			30, 		30		};
 		std::array<uint8_t, 5> maxShotsPerTenSeconds = 	{		40, 	100, 		20,			100, 		140		};
+		std::array<uint8_t, 5> amountOfMags = 			{		5,		2,			4,			3,			3		};
 		std::array<bool, 5> autoAllowed = 				{		false, 	false, 		false, 		true, 		true	};
 		std::array<bool, 5> burstAllowed = 				{		false, 	false, 		false, 		true, 		true	};
 	public:
 		const char * getName(const int weaponId) const;
 		const int getDamage(const int weaponId, const int distance) const;
 		const int getBulletsPerMag(const int weaponId) const;
+		const int getAmountOfMags(const int weaponId) const;
 		const int maxShotsPerTime(const int weaponId) const;
 		const bool autoAllowedForWeapon(const int weaponId) const;
 		const bool burstAllowedForWeapon(const int weaponId) const;

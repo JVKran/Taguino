@@ -21,6 +21,11 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 {
 	handler.suspend();
 	exchanger.signalOnline();
+	
+	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
+	gameStartSignalReceived(100);
+	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
+	
 }
 
 /// \brief
@@ -142,24 +147,6 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
    	radio.powerUp_rx();								//Enable RX Mode
 }
 
-void exchangeGameData::swap(uint8_t *xp, uint8_t *yp){  
-	uint8_t temp = *xp;  
-	*xp = *yp;  
-	*yp = temp;  
-}  
-
-void exchangeGameData::bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n){  
-    int i, j;  
-    for (i = 0; i < n-1; i++){
-      	for (j = 0; j < n-i-1; j++){
-      		if (scores[j] < scores[j+1]){
-              	swap(&scores[j], &scores[j+1]); 
-              	swap(&numbers[j], &numbers[j+1]);
-      		}
-      	}  
-    }
-}
-
 /// \brief
 /// Data Received
 /// \details
@@ -171,7 +158,7 @@ void exchangeGameData::bubbleSort(std::array<uint8_t, 32> scores, std::array<uin
 /// Case 4 means that instaDeath has been activated.
 /// Case 6 means that a new player has signed up.
 /// Case 7 means that all powerups have been disabled.
-void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
+void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	switch(data[0]){
 		case 1:
 			// for(int i = 0; i < signedUpPlayers; i++){
@@ -189,34 +176,34 @@ void exchangeGameData::dataReceived(const uint8_t data[10], const int len){
 				game->getPlayerData().setScore(data[2]);
 				Display.showScore(data[2]);
 			}
-			//What's happening here is just a start. Needs to be fixed; doesn't work.
+			Display.Scoreboard.updateScoreBoard(data);
 
-			for(int i = 0; i < 32; i++){
-				if(board.playerNumbers[i] == data[1]){
-					board.playerScores[i] += data[2];
-					break;
-				}
-				if(i == 31){
-					for(int i = 0; i < 31; i++){
-						if(board.playerScores[i] < data[2]){
-							for(int j = 32; j >= i; j--){
-								board.playerScores[j] = board.playerScores[j - 1];
-								board.playerNumbers[j] = board.playerNumbers[j - 1];
-							}
-							board.playerScores[i] = data[2];
-							board.playerNumbers[i] = data[1];
-							break;
-						}
-					}
-				}
-			}
-
-			bubbleSort(board.playerScores, board.playerNumbers, 30);
-			hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-			for(int i = 0; i < 31; i++){
-				hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
-        		}
-			break;
+			// for(int i = 0; i < 32; i++){
+			// 	if(board.playerNumbers[i] == data[1]){
+			// 		board.playerScores[i] += data[2];
+			// 		break;
+			// 	}
+			// 	if(i == 31){
+			// 		for(int i = 0; i < 31; i++){
+			// 			if(board.playerScores[i] < data[2]){
+			// 				for(int j = 32; j >= i; j--){
+			// 					board.playerScores[j] = board.playerScores[j - 1];
+			// 					board.playerNumbers[j] = board.playerNumbers[j - 1];
+			// 				}
+			// 				board.playerScores[i] = data[2];
+			// 				board.playerNumbers[i] = data[1];
+			// 				break;
+			// 			}
+			// 		}
+			// 	}
+			// }
+			bubbleSort(Display.Scoreboard.playerNumbers, Display.Scoreboard.playerScores,30);
+			Display.Scoreboard.updateScoreBoard(data);
+			// hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
+			// for(int i = 0; i < 31; i++){
+			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
+   //      		}
+			// break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
 			Display.showPowerUp(0);

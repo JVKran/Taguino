@@ -42,6 +42,8 @@ void weaponManager::selectNewWeapon(){
 	weaponId = newWeaponPool.read();
 	weapon.setId(weaponId);
 	Display.showWeapon(weaponId);
+	Display.showMagazines(weapon.getAmountOfMags());
+	Display.showBullets(weapon.getAmountOfBullets());
 	autoFireMode = false;
 	burstFireMode = false;
 	manualFireMode = true;

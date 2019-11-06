@@ -70,6 +70,10 @@ const int weaponSettings::getBulletsPerMag(const int weaponId) const {
 	return bulletsPerMag[weaponId];
 }
 
+const int weaponSettings::getAmountOfMags(const int weaponId) const{
+	return amountOfMags[weaponId];
+}
+
 const int weaponSettings::maxShotsPerTime(const int weaponId) const {
 	return maxShotsPerTenSeconds[weaponId];
 }

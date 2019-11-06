@@ -3,6 +3,7 @@
 
 #include "NRF24.hpp"
 #include "entities.hpp"
+#include "applicationLogic.hpp"
 
 class game : public radioListener {
 private:
@@ -16,9 +17,6 @@ private:
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 
 	uint8_t assignedWeapons = 1;
-
-	void swap(uint8_t *xp, uint8_t *yp);
-  	void bubbleSort(std::array<uint8_t, 32> scores, std::array<uint8_t, 32> numbers, int n);
 
 public:
 	game(NRF24 & radio);

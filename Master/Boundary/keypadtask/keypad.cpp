@@ -1,19 +1,11 @@
 
 #include "keypad.hpp"
-    void testlistner::keyPressed(char karakter){
-        hwlib::cout<<karakter<<hwlib::endl;
-    }
-
 
 T9Keys::T9Keys(keypadListener* listen/*,unsigned long long int period, const char * name*/):
 	//task(name),
 	//updateClock(this, period, "Update Clock"),
     listen(listen)
 {}
-
-
-
-
 
 void T9Keys::update(){
                //HWLIB_TRACE;
