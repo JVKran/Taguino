@@ -75,6 +75,14 @@ protected:
 	rtos::flag newFireModeFlag;
 	rtos::pool<int> newFireModePool;
 	int fireMode;
+
+	rtos::flag newWindowFlag;
+	rtos::pool<int> newWindowPool;
+	int window;
+
+	rtos::flag newSettingFlag;
+	rtos::pool<int> newSettingPool;
+	int setting;
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal);
 
@@ -101,7 +109,10 @@ public:
 	void drawPowerUp();
 
 	void selectedSetting(const int setting);
+	void drawSetting();
+
 	void selectedWindow(const int window);
+	void drawSelectedWindow();
 
 	void showFireMode(const int mode);
 	void drawFireMode();

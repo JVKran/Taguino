@@ -32,7 +32,11 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newPowerUpFlag(this),
 	newPowerUpPool("New Powerup Pool"),
 	newFireModeFlag(this),
-	newFireModePool("New Fire Mode Pool")
+	newFireModePool("New Fire Mode Pool"),
+	newWindowFlag(this),
+	newWindowPool("New Window Pool"),
+	newSettingFlag(this),
+	newSettingPool("New Setting Pool")
 {
 	oled.clear();
 	showScore(0);
@@ -391,10 +395,12 @@ void display::drawInstaKill(){
 }
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
+	newSettingPool.write(setting);
+	newSettingFlag.set();
+}
 
-	//CIRCLES DO NOT DISAPEAR
-	//WILL HAVE TO ADD THIS WHEN IT'S IMPLEMENTED
-	//EASILY DONE WITH A BLACK CIRCLE
+void display::drawSetting(){
+	setting = newSettingPool.read();
 	switch(setting){
 		case 0:
 			//Selected to change weapon
@@ -419,6 +425,12 @@ void display::selectedSetting(const int setting){
 }
 
 void display::selectedWindow(const int window){
+	newWindowPool.write(window);
+	newWindowFlag.set();
+}
+
+void display::drawSelectedWindow(){
+	window = newWindowPool.read();
 	switch(window){
 		case 0:
 			hwlib::cout << "Stats being printed!" << hwlib::endl;
@@ -439,6 +451,8 @@ void display::selectedWindow(const int window){
 			oled.clear();
 			oled.flush();
 			Scoreboard.printScoreboard();
+		default:
+			break;
 	}
 }
 
@@ -479,7 +493,7 @@ void display::drawFireMode(){
 
 void display::main(){
 	for(;;){
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag);
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag+newWindowFlag+newSettingFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -494,6 +508,10 @@ void display::main(){
 			drawScore();
 		} else if (event == newFireModeFlag){
 			drawFireMode();
+		} else if (event == newWindowFlag){
+			drawSelectedWindow();
+		} else if (event == newSettingFlag){
+			drawSetting();
 		} else if (event == newWeaponFlag){
 			weaponId = newWeaponPool.read();
 			switch(weaponId){
