@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	exchanger.signalOnline();
 	
 	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
-	gameStartSignalReceived(100);
+	// gameStartSignalReceived(100);
 	hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
 	
 }

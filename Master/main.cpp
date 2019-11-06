@@ -37,7 +37,7 @@ int main( void ){
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
 
-   game gameRunner = game(radio);
+   game gameRunner = game(Display, radio);
    inputHandler handler = inputHandler(inputPollPeriod);
    signUp signer = signUp(radio,handler); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);

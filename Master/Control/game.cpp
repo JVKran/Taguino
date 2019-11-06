@@ -1,7 +1,10 @@
 #include "game.hpp"
 
-game::game(NRF24 & radio):
-	radio(radio)
+game::game(display & Display, NRF24 & radio):
+	Display(Display),
+	radio(radio),
+	secondClock(this, 1'000'000, "Second Clock for time keeping"),
+	updateClockTimer(this, "update Clock Timer")
 {}
 
 void game::dataReceived(const uint8_t data[10], const int len){
@@ -47,6 +50,19 @@ void game::dataReceived(const uint8_t data[10], const int len){
 		assignedWeapons++;
 		if(assignedWeapons > 31){
 			assignedWeapons = 31;
+		}
+	}
+}
+
+void game::main(){
+	for(;;){
+		auto event= wait(secondClock+updateClockTimer);
+
+		if (event == secondClock) {
+			remainingSeconds--;
+		} else {
+			Display.showTime(remainingSeconds);							
+			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 		}
 	}
 }
