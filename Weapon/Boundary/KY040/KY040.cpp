@@ -12,7 +12,7 @@ KY040::KY040(const int receivedSwitchPinNumber, encoderListener * listener, inpu
 	listener(listener)
 {
 	switchPinNumber = receivedSwitchPinNumber;
-	buttonRegister = handler->getRegister();
+	buttonsRegister = handler->getRegister();
 }
 
 /// \brief
@@ -24,12 +24,12 @@ KY040::KY040(const int receivedSwitchPinNumber, encoderListener * listener, inpu
 /// Rotary Encoder outputs a grey-code and this function tries to interpret that outputted
 /// code. It's very basic though.
 void KY040::update(){
-	posCounter = encoder.read();
+	posCounter = decoder.read();
 	if(posCounter != lastPos){
 		lastPos = posCounter;
 		listener->encoderTurned(posCounter);
 	}
-	if(buttonRegister->read(switchPinNumber)){
+	if(buttonsRegister->read(switchPinNumber)){
 		listener->buttonPressed();
 	}
 }

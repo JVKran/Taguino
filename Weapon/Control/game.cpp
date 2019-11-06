@@ -21,7 +21,9 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 {
 	handler.suspend();
 	exchanger.signalOnline();
+	// hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
 	// gameStartSignalReceived(100);
+	// hwlib::cout<<"Delete gameStartSignalReceived(100);"<<hwlib::endl;
 }
 
 /// \brief
@@ -64,7 +66,7 @@ void runGame::main(){
 		if(event == receivedDataChannel){
 			receivedData = receivedDataChannel.read();
 			playerNumber = (receivedData >> 10);
-			if(playerNumber != player.getPlayerNumber()){			//If player didn't shoot himself
+			if(playerNumber != player.getPlayerNumber() && player.getHealth() > 0){			//If player didn't shoot himself
 				distance = (receivedData & 0x3F) * 10;
 				weaponId = ((receivedData & 0x1C0) >> 6);
 				dealtDamage = weaponStats.getDamage(weaponId, distance);
@@ -73,7 +75,13 @@ void runGame::main(){
 				// hwlib::cout << "Hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
+				if(player.getHealth() < 0){
+					player.setHealth(0);
+				}
 				Display.showHealth(player.getHealth());
+				healthColor.red = (player.getHealth() * 25) / 10;
+				healthColor.green = 255 - ((player.getHealth() * 25) / 10);
+				Led.setColor(healthColor);
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;

@@ -11,7 +11,7 @@ class interfaceManager : public encoderListener, public rtos::task<> {
 	private:
 		display & Display;
 
-		inputHandler handler;
+		inputHandler & handler;
 		KY040 rotaryEncoder;
 		weaponManager & weapon;
 

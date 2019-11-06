@@ -18,7 +18,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		button burstButton;
 		button leftManualButton;
 		button rightManualButton;
-		inputHandler handler;
+		inputHandler & handler;
 		bool triggerPressed = false;
 
 		infraredTransmitter & irTransmitter;
@@ -46,11 +46,17 @@ class weaponManager : public buttonListener, public rtos::task<> {
 
 		char readButton;
 		rtos::channel<char, 5> buttonsChannel;
+
+		rtos::flag newWeaponFlag;
+		rtos::pool<int> newWeaponPool;
+		int weaponId;
 	public:
 		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
 		virtual void buttonPressed(const char id) override;
 
 		void newWeaponSelected(const int id);
+		void selectNewWeapon();
+
 		void shootBullet();
 
 		void main() override;

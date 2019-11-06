@@ -3,12 +3,10 @@
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
+
 class keypadListener {
 public:
     virtual void keyPressed(char karakter) = 0;
-};
-class testlistner : public keypadListener{
-     void keyPressed (char karakter);
 };
 
 class T9Keys  {

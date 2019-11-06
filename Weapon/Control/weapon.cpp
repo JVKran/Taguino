@@ -14,7 +14,9 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	game(game),
 	player(player),
 	shootTimer(this, "Shoot Timer"),
-	buttonsChannel(this, "Pressed Buttons Channel")
+	buttonsChannel(this, "Pressed Buttons Channel"),
+	newWeaponFlag(this),
+	newWeaponPool("New Weapon Channel")
 {
 	handler.addButton(&triggerButton);
 	handler.addButton(&leftManualButton);
@@ -32,11 +34,14 @@ void weaponManager::buttonPressed(const char id){
 }
 
 void weaponManager::newWeaponSelected(const int id){
-	weapon.setId(id);
-	Display.showWeapon(id);
-	
-	// hwlib::cout<<int(Display.showBullets(weaponStats.getBulletsPerMag(id)))<< hwlib::endl;
-	// hwlib::cout<<int(Display.showMagazines(weaponStats.getAmountOfMags(id)))<< hwlib::endl;
+	newWeaponPool.write(id);
+	newWeaponFlag.set();
+}
+
+void weaponManager::selectNewWeapon(){
+	weaponId = newWeaponPool.read();
+	weapon.setId(weaponId);
+	Display.showWeapon(weaponId);
 	Display.showMagazines(weapon.getAmountOfMags());
 	Display.showBullets(weapon.getAmountOfBullets());
 	autoFireMode = false;
@@ -72,7 +77,7 @@ void weaponManager::shootBullet(){
 
 void weaponManager::main(){
 	for(;;){
-		auto event = wait(buttonsChannel+shootTimer);
+		auto event = wait(buttonsChannel+shootTimer+newWeaponFlag);
 		if(event == buttonsChannel){
 			readButton = buttonsChannel.read();
 			switch(readButton){
@@ -119,7 +124,7 @@ void weaponManager::main(){
 					hwlib::cout << "Unknown button pressed?" << hwlib::endl;
 					break;
 			}
-		} else {
+		} else if(event == shootTimer){
 			if(manualFireMode){
 				shootBullet();
 			} else if(burstFireMode && triggerPressed){
@@ -132,6 +137,8 @@ void weaponManager::main(){
 				shootBullet();
 				shootTimer.set(1'000'000 / (weapon.maxShotsPerTenSeconds() / 10));
 			}
+		} else {
+			selectNewWeapon();
 		}
 	}
 }

@@ -16,7 +16,7 @@ private:
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 
-	uint8_t assignedWeapons = 5;
+	uint8_t assignedWeapons = 1;
 
 public:
 	game(NRF24 & radio);
