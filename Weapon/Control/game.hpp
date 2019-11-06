@@ -50,7 +50,7 @@ private:
 
   hwlib::color initColor = hwlib::color(52, 112, 90);
   hwlib::color healthColor = hwlib::color(0, 255, 0);
-  RGBLed Led = RGBLed(initColor);
+  RGBLed Led = RGBLed(healthColor);
 
   uint16_t receivedData;
   exchangeGameData exchanger;
