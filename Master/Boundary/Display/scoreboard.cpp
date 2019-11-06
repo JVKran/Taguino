@@ -51,7 +51,7 @@ scoreboard::scoreboard()
 void scoreboard::updateScoreBoard(const uint8_t data[5]){
     bool insert=true;
     for(int j = 0; j < 32; j++){
-		hwlib::cout<<"data "<<data[1]<<"   "<<j<<"   "<<data[2]<<hwlib::endl;
+		//hwlib::cout<<"data "<<data[1]<<"   "<<j<<"   "<<data[2]<<hwlib::endl;
         if(playerNumbers[j] == data[1]){
             playerScores[j] += data[2];
             insert=false;

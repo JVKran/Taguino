@@ -77,7 +77,7 @@ void game::main(){
 		auto event= wait(secondClock/*+updateClockTimer*/);
 
 		if ((event == secondClock)&&(gamestarted)) {
-			HWLIB_TRACE;
+			//HWLIB_TRACE;
 			remainingSeconds--;
 						Display.showTime(remainingSeconds);	
 						//Display.showTime(remainingSeconds);			
