@@ -7,14 +7,29 @@ game::game(display & Display, NRF24 & radio):
 	secondClock(this, 1'000'000, "Second Clock for time keeping"),
 	updateClockTimer(this, "update Clock Timer")
 {}
+
+/// \brief
+/// SetGameTime
+/// \details
+/// This function sets the time attributes.
 void game::setgametime(int time){
   	gameSeconds= time;                                   
-  	 remainingSeconds =time;
+  	remainingSeconds =time;
 }
+
+/// \brief
+/// getGameTime
+/// \details
+/// This function gets the remaining gameSeconds;
 uint8_t game::getGameTime(){
 	return gameSeconds;
 }
 
+/// \brief
+/// DataReceived
+/// \details
+/// This function gets called when data is received with parameters data and len. Based on protocol
+/// as written in documentation things are done.
 void game::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 2){
 		hwlib::cout << "Player " << data[1] << " dealt " << int(data[2]) << " damage!" << hwlib::endl;
@@ -66,7 +81,6 @@ void game::main(){
 			Display.showTime(remainingSeconds);							
 			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	for(;;){
-				//HWLIB_TRACE;
 
 		auto event= wait(secondClock/*+updateClockTimer*/);
 
@@ -75,11 +89,6 @@ void game::main(){
 			remainingSeconds--;
 						Display.showTime(remainingSeconds);	
 						//Display.showTime(remainingSeconds);			
-		} /*else {
-			//HWLIB_TRACE;
-			//hwlib::cout<<remainingSeconds<<hwlib::endl;
-			Display.showTime(remainingSeconds);							
-			//updateClockTimer.set((gameSeconds / 100 )* 1'000100000);
-		}*/
+		}
 	}
 }

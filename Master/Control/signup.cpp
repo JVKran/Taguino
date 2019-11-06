@@ -39,6 +39,10 @@ void signUp::keyPressed(char karakter){
 
 }
 
+/// \brief
+/// StartGame
+/// \details
+/// Starts Game for all online weapons based on protocol as defined in documentation.
 void signUp::startGame(const uint8_t gameTime){
 	HWLIB_TRACE;
 	Game.gamestarted =1;
