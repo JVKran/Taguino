@@ -21,6 +21,8 @@ private:
 public:
 	signUp(NRF24 & radio, inputHandler &handler);
 
+	void sendName(char naam[], int len);
+
 	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;
 	virtual void keyPressed(char karakter) override;

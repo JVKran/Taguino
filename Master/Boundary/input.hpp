@@ -44,6 +44,7 @@ class inputHandler : public rtos::task<> {
 	private:
 		KY040* encoder;
 		int addedButtons = 0;
+		int signedplayers =0;
 
 		std::array<button*, 10> buttons;
 		Buttoninterrupter buttonInterrupter;
