@@ -1,10 +1,15 @@
 #include "signup.hpp"
 
+
+// Lobby muziek in constructor en in start game actie
 signUp::signUp(NRF24 & radio, inputHandler &handler):
 	radio(radio),
 	toetsenbord(this)
 
-{handler.addkeypad(&toetsenbord);}
+	{
+		mp3Player.startPlayingSound(1); // Start lobby music once.
+		handler.addkeypad(&toetsenbord);
+	}
 
 void signUp::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 1){
@@ -33,6 +38,8 @@ void signUp::keyPressed(char karakter){
 }
 
 void signUp::startGame(const uint8_t gameTime){
+	mp3Player.startPlayingSound(2);	// Start action music once.
+	
 	radio.powerDown_rx();
 	hwlib::wait_ms(100);
 	for(uint8_t i = 1; i < assignedWeapons; i++){
