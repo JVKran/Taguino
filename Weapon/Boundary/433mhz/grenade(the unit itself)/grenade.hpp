@@ -5,6 +5,7 @@
 #include <array>
 #include "hwlib.hpp"
 #include "NRF24.hpp"
+//#include "input.hpp"
 
 class hwuart{
 	//Usart * hw_usart = USART0;
@@ -18,9 +19,8 @@ class hwuart{
 
 class mhzListener{
 public:
-	virtual void mhzdataReceived( const uint8_t data[], const int len )=0;
+	virtual void mhzDataReceived( const uint8_t data[], const int len )=0;
 };
-
 
 
 class mhz433Read : public rtos::task<256>, public hwuart{
@@ -37,7 +37,7 @@ public:
 	
 	void addMhzListener( mhzListener * listener );
 	
-	//virtual void dataReceived( const uint8_t data[], const int len );// override;
+	//virtual void mhzDataReceived( const uint8_t data[], const int len );// override;
 	
 	void read();
 	

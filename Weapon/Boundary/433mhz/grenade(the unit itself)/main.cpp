@@ -20,12 +20,12 @@ int main(){
     auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso );
 	
 	const long long int radioPollPeriod = 100'000;
-	const uint8_t addressToListenTo = 0;
+	const uint8_t addressToListenTo = 101;
 	
   	NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
 	
 	mhz433Write mhz = mhz433Write(player, damage);
-		
+	
 	exchangeGrenadeData grenade = exchangeGrenadeData( radio, mhz );
 	
 	radio.addListener(&grenade);

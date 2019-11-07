@@ -54,12 +54,13 @@ hwuart::hwuart(){
 	}
 //======================< Grenade >===============================
 
-exchangeGrenadeData::exchangeGrenadeData( NRF24 &radio, mhz433Write& mhz):
+exchangeGrenadeData::exchangeGrenadeData( NRF24 & radio, mhz433Write & mhz):
 	radio(radio),
 	mhz(mhz)
 	{}
 
-void exchangeGrenadeData::dataReceived(const uint8_t data[10], const int len){
+void exchangeGrenadeData::dataReceived(const uint8_t data[5], const int len){
+	hwlib::cout<< "Data: "<< data[0] << "\n";
 	if(data[0] == 12){
 		explode( data[1], data[2] );
 	}
@@ -100,29 +101,7 @@ void mhz433Write::write( uint8_t playerNumber, uint8_t damage ){
 	 }
 	 hwlib::cout<<"sending mhz"<<hwlib::endl;
 }
-/*
-uint8_t mhz433Write::dmgTimer( uint8_t damage ){
-	while( !b.read() ){
-		damage+=2;
-		// The grenade dammage cap will be 50, if too low or high just change it.
-	 	if( damage > 51){ damage=50; break; }
-		hwlib::wait_ms(200);			// Add 5 damage every second, up to 50.
-		
-	}
-	return damage;
-}
-*/
-/*
-void mhz433Write::main(){
-	//state = states::IDLE;
-    for(;;){
-		hwlib::wait_ms(100);
-		write(player, damage);
-		hwlib::cout<<"boom"<<hwlib::endl;
-	}
-}
 
-*/
 //======================< Read >===============================
 
 mhz433Read::mhz433Read( unsigned long long int duration, const char * name):
@@ -159,7 +138,7 @@ void mhz433Read::read(){
 		   uint8_t mhzData[len] = { tmpArray[0], tmpArray[1], tmpArray[2]};		// Protocol, playerId, damage.
 
 		   for( int i = 0; i < amountMhzListeners; i++){
-					listenMhz[i]->mhzdataReceived( mhzData, len );
+					listenMhz[i]->mhzDataReceived( mhzData, len );
 		   }
 	   }
 	}
