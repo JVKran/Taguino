@@ -64,8 +64,8 @@ void game::dataReceived(const uint8_t data[10], const int len){
 }
 
 void game::main(){
-			Display.showTime(remainingSeconds);							
-			updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
+	Display.showTime(remainingSeconds);							
+	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	for(;;){
 
 		auto event= wait(secondClock/*+updateClockTimer*/);
@@ -73,8 +73,7 @@ void game::main(){
 		if ((event == secondClock)&&(gamestarted)) {
 			//HWLIB_TRACE;
 			remainingSeconds--;
-						Display.showTime(remainingSeconds);	
-						//Display.showTime(remainingSeconds);			
+			Display.showTime(remainingSeconds);				
 		}
 	}
 }
