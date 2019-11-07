@@ -39,6 +39,10 @@ RGBLed::RGBLed(hwlib::color color):
   PWM->PWM_ENA = PWM_ENA_CHID3;  
   setColor(color);}
 
+/// \brief
+/// Set Color
+/// \details
+/// This function gives the led the passed color.
 void RGBLed::setColor(hwlib::color color){
   currentcolor = color;
   PWM->PWM_CH_NUM[2].PWM_CDTY = color.red;                //Takes red value and puses it to the output register

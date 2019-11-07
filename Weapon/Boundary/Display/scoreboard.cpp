@@ -1,5 +1,11 @@
+/// @file
+
 #include "scoreboard.hpp"
 
+/// \brief
+/// Constructor
+/// \details
+/// This class sets all elements in the arrays to zero.
 scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
 	scoreTerminal(scoreTerminal)
 {
@@ -11,6 +17,11 @@ scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
     }
 }
 
+/// \brief
+/// Update Scoreboard
+/// \details
+/// This function has one parameter; the data received by the NRF24L01+ chip.
+/// Based on that the score and player are inserted and / or sorted.
 void scoreboard::updateScoreBoard(uint8_t data[5]){
     bool insert=true;
     for(int j = 0; j < 32; j++){
@@ -33,6 +44,10 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
     }
 }
 
+/// \brief
+/// Print Scoreboard
+/// \details
+/// This function prints the scoreboard to the display.
 void scoreboard::printScoreboard(){
 
     scoreTerminal

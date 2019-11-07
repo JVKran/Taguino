@@ -1,7 +1,12 @@
+/// @file
+
 #include "signup.hpp"
 
 
-// Lobby muziek in constructor en in start game actie
+/// \brief
+/// Constructor
+/// \details
+/// Starts Lobby music to join game.
 signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game):
 	radio(radio),
 	toetsenbord(this),
@@ -13,6 +18,10 @@ signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game):
 		handler.addkeypad(&toetsenbord);
 	}
 
+/// \brief
+/// Data Received
+/// \details
+/// Gets called when data is received
 void signUp::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 1){
 		if(assignedWeapons < 31){
@@ -32,6 +41,11 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 		//startGame(100);
 	}
 }
+
+/// \brief
+/// Key Pressed
+/// \details
+/// Gets called when a key is pressed.
 void signUp::keyPressed(char karakter){
 			//HWLIB_TRACE;
 

@@ -1,6 +1,12 @@
+/// @file
+
 #ifndef __HC_SR04_HPP
 #define __HC_SR04_HPP
 
+/// \brief
+/// Distance Sensor 
+/// \details
+/// This class is responsible for measuring Distance.
 class HCSR04{
 private:
 	hwlib::pin_out & triggerPin;

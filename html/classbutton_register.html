@@ -65,6 +65,11 @@ $(function() {
 <div class="title">buttonRegister Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Button Register.  
+ <a href="classbutton_register.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_weapon_2_boundary_2buttoninterrupt_2button_8hpp_source.html">button.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -78,7 +83,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab0ef3e19746a52edd0fa9eb877e27c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#ab0ef3e19746a52edd0fa9eb877e27c90">More...</a><br /></td></tr>
 <tr class="separator:ab0ef3e19746a52edd0fa9eb877e27c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Button Register. </p>
+<p>This class is used to refresh the values in the desired register. This can be useful to determine wether or not a button has been pressed. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab0ef3e19746a52edd0fa9eb877e27c90"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab0ef3e19746a52edd0fa9eb877e27c90">&#9670;&nbsp;</a></span>buttonRegister()</h2>
 
@@ -95,7 +103,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p>Initialize hardware with required values. </p>
+<p>This constructor initializes the required registers with the required values. </p>
 
 </div>
 </div>
@@ -117,7 +125,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Read pin. </p>
-<p>This function returns the state of the pin read from the register variable. </p>
+<p>This function returns the state of the pin passed as parameter read from the register variable. Hence the <a class="el" href="classbutton_register.html#a0efd99961b9ce10e804db77ca4286810" title="Refresh Register. ">refreshregister()</a> function should be called first. </p>
 
 </div>
 </div>
@@ -137,7 +145,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Refresh Register. </p>
-<p>This function refreshes the register and stores it in the register variable. Should be called before <a class="el" href="classbutton_register.html#a5dc83b609eac72e0f7cc6dcd2c5a2f03" title="Read pin. ">read()</a>. </p>
+<p>This function refreshes the register and stores it in the register variable. Should be called before <a class="el" href="classbutton_register.html#a5dc83b609eac72e0f7cc6dcd2c5a2f03" title="Read pin. ">read()</a> to refresh the register. </p>
 
 </div>
 </div>
@@ -148,7 +156,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 7 2019 09:48:28 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Nov 7 2019 11:13:48 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

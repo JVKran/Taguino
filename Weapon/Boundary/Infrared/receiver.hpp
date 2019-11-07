@@ -1,21 +1,33 @@
+/// @file
+
 #ifndef __RECEIVER_HPP
 #define __RECEIVER_HPP
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
 
-
+/// \brief
+/// High Signal Listener
+/// \details
+/// This class is responsible for listening to highSignals.
 class highSignalListener {
 public:
 	virtual void highSignalDetected(const int highDuration) = 0;
 };
 
+/// \brief
+/// Message Listener
+/// \details
+/// This class is responsible for listening to messages.
 class messageListener {
 public:
 	virtual void messageReceived(const uint16_t message) = 0;
 };
 
-
+/// \brief
+/// Infrared Receiver
+/// \details
+/// This class is responsible for receiving High Durations.
 class infraredReceiver : public rtos::task<> {
 private:
 	hwlib::target::pin_in irReceiver = hwlib::target::pin_in(hwlib::target::pins::d5);
@@ -34,8 +46,10 @@ public:
 	void main() override;
 };
 
-
-
+/// \brief
+/// Infrared Decoder
+/// \details
+/// This class is responsible for decoding the received durations.
 class infraredDecoder : public rtos::task<>, public highSignalListener {
 private:
 	messageListener & listener;

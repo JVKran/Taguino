@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __INPUT_HPP
 #define __INPUT_HPP
 
@@ -11,11 +13,19 @@
 
 class KY040;
 
+/// \brief
+/// Button Listener
+/// \details
+/// This class defines a function that gets caled when a button is pressed.
 class buttonListener {
 	public:
 		virtual void buttonPressed(const char id) = 0;
 };
 
+/// \brief
+/// Encoder Listener
+/// \details
+/// This function gets called when the encoder gets pressed or turned.
 class encoderListener {
 	public:
 		virtual void buttonPressed() = 0;
@@ -24,6 +34,11 @@ class encoderListener {
 
 class inputHandler;
 
+/// \brief
+/// Button 
+/// \details
+/// The button gets updated on update() call. It then checks the register that gets updated by the inputHandler.
+/// When it is pressed it calls the listener.buttonPressed() function.
 class button {
 	private:
 		const int pinNumber;
@@ -40,6 +55,10 @@ class button {
 		void update();
 };
 
+/// \brief
+/// Input Handler
+/// \details
+/// The class is responsible for updating all input boundary objects.
 class inputHandler : public rtos::task<> {
 	private:
 		KY040* encoder;

@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
@@ -7,6 +9,11 @@
 #include "applicationLogic.hpp"
 #include "scoreboard.hpp"
 
+
+/// \brief
+/// Game 
+/// \details
+/// Responsible for starting, and initializing of game.
 class game : public radioListener, rtos::task<>{
 private:
   	display & Display;

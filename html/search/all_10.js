@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['update',['update',['../class_k_y040.html#aa56d87af30f9e18d09ebc103d23ff397',1,'KY040']]],
-  ['updatehealth',['updateHealth',['../classdisplay.html#a6a97d7c8be0a300b9e1db359312b3e45',1,'display']]],
-  ['updatescore',['updateScore',['../classexchange_game_data.html#a81f2caa6ce1d1874d1aba3fea076c6b5',1,'exchangeGameData']]]
+  ['t9keys',['T9Keys',['../class_t9_keys.html',1,'']]],
+  ['tester',['tester',['../classtester.html',1,'']]],
+  ['transfer',['transfer',['../class_n_r_f24.html#a056ef9105f5604a6c4895fee2e29f0a3',1,'NRF24::transfer(uint8_t reg)'],['../class_n_r_f24.html#a056ef9105f5604a6c4895fee2e29f0a3',1,'NRF24::transfer(uint8_t reg)'],['../class_n_r_f24.html#a056ef9105f5604a6c4895fee2e29f0a3',1,'NRF24::transfer(uint8_t reg)'],['../class_n_r_f24.html#a056ef9105f5604a6c4895fee2e29f0a3',1,'NRF24::transfer(uint8_t reg)']]]
 ];

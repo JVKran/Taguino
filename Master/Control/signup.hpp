@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __SIGNUP_HPP
 #define __SIGNUP_HPP
 
@@ -8,6 +10,11 @@
 
 #include "game.hpp"
 
+
+/// \brief
+/// Sign Up
+/// \details
+/// This class is responsible for signing up. Therfore it has a keypad and radio.
 class signUp : public radioListener, public keypadListener  {
 
 
