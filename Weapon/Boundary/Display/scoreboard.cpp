@@ -1,13 +1,14 @@
 /// @file
 
-#include "scoreboard.hpp"
+#include "display.hpp"
 
 /// \brief
 /// Constructor
 /// \details
 /// This class sets all elements in the arrays to zero.
-scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
-	scoreTerminal(scoreTerminal)
+scoreboard::scoreboard(hwlib::terminal & scoreTerminal, display * Display):
+    scoreTerminal(scoreTerminal),
+    Display(Display)
 {
     for(auto & element : playerNumbers){
         element = 0;
@@ -42,6 +43,12 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
             }
         }
     }
+
+    bubbleSort(playerNumbers, playerScores,31);
+    
+    if(Display->getSelectedWindow() == 1){
+        printScoreboard();
+    }
 }
 
 /// \brief
@@ -49,15 +56,14 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
 /// \details
 /// This function prints the scoreboard to the display.
 void scoreboard::printScoreboard(){
-
     scoreTerminal
-    << hwlib::left <<hwlib::setw(10) << int(playerNumbers[0])<<int(playerScores[0])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[1])<<int(playerScores[1])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[2])<<int(playerScores[2])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[3])<<int(playerScores[3])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[4])<<int(playerScores[4])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[5])<<int(playerScores[5])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[6])<<int(playerScores[6])<<'\n'<<
-    hwlib::left << hwlib::setw(10) << int(playerNumbers[7])<<int(playerScores[7])<<'\n'<<
+    << '\f' << hwlib::left <<hwlib::setw(10) << int(playerNumbers[30])<<int(playerScores[30])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[29])<<int(playerScores[29])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[28])<<int(playerScores[28])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[27])<<int(playerScores[27])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[26])<<int(playerScores[26])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[25])<<int(playerScores[25])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[24])<<int(playerScores[24])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[23])<<int(playerScores[23])<<'\n'<<
     hwlib::flush;
 }

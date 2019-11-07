@@ -33,8 +33,6 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newMagazinePool("New Magazine Pool"),
 	newHealthFlag(this),
 	newHealthPool("New Health Pool"),
-	//newScoreBoardFlag(this),
-	//newScoreBoardPool("New Scoreboard Pool"),
 	newTimeFlag(this),
 	newTimePool("New Time Pool"),
 	newPowerUpFlag(this),
@@ -123,24 +121,26 @@ void display::showHealthBar(){
 /// the lines that should desappear are overwritten with black; hence not the entire
 /// window has got to be redrawn.
 void display::updateHealth(){
-	health = newHealthPool.read();
-	if(health < 0 || health > 100){
-		health = lastData.lastHealth;
+	if(currentlySelectedWindow == 0){
+		health = newHealthPool.read();
+		if(health < 0 || health > 100){
+			health = lastData.lastHealth;
+		}
+		int amountOfBlack = 27-((100 - health) * 0.27);
+		int amountOfWhite = (100 - health) * 0.27;
+		if(lastData.lastHealth < health){
+			hwlib::line(hwlib::xy(12,2), hwlib::xy(11+amountOfWhite,2)).draw(healthWindow);						//White line
+			hwlib::line(hwlib::xy(12,3), hwlib::xy(11+amountOfWhite,3)).draw(healthWindow);						//White line
+			hwlib::line(hwlib::xy(12,4), hwlib::xy(11+amountOfWhite,4)).draw(healthWindow);						//White line
+		}
+		else{
+			hwlib::line(hwlib::xy(11+amountOfBlack,2), hwlib::xy(38,2), hwlib::black).draw(healthWindow);		//Black line
+			hwlib::line(hwlib::xy(11+amountOfBlack,3), hwlib::xy(38,3), hwlib::black).draw(healthWindow);		//Black line
+			hwlib::line(hwlib::xy(11+amountOfBlack,4), hwlib::xy(38,4), hwlib::black).draw(healthWindow);		//Black line
+		}
+		healthWindow.flush();
+		lastData.lastHealth = health;
 	}
-	int amountOfBlack = 27-((100 - health) * 0.27);
-	int amountOfWhite = (100 - health) * 0.27;
-	if(lastData.lastHealth < health){
-		hwlib::line(hwlib::xy(12,2), hwlib::xy(11+amountOfWhite,2)).draw(healthWindow);						//White line
-		hwlib::line(hwlib::xy(12,3), hwlib::xy(11+amountOfWhite,3)).draw(healthWindow);						//White line
-		hwlib::line(hwlib::xy(12,4), hwlib::xy(11+amountOfWhite,4)).draw(healthWindow);						//White line
-	}
-	else{
-		hwlib::line(hwlib::xy(11+amountOfBlack,2), hwlib::xy(38,2), hwlib::black).draw(healthWindow);		//Black line
-		hwlib::line(hwlib::xy(11+amountOfBlack,3), hwlib::xy(38,3), hwlib::black).draw(healthWindow);		//Black line
-		hwlib::line(hwlib::xy(11+amountOfBlack,4), hwlib::xy(38,4), hwlib::black).draw(healthWindow);		//Black line
-	}
-	healthWindow.flush();
-	lastData.lastHealth = health;
 }
 
 /// \brief
@@ -234,7 +234,7 @@ void display::drawUnknown(){
 /// \brief
 /// Draw Shotgun
 /// \details
-/// This function pints the shotgun.
+/// This function prints the shotgun.
 void display::drawShotgun(){
 	weaponWindow.clear();
 	hwlib::line(hwlib::xy(0,10), hwlib::xy(12,5)).draw(weaponWindow); 				//recoilPadTop
@@ -254,7 +254,7 @@ void display::drawShotgun(){
 /// \brief
 /// Draw Pistol
 /// \details
-/// This function pints the pistol.
+/// This function prints the pistol.
 void display::drawPistol(){
 	weaponWindow.clear();
 
@@ -277,7 +277,7 @@ void display::drawPistol(){
 /// \brief
 /// Draw Sniper
 /// \details
-/// This function pints the Sniper.
+/// This function prints the Sniper.
 void display::drawSniper(){
 	weaponWindow.clear();
 
@@ -309,7 +309,7 @@ void display::drawSniper(){
 /// \brief
 /// Draw M16
 /// \details
-/// This function pints the M16.
+/// This function prints the M16.
 void display::drawM16(){
 	weaponWindow.clear();
 
@@ -338,7 +338,7 @@ void display::drawM16(){
 /// \brief
 /// Draw AK47
 /// \details
-/// This function pints the AK47.
+/// This function prints the AK47.
 void display::drawAK(){
 	weaponWindow.clear();
 
@@ -409,7 +409,10 @@ void display::showTime(const double remainingSeconds, double totalGameSeconds){
 /// Draw Time
 /// \details
 /// This function draws the current remaining time on the screen.
-void display::drawTime(){
+void display::drawTime(const bool forceOverwrite){
+	if(forceOverwrite){
+		timeWindow.clear();
+	}
 	if(currentlySelectedWindow == 0){
 		remainingSeconds = newTimePool.read();
 		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
@@ -553,6 +556,14 @@ void display::selectedWindow(const int window){
 }
 
 /// \brief
+/// Get Selected Window
+/// \details
+/// This function returns the currently selected window.
+int display::getSelectedWindow(){
+ 	return window;
+}
+
+/// \brief
 /// Draw Selected Window
 /// \details
 /// This function draws the window that has to be drawn. The window to print is equal
@@ -598,33 +609,35 @@ void display::showFireMode(const int mode){
 /// \details
 /// This function prints the fire mode in the oled.
 void display::drawFireMode(){
-	fireMode = newFireModePool.read();
-	fireModeWindow.clear();
-	switch(fireMode){
-		case 0:		//Manual
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			break;
-		case 1:		//AutoFire
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(3,6),hwlib::xy(12,6)).draw(fireModeWindow);
-			break;
-		case 2:		//Burst
-			hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(2,7),hwlib::xy(13,7)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(3,4),hwlib::xy(12,4)).draw(fireModeWindow);
-			hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
-			break;
-		default:
-			break;
+	if(currentlySelectedWindow == 0){
+		fireMode = newFireModePool.read();
+		fireModeWindow.clear();
+		switch(fireMode){
+			case 0:		//Manual
+				hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+				break;
+			case 1:		//AutoFire
+				hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(3,6),hwlib::xy(12,6)).draw(fireModeWindow);
+				break;
+			case 2:		//Burst
+				hwlib::line(hwlib::xy(0,10), hwlib::xy(7,0)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(7,0), hwlib::xy(14,10)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(14,10), hwlib::xy(0,10)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(2,7),hwlib::xy(13,7)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(3,4),hwlib::xy(12,4)).draw(fireModeWindow);
+				hwlib::line(hwlib::xy(7,0), hwlib::xy(7,12)).draw(fireModeWindow);
+				break;
+			default:
+				break;
+		}
+		fireModeWindow.flush();
 	}
-	fireModeWindow.flush();
 }
 
 /// \brief
@@ -674,8 +687,5 @@ void display::main(){
 					drawUnknown();
 			}
 		}
-		/*else if (event == newScoreBoardFlag){
-
-		} */
 	}
 }

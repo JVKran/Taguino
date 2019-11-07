@@ -51,7 +51,6 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	Display.showHealthBar();
 	Display.showFireMode(0);
-	//Display.showScore(player.getScore());
 }
 
 /// \brief
@@ -160,56 +159,19 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
 void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	switch(data[0]){
 		case 1:
-			// for(int i = 0; i < signedUpPlayers; i++){
-			// 	hwlib::cout << "Player " << board.playerNumbers[i] << ": ";
-			// 	for(int j = 0; j < 8; j++){
-			// 		hwlib::cout << board.playerNames[i][j];
-			// 	}
-			// 	hwlib::cout << hwlib::endl;
-			// }
 			game->gameStartSignalReceived(data[1]);
+			Display.drawTime(true);
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
-			
-			if(data[1] == game->getPlayerData().getPlayerNumber()){
-				game->getPlayerData().setScore(data[2]);
-				Display.showScore(data[2]);
-			}
-			
 			Display.Scoreboard.updateScoreBoard(data);
-
-			// for(int i = 0; i < 32; i++){
-			// 	if(board.playerNumbers[i] == data[1]){
-			// 		board.playerScores[i] += data[2];
-			// 		break;
-			// 	}
-			// 	if(i == 31){
-			// 		for(int i = 0; i < 31; i++){
-			// 			if(board.playerScores[i] < data[2]){
-			// 				for(int j = 32; j >= i; j--){
-			// 					board.playerScores[j] = board.playerScores[j - 1];
-			// 					board.playerNumbers[j] = board.playerNumbers[j - 1];
-			// 				}
-			// 				board.playerScores[i] = data[2];
-			// 				board.playerNumbers[i] = data[1];
-			// 				break;
-			// 			}
-			// 		}
-			// 	}
-			// }
-			bubbleSort(Display.Scoreboard.playerNumbers, Display.Scoreboard.playerScores,30);
-			// hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-			// for(int i = 0; i < 31; i++){
-			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
-   //      		}
 			break;
 		case 3:
-			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
+			hwlib::cout << "InfiniteBullets Activated." << hwlib::endl;
 			Display.showPowerUp(0);
 			break;
 		case 4:
-			hwlib::cout << "InstaDeath Activated" << hwlib::endl;
+			hwlib::cout << "InstaDeath Activated." << hwlib::endl;
 			Display.showPowerUp(1);
 			break;
 		case 6:
@@ -222,6 +184,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 					board.playerNames[signedUpPlayers][i - 2] = char(data[i]);
 				}
 			}
+			hwlib::cout << "." << hwlib::endl;
 			signedUpPlayers++;
 			break;
 		case 7:
