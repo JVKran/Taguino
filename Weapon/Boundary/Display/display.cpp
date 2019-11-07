@@ -8,6 +8,7 @@
 /// This constructor takes an oled, xCoordinates lookup, yCoordinates lookup and a windowpart and terminal. These are needed
 /// because they can't be constructed in this class by itself. Furthermore some rtos objects are created.
 display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal):
+	task(4, "Display"),
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
 	weaponSettingWindow(oled, hwlib::xy(40, 0), hwlib::xy(50, 13)),
@@ -129,9 +130,9 @@ void display::updateHealth(){
 	int amountOfBlack = 27-((100 - health) * 0.27);
 	int amountOfWhite = (100 - health) * 0.27;
 	if(lastData.lastHealth < health){
-		hwlib::line(hwlib::xy(12,2), hwlib::xy(amountOfWhite,2)).draw(healthWindow);						//White line
-		hwlib::line(hwlib::xy(12,3), hwlib::xy(amountOfWhite,3)).draw(healthWindow);						//White line
-		hwlib::line(hwlib::xy(12,4), hwlib::xy(amountOfWhite,4)).draw(healthWindow);						//White line
+		hwlib::line(hwlib::xy(12,2), hwlib::xy(11+amountOfWhite,2)).draw(healthWindow);						//White line
+		hwlib::line(hwlib::xy(12,3), hwlib::xy(11+amountOfWhite,3)).draw(healthWindow);						//White line
+		hwlib::line(hwlib::xy(12,4), hwlib::xy(11+amountOfWhite,4)).draw(healthWindow);						//White line
 	}
 	else{
 		hwlib::line(hwlib::xy(11+amountOfBlack,2), hwlib::xy(38,2), hwlib::black).draw(healthWindow);		//Black line
@@ -385,9 +386,9 @@ void display::showScore(const int score){
 /// This function prints the score on the display.
 void display::drawScore(){
 	score = newScorePool.read();
-	hwlib::cout << score << hwlib::endl;
 	if(score >= 0){
 		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score << hwlib::flush;
+		drawTime();
 	}
 }
 
@@ -563,12 +564,12 @@ void display::drawSelectedWindow(){
 			hwlib::cout << "Stats being printed!" << hwlib::endl;
 			currentlySelectedWindow = 0;
 			oled.clear();
+			drawScore();
 			showTime(remainingSeconds, totalGameTime);
 			drawWeapon();
 			drawBullets(true);
 			drawMagazines();
 			showHealthBar();
-			//showScore();
 			drawFireMode();
 			updateHealth();
 			break;

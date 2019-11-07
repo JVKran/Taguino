@@ -2,7 +2,7 @@
 
 
 infraredTransmitter::infraredTransmitter(const long long int period):
-   task("Infrared Transmitting Task"),
+   task(1, "Infrared Transmitting Task"),
    transmitClock(this, period, "Transmitting Clock"),
    messageChannel(this, "Message Channel")
 {}

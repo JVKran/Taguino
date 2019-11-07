@@ -42,13 +42,12 @@ void interfaceManager::buttonPressed(){
 void interfaceManager::encoderTurned(const int pos){
 	HWLIB_TRACE;
 	if(pos%2==0){
-
 		if(pos != 0){
 			positionPool.write(pos / 2);
-					newPositionFlag.set();
+			newPositionFlag.set();
 		} else {
 			positionPool.write(pos);
-					newPositionFlag.set();
+			newPositionFlag.set();
 		}
 	}
 }

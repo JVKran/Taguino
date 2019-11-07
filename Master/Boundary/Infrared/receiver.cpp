@@ -8,7 +8,7 @@
 /// \details
 /// This constructor has one mandatory parameter; the pin to which the receiver is attached.
 infraredReceiver::infraredReceiver(highSignalListener & listener, const long long int period):
-   task("Signal Detecting Task"),
+   task(0, "Signal Detecting Task"),
    listener(listener),
    sampleClock(this, period, "Sample Clock"),
    period(period)
@@ -37,6 +37,7 @@ void infraredReceiver::main(){
 }
 
 infraredDecoder::infraredDecoder(messageListener & listener):
+   task(7, "Infrared Decoder"),
    listener(listener),
    highDurations(this, "High Durations Channel")
 {}

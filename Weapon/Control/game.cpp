@@ -11,6 +11,7 @@
 /// and a weaponNumber which is initialized in the main().
 /// After constructing the inputHanlder is suspended to prevent shooting and getting hit and the master is informed about this specific weapon beeing online.
 runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber):
+	task(6, "Run Game"),
 	Display(Display),
 	player(player),
 	exchanger(exchangeGameData(Display, this, spiBus, duration, weaponNumber)),
@@ -69,18 +70,18 @@ void runGame::main(){
 				distance = (receivedData & 0x3F) * 10;
 				weaponId = ((receivedData & 0x1C0) >> 6);
 				dealtDamage = weaponStats.getDamage(weaponId, distance);
-				// hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
-				// hwlib::cout << "This is equal to a damage of " << dealtDamage << ". " << hwlib::endl;
-				// hwlib::cout << "Hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 				exchanger.updateScore(playerNumber, dealtDamage);
 				player.setHealth(player.getHealth() - dealtDamage);
-				if(player.getHealth() < 0){
+				if(player.getHealth() > 100){
 					player.setHealth(0);
 				}
 				Display.showHealth(player.getHealth());
 				healthColor.red = 255 - (player.getHealth() * 25) / 10;
 				healthColor.green =  ((player.getHealth() * 25) / 10);
 				Led.setColor(healthColor);
+				hwlib::cout << "Player " << playerNumber << " shot us from a distance of " << distance << " with weapon " << weaponId << '.' << hwlib::endl;
+				hwlib::cout << "This is equal to a damage of " << dealtDamage << ". " << hwlib::endl;
+				hwlib::cout << "Hence our new health is " << player.getHealth() << '.' << hwlib::endl;
 			}
 		} else if (event == secondClock) {
 			remainingSeconds--;
@@ -196,7 +197,6 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 			// 	}
 			// }
 			bubbleSort(Display.Scoreboard.playerNumbers, Display.Scoreboard.playerScores,30);
-			Display.Scoreboard.updateScoreBoard(data);
 			// hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
 			// for(int i = 0; i < 31; i++){
 			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;

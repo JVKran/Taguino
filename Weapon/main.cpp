@@ -41,7 +41,7 @@ int main( void ){
    const long long int infraredPollPeriod = 200;
    const long long int infraredTransmitPeriod = 100;
    const long long int inputPollPeriod = 100'000;
-   const long long int radioPollPeriod = 100'000;
+   const long long int radioPollPeriod = 10'000;
    
    playerData player = playerData();
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
