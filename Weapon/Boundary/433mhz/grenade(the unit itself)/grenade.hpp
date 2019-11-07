@@ -5,7 +5,7 @@
 #include <array>
 #include "hwlib.hpp"
 #include "NRF24.hpp"
-//#include "input.hpp"
+#include "input.hpp"
 
 class hwuart{
 	//Usart * hw_usart = USART0;
@@ -64,17 +64,32 @@ public:
 	//void main() override;
 }; 
 
-class exchangeGrenadeData : public radioListener {
+class exchangeGrenadeData : public radioListener, public buttonListener, public rtos::task<> {
 private:
 	NRF24 radio;
 	mhz433Write mhz;
+	inputHandler handler;
+	
+	button proximity;
+	
+	rtos::flag buttonFlag;
+	
+	uint8_t storedData[5] = { 0, 0, 0, 0, 0 };
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 101};
+	
+	enum class states{ IDLE, ACTIVE, EXPLODE, END };
+	states state;
+	
 public:
-	exchangeGrenadeData( NRF24 & radio, mhz433Write &mhz );
+	exchangeGrenadeData( NRF24 & radio, mhz433Write &mhz, inputHandler & handler );
 	
 	virtual void dataReceived(const uint8_t data[], const int len) override;
 	
+	virtual void buttonPressed( const char id );
+	
 	void explode( uint8_t player, uint8_t damage);
+	
+	void main() override;
 	
 
 };

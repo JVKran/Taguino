@@ -54,21 +54,59 @@ hwuart::hwuart(){
 	}
 //======================< Grenade >===============================
 
-exchangeGrenadeData::exchangeGrenadeData( NRF24 & radio, mhz433Write & mhz):
+exchangeGrenadeData::exchangeGrenadeData( NRF24 & radio, mhz433Write & mhz, inputHandler & handler ):
 	radio(radio),
-	mhz(mhz)
-	{}
+	mhz(mhz),
+	proximity(16, &handler, this, 16),
+	buttonFlag(this)
+	{
+	handler.addButton( &proximity );
+	}
 
 void exchangeGrenadeData::dataReceived(const uint8_t data[5], const int len){
-	hwlib::cout<< "Data: "<< data[0] << "\n";
-	if(data[0] == 12){
-		explode( data[1], data[2] );
+	for(int i =0; i<len; i++){
+		storedData[i] = data[i];
 	}
 }
 
+void exchangeGrenadeData::buttonPressed( const char id ){
+ 	hwlib::cout<<"sensor test\n";
+	buttonFlag.set();
+}
+
 void exchangeGrenadeData::explode( uint8_t player, uint8_t damage ){
+	hwlib::cout << "exploding \n";
 	mhz.write( player, damage );
 };
+
+void exchangeGrenadeData::main(){
+	state = states::IDLE;
+	for(;;){
+		switch(state){
+			case states::IDLE:
+				wait( buttonFlag );
+				state = states::ACTIVE;
+				break;
+			case states::ACTIVE:
+				hwlib::cout<<"ACTIVE\n";
+				//sendNrf();
+				//hwlib::wait_ms(2000);
+				if( storedData[0] == 13){
+					state = states::EXPLODE;
+					break;
+				}
+				state = states::IDLE;
+				break;
+			case states::EXPLODE:
+				
+				explode(storedData[1], storedData[2]);
+				state = states::END;
+				break;
+			case states::END:
+				for(;;){};
+		}
+	}
+}
 
 //======================< Write >===============================
 

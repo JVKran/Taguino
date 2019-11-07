@@ -9,9 +9,9 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := grenade.cpp NRF24.cpp 
+SOURCES := grenade.cpp NRF24.cpp input.cpp button.cpp KY040.cpp
 # header files in this project
-HEADERS := grenade.hpp NRF24.hpp 
+HEADERS := grenade.hpp NRF24.hpp input.hpp button.hpp KY040.cpp
 
 # other places to look for files for this project
 SEARCH  := 

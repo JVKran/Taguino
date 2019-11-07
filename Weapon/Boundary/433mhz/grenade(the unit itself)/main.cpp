@@ -19,6 +19,7 @@ int main(){
 	
     auto spiBus = hwlib::spi_bus_bit_banged_sclk_mosi_miso(sclk, mosi, miso );
 	
+	const long long int inputPollPeriod = 100'000;
 	const long long int radioPollPeriod = 100'000;
 	const uint8_t addressToListenTo = 101;
 	
@@ -26,9 +27,12 @@ int main(){
 	
 	mhz433Write mhz = mhz433Write(player, damage);
 	
-	exchangeGrenadeData grenade = exchangeGrenadeData( radio, mhz );
+	inputHandler handler = inputHandler(inputPollPeriod);
 	
+	exchangeGrenadeData grenade = exchangeGrenadeData( radio, mhz, handler );
+
 	radio.addListener(&grenade);
+	hwlib::cout<<"start\n";
 	
 	rtos::run();
 	
