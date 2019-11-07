@@ -59,7 +59,7 @@ exchangeGrenadeData::exchangeGrenadeData( NRF24 & radio, mhz433Write & mhz, inpu
 	radio(radio),
 	mhz(mhz),
 	handler(handler),
-	proximity(16, &handler, this, 16),
+	proximity(17, &handler, this, 16),
 	buttonFlag(this)
 	{
 	handler.addButton( &proximity );

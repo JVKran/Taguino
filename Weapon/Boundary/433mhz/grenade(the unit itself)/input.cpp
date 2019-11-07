@@ -11,7 +11,6 @@ button::button(const int pinNumber, inputHandler* handler, buttonListener * list
 }
 
 void button::update(){
-			hwlib::cout<<"inup2\n";
 	if(buttonRegister->read(pinNumber) && (buttonNotToBeSet == 0 || !buttonRegister->read(buttonNotToBeSet))){
 		hwlib::cout<<"inup\n";
 		listener->buttonPressed(id);
@@ -47,12 +46,11 @@ Buttoninterrupter * inputHandler::getRegister(){
 void inputHandler::main(){
 	for(;;){
 		wait(updateClock);
-		hwlib::cout<<"inMain\n";
 		buttonInterrupter.refreshregister();
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
-		encoder->update();
-		buttonInterrupter.refreshregister();
+		//encoder->update();
+		//buttonInterrupter.refreshregister();
 	}
 }
