@@ -46,13 +46,16 @@ Buttoninterrupter * inputHandler::getRegister(){
 
 void inputHandler::main(){
 	for(;;){
+		HWLIB_TRACE;
 		wait(updateClock);
 		hwlib::cout<<"inMain\n";
 		buttonInterrupter.refreshregister();
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
-		encoder->update();
+		HWLIB_TRACE;
+		//encoder->update();
+		HWLIB_TRACE;
 		buttonInterrupter.refreshregister();
 	}
 }

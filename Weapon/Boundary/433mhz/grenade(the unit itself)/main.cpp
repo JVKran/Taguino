@@ -13,7 +13,7 @@ int main(){
 	
     auto sclk = target::pin_out( target::pins::d9 );
   	auto mosi = target::pin_out( target::pins::d12 );
-   	auto miso = target::pin_in( target::pins::d13 );
+   	auto miso = target::pin_in( target::pins::d7 );
    	auto csn  = target::pin_out( target::pins::d11 );
    	auto ce   = target::pin_out( target::pins::d10 );
 	
