@@ -557,7 +557,7 @@ void display::selectedWindow(const int window){
 /// \details
 /// This function returns the currently selected window.
 int display::getSelectedWindow(){
-
+ 	return window;
 }
 
 /// \brief
