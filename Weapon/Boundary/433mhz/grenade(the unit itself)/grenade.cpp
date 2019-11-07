@@ -55,8 +55,10 @@ hwuart::hwuart(){
 //======================< Grenade >===============================
 
 exchangeGrenadeData::exchangeGrenadeData( NRF24 & radio, mhz433Write & mhz, inputHandler & handler ):
+	task("grenade"),
 	radio(radio),
 	mhz(mhz),
+	handler(handler),
 	proximity(16, &handler, this, 16),
 	buttonFlag(this)
 	{
@@ -103,8 +105,10 @@ void exchangeGrenadeData::main(){
 				state = states::END;
 				break;
 			case states::END:
-				for(;;){};
+				stop=true;
+				break;
 		}
+		if(stop){break;}
 	}
 }
 

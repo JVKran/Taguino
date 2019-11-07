@@ -76,6 +76,7 @@ private:
 	
 	uint8_t storedData[5] = { 0, 0, 0, 0, 0 };
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 101};
+	bool stop=0;
 	
 	enum class states{ IDLE, ACTIVE, EXPLODE, END };
 	states state;
