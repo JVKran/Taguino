@@ -88,6 +88,8 @@ public:
 	
 	virtual void buttonPressed( const char id );
 	
+	void sendNrf();
+	
 	void explode( uint8_t player, uint8_t damage);
 	
 	void main() override;

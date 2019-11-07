@@ -51,14 +51,12 @@ void inputHandler::main(){
 		for(int i = 0; i < addedButtons; i++){
 			buttons[i]->update();
 		}
-<<<<<<< HEAD
+
 		//encoder->update();
 		//buttonInterrupter.refreshregister();
-=======
-		HWLIB_TRACE;
+
 		//encoder->update();
-		HWLIB_TRACE;
 		buttonInterrupter.refreshregister();
->>>>>>> b0166c0ea5792a3f16da1955d8db4cf40453034c
+
 	}
 }
