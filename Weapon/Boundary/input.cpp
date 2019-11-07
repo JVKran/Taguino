@@ -21,7 +21,7 @@ void button::update(){
 
 
 inputHandler::inputHandler(unsigned long long int period, const char * name):
-	task(name),
+	task(5, name),
 	updateClock(this, period, "Update Clock")
 {
 	buttonsRegister.refreshregister();

@@ -4,6 +4,7 @@
 /************************************************************************************************/
 
 NRF24::NRF24( hwlib::spi_bus & bus, hwlib::pin_out & ce, hwlib::pin_out & csn, const long long int duration, const uint8_t addressToListenTo ):
+   task(3, "Radio Task"),
    bus( bus ), 
    ce( ce ), 
    csn( csn ), 

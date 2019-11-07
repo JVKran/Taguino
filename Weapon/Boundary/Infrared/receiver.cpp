@@ -10,7 +10,7 @@
 /// measured and the period to check for a new signal. Then there's also a clock object created which fires every
 /// period and a task.
 infraredReceiver::infraredReceiver(highSignalListener & listener, const long long int period):
-   task(1, "Signal Detecting Task"),
+   task(0, "Signal Detecting Task"),
    listener(listener),
    sampleClock(this, period, "Sample Clock"),
    period(period)
@@ -50,6 +50,7 @@ void infraredReceiver::main(){
 /// This constructor has one mandatory parameter; the messageListener to notify when a signal has been detected.
 /// There also is a channel created which contains the high durations; based on these the signal can be decoded.
 infraredDecoder::infraredDecoder(messageListener & listener):
+   task(2, "Infrared Decoder"),
    listener(listener),
    highDurations(this, "High Durations Channel")
 {}

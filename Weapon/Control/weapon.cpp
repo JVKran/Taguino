@@ -8,7 +8,7 @@
 /// This constructor has some parameters; the display, handler, game, player and transmitter. These are needed
 /// according to the class diagram. Furthermore some RTOS objects are created.
 weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, infraredTransmitter & irTransmitter):
-	task(5, "Weapon managing task"),
+	task(7, "Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
 	triggerReleaseButton(button(20, &handler, this, 'R')),

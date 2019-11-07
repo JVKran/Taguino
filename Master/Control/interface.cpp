@@ -8,7 +8,7 @@
 /// This function creates a refrence for display, inputHandler and weaponManager.
 /// It also initializes some concurrency mechanisms.
 interfaceManager::interfaceManager(display & Display, inputHandler & handler, signUp & signer, game & gameRunner):
-	task(5,"intermanagment"),
+	task(3,"intermanagment"),
 	Display(Display),
 	handler(handler),
 	rotaryEncoder(KY040(15, this, &handler)),

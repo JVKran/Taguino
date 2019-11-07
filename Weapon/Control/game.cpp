@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler.suspend();
 	exchanger.signalOnline();
 	
-	gameStartSignalReceived(100);
+	//gameStartSignalReceived(100);
 	
 }
 
@@ -115,13 +115,17 @@ exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi
 /// This function is used to let the master know this weapon is online. That's done by broadcasting a message of type 1
 /// with the weaponNumber as the second byte.
 void exchangeGameData::signalOnline(){
+	hwlib::cout << "Signaled Master about beeing online." << hwlib::endl;
 	radio.write_pipe( masterAddress );					//Master address = 0x00
    	radio.powerDown_rx();								//Enable TX mode
 
    	dataToTransmit[0] = 1;								//1 is defined as onlineMessage
    	dataToTransmit[1] = weaponNumber;					//Byte two should containt weaponNumber which also is the playerNumber
-   	radio.write(dataToTransmit, amountOfDataToTransmit);
-   	hwlib::wait_ms(10);
+
+   	for(unsigned int i = 0; i < 2; i++){
+   		radio.write(dataToTransmit, amountOfDataToTransmit);
+   		hwlib::wait_ms(50);
+   	}
 
    	radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
    	radio.powerUp_rx();

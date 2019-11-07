@@ -34,9 +34,12 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 			radio.powerDown_rx();
 			transmitAddress[4] = 100;
 			radio.write_pipe( transmitAddress );
-			dataToTransmit[0] = 8;					//2 is defined as newScoreMessage
+			dataToTransmit[0] = 8;					//8 is defined as newScoreMessage
 			dataToTransmit[1] = assignedWeapons;
-			board.setName(assignedWeapons, name, namePos);
+			for(unsigned int i = 0; i < 2; i++){
+				radio.write( dataToTransmit, amountOfDataToTransmit );
+				hwlib::wait_ms(10);
+			}
 			hwlib::cout << assignedWeapons << "." << hwlib::endl;
 			radio.write( dataToTransmit, amountOfDataToTransmit );
 			radio.read_pipe(receiveAddress);

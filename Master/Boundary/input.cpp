@@ -7,7 +7,6 @@
 /// \details
 /// The constructor has several mandatory parameters as defined in the class diagram
 button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id, const int buttonNotToBeSet):
-	//task(3, "Input Task"),
 	pinNumber(pinNumber),
 	listener(listener),
 	handler(handler),
@@ -36,7 +35,7 @@ void button::update(){
 /// \details
 /// The constructor has several mandatory parameters for RTOS tasks.
 inputHandler::inputHandler(unsigned long long int period, const char * name):
-	task(6, name),
+	task(2, name),
 	updateClock(this, period, "Update Clock")
 {
 	buttonInterrupter.refreshregister();
