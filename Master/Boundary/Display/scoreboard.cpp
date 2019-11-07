@@ -14,7 +14,6 @@ scoreboard::scoreboard(){
     for(auto & element : playerScores){
         element = 0;
     }
-	hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
     
 	for(int i=0; i<32; i++){
         for(int j=0; j<8; j++){
@@ -61,7 +60,7 @@ void scoreboard::updateScoreBoard(const uint8_t data[5]){
 /// \details
 /// This function prints the scoreboard to the display.
 void scoreboard::printScoreboard(){
-	hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
+	hwlib::cout << "Name\t\tScore" << hwlib::endl;
     
 	for(int i=0; i<32; i++){
         for(const auto & element : playerNames[i]){

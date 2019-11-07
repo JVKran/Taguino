@@ -22,6 +22,8 @@ int main( void ){
    auto scoreFont      = hwlib::font_default_8x8();
    auto scoreWindow    = hwlib::window_part(oled, hwlib::xy(88, 9), hwlib::xy(128, 17));
    auto scoreTerminal  = hwlib::terminal_from( scoreWindow, scoreFont );
+   auto nameWindow     = hwlib::window_part(oled, hwlib::xy(0, 0), hwlib::xy(100, 10));
+   auto nameTerminal   = hwlib::terminal_from( nameWindow, scoreFont);
 
    auto sclk = hwlib::target::pin_out( hwlib::target::pins::d9 );
    auto mosi = hwlib::target::pin_out( hwlib::target::pins::d12 );
@@ -36,16 +38,16 @@ int main( void ){
    const long long int inputPollPeriod = 100'000;
 
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
-   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
+   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, nameTerminal);
    scoreboard bord;
-   bord.printScoreboard();
 
    game gameRunner = game(Display, radio,bord);
    inputHandler handler = inputHandler(inputPollPeriod);
-   signUp signer = signUp(radio,handler,gameRunner, bord); 
+   signUp signer = signUp(radio,handler,gameRunner, bord, Display); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);
-   HWLIB_TRACE;
+
+   hwlib::cout << "Master Started!" << hwlib::endl;
    rtos::run();
 }

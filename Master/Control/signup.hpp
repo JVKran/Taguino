@@ -20,6 +20,7 @@ class signUp : public radioListener, public keypadListener  {
 
 private:
 	NRF24 radio;
+	display & Display;
 
 	uint8_t assignedWeapons = 1;
 	std::array<char, 8> name;
@@ -37,7 +38,7 @@ private:
 	scoreboard & board;
 
 public:
-	signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board);
+	signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board, display & Display);
 
 	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;

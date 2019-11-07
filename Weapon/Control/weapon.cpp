@@ -30,15 +30,10 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	handler.addButton(&rightManualButton);
 	handler.addButton(&autoButton);	
 	handler.addButton(&burstButton);
-	HWLIB_TRACE;
 	handler.addButton(&triggerReleaseButton);
-	HWLIB_TRACE;
 	Display.showMagazines(weapon.getAmountOfMags());
-	HWLIB_TRACE;
 	Display.showWeapon(weapon.getId());	
-	HWLIB_TRACE;
 	Display.showBullets(weapon.getAmountOfBullets());
-	HWLIB_TRACE;
 }
 
 /// \brief
@@ -66,8 +61,8 @@ void weaponManager::selectNewWeapon(){
 	weaponId = newWeaponPool.read();
 	weapon.setId(weaponId);
 	Display.showWeapon(weaponId);
-	Display.showMagazines(weapon.getAmountOfMags());
-	Display.showBullets(weapon.getAmountOfBullets());
+	Display.showMagazines(settings.getAmountOfMags(weaponId));
+	Display.showBullets(settings.getBulletsPerMag(weaponId));
 	autoFireMode = false;
 	burstFireMode = false;
 	manualFireMode = true;
@@ -81,6 +76,7 @@ void weaponManager::selectNewWeapon(){
 /// and shoots that.
 void weaponManager::shootBullet(){
 	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)) && game.getPlayerData().getHealth() > 0){
+		hwlib::cout << "Shot Bullet!" << hwlib::endl;
 		dataToSend = 0;
 		dataToSend |= (game.getPlayerData().getPlayerNumber() << 10);
 		dataToSend |= (weapon.getId() << 6);
@@ -92,14 +88,14 @@ void weaponManager::shootBullet(){
 		irTransmitter.sendData(dataToSend);
 		weapon.setAmountOfBullets(weapon.getAmountOfBullets() - 1);
 	} else if (hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
-		//hwlib::cout << "Triggerbutton pressed but too little bullets..." << hwlib::endl;
+		hwlib::cout << "Triggerbutton pressed but too little bullets... ";
 		if(weapon.getAmountOfMags() > 0){
 			weapon.setAmountOfMags(weapon.getAmountOfMags() - 1);
 			Display.showMagazines(weapon.getAmountOfMags());
 			weapon.setAmountOfBullets(weapon.bulletsPerMag());
-			//hwlib::cout << "Reloaded Weapon!" << hwlib::endl;
+			hwlib::cout << "Reloaded Weapon!" << hwlib::endl;
 		} else {
-			//hwlib::cout << "No magazines left. Weapon unloaded..." << hwlib::endl;
+			hwlib::cout << "No magazines left. Weapon unloaded..." << hwlib::endl;
 		}
 	}
 }	
@@ -121,30 +117,34 @@ void weaponManager::main(){
 					triggerPressed = true;
 					break;
 				case 'A':
-					hwlib::cout << "Autofire-Mode selected" << hwlib::endl;
+					hwlib::cout << "Autofire-Mode selected";
 					if(weapon.autoAllowed()){
+						hwlib::cout << '!' << hwlib::endl;
 						autoFireMode = true;
 						burstFireMode = false;
 						manualFireMode = false;
 						shotBullets = 0;
 						Display.showFireMode(1);
 					} else {
+						hwlib::cout << " but not available for this weapon." << hwlib::endl;
 						Display.showFireMode(0);
 					}
 					break;
 				case 'B':
-					hwlib::cout << "Burstfire-Mode selected" << hwlib::endl;
+					hwlib::cout << "Burstfire-Mode selected";
 					if(weapon.burstAllowed()){
+						hwlib::cout << '!' << hwlib::endl;
 						autoFireMode = false;
 						burstFireMode = true;
 						manualFireMode = false;
 						Display.showFireMode(2);
 					} else {
+						hwlib::cout << " but not available for this weapon." << hwlib::endl;
 						Display.showFireMode(0);
 					}
 					break;
 				case 'M':
-					hwlib::cout << "Manualfire-Mode selected" << hwlib::endl;
+					hwlib::cout << "Manualfire-Mode selected!" << hwlib::endl;
 					autoFireMode = false;
 					burstFireMode = false;
 					manualFireMode = true;

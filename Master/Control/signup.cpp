@@ -7,8 +7,9 @@
 /// Constructor
 /// \details
 /// Starts Lobby music to join game.
-signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board):
+signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board, display & Display):
 	radio(radio),
+	Display(Display),
 	toetsenbord(this),
 	Game(Game),
 	board(board)
@@ -17,6 +18,9 @@ signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &boar
 	{
 		mp3Player.startPlayingSound(1); // Start lobby music once.
 		handler.addkeypad(&toetsenbord);
+		for(auto & element : name){
+			element = 0;
+		}
 	}
 
 /// \brief
@@ -26,7 +30,7 @@ signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &boar
 void signUp::dataReceived(const uint8_t data[10], const int len){
 	if(data[0] == 1){
 		if(assignedWeapons < 31){
-			hwlib::cout << "Weapon turned on. Gave him address " << hwlib::endl;
+			hwlib::cout << "Weapon turned on. Gave him address ";
 			radio.powerDown_rx();
 			transmitAddress[4] = 100;
 			radio.write_pipe( transmitAddress );
@@ -48,20 +52,25 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 /// Gets called when a key is pressed.
 void signUp::keyPressed(char karakter){
 	if(karakter == 'I' || namePos == 7){
+		hwlib::cout << "Name Entered: ";
 		for(int i=0; i<namePos; i++){
 			board.playerNames[assignedNames][i] = name[i];
 			hwlib::cout << board.playerNames[assignedNames][i];
 		}
+		hwlib::cout << hwlib::endl;
+		for(auto & element : name){
+			element = 0;
+		}
 		namePos = 0;
-		board.printScoreboard();
 		assignedNames++;
+	} else if(karakter == '4'){
+		namePos--;
+		name[namePos] = 0;
 	} else {
 		name[namePos]= karakter;
 		namePos++;
-		for(int i=0; i<namePos; i++){
-			hwlib::cout<<name[i];
-		}
 	}
+	Display.nameEntered(name);
 }
 
 /// \brief
@@ -69,19 +78,22 @@ void signUp::keyPressed(char karakter){
 /// \details
 /// Starts Game for all online weapons based on protocol as defined in documentation.
 void signUp::startGame(const uint8_t gameTime){
-	HWLIB_TRACE;
 	Game.gamestarted =1;
 	mp3Player.startPlayingSound(2);	// Start action music once.
 	
 	radio.powerDown_rx();
 	hwlib::wait_ms(1000);
+	hwlib::cout << "Started game for players ";
+	for(uint8_t i = 1; i < assignedWeapons; i++){
+		hwlib::cout << i << " ";
+	}
+	hwlib::cout << " and " << assignedWeapons << hwlib::endl;
 	for(uint8_t i = 1; i < assignedWeapons; i++){		//Transmit start message 3 times.
 		for(uint8_t j = 0; j < 3; j++){					
 			transmitAddress[4] = i;
 			radio.write_pipe( transmitAddress );
 			dataToTransmit[0] = 1;						//2 is defined as newScoreMessage.
 			dataToTransmit[1] = Game.getGameTime();
-			hwlib::cout << "Started game for player " << i << "!" << hwlib::endl;
 			radio.write( dataToTransmit, amountOfDataToTransmit );
 			hwlib::wait_ms(100);
 		}

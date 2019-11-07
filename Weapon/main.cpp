@@ -52,5 +52,6 @@ int main( void ){
    weaponManager gunManager = weaponManager(Display, handler, game, player, Transmitter);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
+   hwlib::cout << "Weapon Started!" << hwlib::endl;
    rtos::run();
 }

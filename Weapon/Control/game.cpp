@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler.suspend();
 	exchanger.signalOnline();
 	
-	// gameStartSignalReceived(100);
+	gameStartSignalReceived(100);
 	
 }
 
@@ -121,6 +121,7 @@ void exchangeGameData::signalOnline(){
    	dataToTransmit[0] = 1;								//1 is defined as onlineMessage
    	dataToTransmit[1] = weaponNumber;					//Byte two should containt weaponNumber which also is the playerNumber
    	radio.write(dataToTransmit, amountOfDataToTransmit);
+   	hwlib::wait_ms(10);
 
    	radio.read_pipe(startupAddress);					//Start listening to playerNumber address again.
    	radio.powerUp_rx();

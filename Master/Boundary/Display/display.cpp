@@ -7,7 +7,7 @@
 /// \details
 /// This constructor takes an oled, xCoordinates lookup, yCoordinates lookup and a windowpart and terminal. These are needed
 /// because they can't be constructed in this class by itself. Furthermore some rtos objects are created.
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & nameTerminal):
 	task(4, "display"),
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
@@ -19,6 +19,7 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	timeWindow(oled, hwlib::xy(107,21), hwlib::xy(128,41)),
 	powerUpWindow(oled, hwlib::xy(78,40), hwlib::xy(128,64)),
 	scoreWindow(scoreWindow),
+	nameTerminal(nameTerminal),
 
 	xCoordinates(xCoordinates),
 	yCoordinates(yCoordinates),
@@ -587,6 +588,24 @@ void display::drawSelectedWindow(){
 			oled.clear();
 			scoreTerminal << '\f' << "3" << hwlib::flush;
 			break;
+	}
+}
+
+/// \brief
+/// Print Typed Name
+/// \details
+/// This function prints the currently typed name.
+void display::nameEntered(const std::array<char, 8> & name){
+	if(currentlySelectedWindow == 1){
+		nameTerminal << '\f';
+		for(const auto & element : name){
+			if(element != '0'){
+				nameTerminal << element;
+			} else {
+				break;
+			}
+		}
+		nameTerminal << hwlib::flush;
 	}
 }
 

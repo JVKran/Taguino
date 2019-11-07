@@ -26,6 +26,7 @@ protected:
 	hwlib::window_part timeWindow;
 	hwlib::window_part powerUpWindow;
 	hwlib::window_part scoreWindow;
+	hwlib::terminal_from nameTerminal;
 
 	displayedData lastData;
 	bool maxBulletsDrawn = false;
@@ -90,7 +91,7 @@ public:
 	hwlib::terminal_from scoreTerminal;
 		int currentlySelectedWindow = 0;
 
-	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal);
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & nameTerminal);
 
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
@@ -122,6 +123,8 @@ public:
 
 	void showFireMode(const int mode);
 	void drawFireMode();
+
+	void nameEntered(const std::array<char, 8> & name);
 
 	void main() override;
 

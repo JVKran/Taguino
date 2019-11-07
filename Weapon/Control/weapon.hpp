@@ -48,7 +48,8 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		uint_fast64_t lastShot = 0;
 		int measuredDistance = 0;
 
-		weaponData weapon = weaponData(1, 2, 17);
+		weaponData weapon = weaponData(0, 2, 4);
+		weaponSettings settings = weaponSettings();
 		rtos::timer shootTimer;
 
 		char readButton;
