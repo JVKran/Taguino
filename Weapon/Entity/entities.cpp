@@ -59,7 +59,7 @@ const char * weaponSettings::getName(const int weaponId) const {
 }
 
 const int weaponSettings::getDamage(const int weaponId, const int distance) const {
-	if(weaponId >= 0 && weaponId <= 4){
+	if(weaponId == 0){
 		return (weaponId == 1) ? damageFactors[weaponId] * (distance / 10) : damageFactors[weaponId];
 	} else {
 		return damageFactors[0];
