@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __SCOREBOARD_HPP
 #define __SCOREBOARD_HPP
 
@@ -6,6 +8,10 @@
 #include "applicationLogic.hpp"
 #include <array>
 
+/// \brief
+/// Scoreboard
+/// \details
+/// This class is used to keep and print the scoreboard.
 class scoreboard {
 private:
 	hwlib::terminal & scoreTerminal;

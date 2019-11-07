@@ -66,6 +66,11 @@ $(function() {
 <div class="title">game Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Game.  
+ <a href="classgame.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_master_2_control_2game_8hpp_source.html">game.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for game:</div>
 <div class="dyncontent">
@@ -84,8 +89,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab74478a3de066e641bb2013495c1d528"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgame.html#ab74478a3de066e641bb2013495c1d528">getGameTime</a> ()</td></tr>
 <tr class="memdesc:ab74478a3de066e641bb2013495c1d528"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGameTime  <a href="#ab74478a3de066e641bb2013495c1d528">More...</a><br /></td></tr>
 <tr class="separator:ab74478a3de066e641bb2013495c1d528"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99eda5954ad9d5bdcd53c13c26cb66da"><td class="memItemLeft" align="right" valign="top"><a id="a99eda5954ad9d5bdcd53c13c26cb66da"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>game</b> (<a class="el" href="classdisplay.html">display</a> &amp;Display, <a class="el" href="class_n_r_f24.html">NRF24</a> &amp;radio, <a class="el" href="classscoreboard.html">scoreboard</a> &amp;board)</td></tr>
+<tr class="memitem:a99eda5954ad9d5bdcd53c13c26cb66da"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgame.html#a99eda5954ad9d5bdcd53c13c26cb66da">game</a> (<a class="el" href="classdisplay.html">display</a> &amp;Display, <a class="el" href="class_n_r_f24.html">NRF24</a> &amp;radio, <a class="el" href="classscoreboard.html">scoreboard</a> &amp;board)</td></tr>
+<tr class="memdesc:a99eda5954ad9d5bdcd53c13c26cb66da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a99eda5954ad9d5bdcd53c13c26cb66da">More...</a><br /></td></tr>
 <tr class="separator:a99eda5954ad9d5bdcd53c13c26cb66da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fc8d11bea4480943dc50103bc45fdd0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgame.html#a5fc8d11bea4480943dc50103bc45fdd0">dataReceived</a> (const uint8_t data[10], const int len) override</td></tr>
 <tr class="memdesc:a5fc8d11bea4480943dc50103bc45fdd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">DataReceived.  <a href="#a5fc8d11bea4480943dc50103bc45fdd0">More...</a><br /></td></tr>
@@ -104,6 +109,47 @@ Public Attributes</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>gamestarted</b> =0</td></tr>
 <tr class="separator:a929d12ea9134ae04aa43bcc6746c5a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Game. </p>
+<p>Responsible for starting, and initializing of game. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a99eda5954ad9d5bdcd53c13c26cb66da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99eda5954ad9d5bdcd53c13c26cb66da">&#9670;&nbsp;</a></span>game()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">game::game </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdisplay.html">display</a> &amp;&#160;</td>
+          <td class="paramname"><em>Display</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_n_r_f24.html">NRF24</a> &amp;&#160;</td>
+          <td class="paramname"><em>radio</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classscoreboard.html">scoreboard</a> &amp;&#160;</td>
+          <td class="paramname"><em>board</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<p>Starts Game for all online weapons based on protocol as defined in documentation. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5fc8d11bea4480943dc50103bc45fdd0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5fc8d11bea4480943dc50103bc45fdd0">&#9670;&nbsp;</a></span>dataReceived()</h2>
@@ -189,12 +235,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>gamestarted</b> =0</t
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_master_2_control_2game_8hpp_source.html">Master/Control/game.hpp</a></li>
-<li>Master/Control/game.cpp</li>
+<li><a class="el" href="_master_2_control_2game_8cpp.html">Master/Control/game.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 7 2019 09:48:28 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Nov 7 2019 11:13:48 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

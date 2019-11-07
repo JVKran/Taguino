@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __WEAPON_HPP
 #define __WEAPON_HPP
 
@@ -9,6 +11,11 @@
 #include "game.hpp"
 #include "transmitter.hpp"
 
+
+/// \brief
+/// Weapon Manager
+/// \details
+/// This class is responsible for managing the weapon; bullets, magazines, weapons and fireModes.
 class weaponManager : public buttonListener, public rtos::task<> {
 	private:
 		display & Display;

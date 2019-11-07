@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
@@ -10,6 +12,10 @@
 
 class runGame;
 
+/// \brief
+/// Exchange Game Data
+/// \details
+/// This class is responsible for handling incoming Radio Messages.
 class exchangeGameData : public radioListener {
 private:
   display & Display;
@@ -43,6 +49,10 @@ public:
 
 };
 
+/// \brief
+/// Run Game
+/// \details
+/// This class is responsible for managing the entire game; getting hit, starting and stopping.
 class runGame : public messageListener, public rtos::task<> {
 private:
   display & Display;

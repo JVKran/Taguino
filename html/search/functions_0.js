@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['buttonpressed',['buttonPressed',['../classinterface_manager.html#a6da35f4035aad3e786f90048b1976867',1,'interfaceManager']]],
-  ['buttonregister',['buttonRegister',['../classbutton_register.html#ab0ef3e19746a52edd0fa9eb877e27c90',1,'buttonRegister']]]
+  ['addbutton',['addButton',['../classinput_handler.html#a801f9dcf2fd456e03ff8781df8f47ef1',1,'inputHandler']]],
+  ['addencoder',['addEncoder',['../classinput_handler.html#ab10d4450953b7fcf430ceceeda7ba003',1,'inputHandler']]],
+  ['addkeypad',['addkeypad',['../classinput_handler.html#a47b14e81049679f4196cfdccf77af534',1,'inputHandler']]]
 ];

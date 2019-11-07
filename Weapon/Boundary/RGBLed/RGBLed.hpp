@@ -1,5 +1,12 @@
+/// @file
+
 #ifndef __RGB_LED_HPP
 #define __RGB_LED_HPP
+
+/// \brief
+/// RGB Led
+/// \details
+/// This class is responsible for giving leds another color.
 class RGBLed{
 private:
     hwlib::color currentcolor;

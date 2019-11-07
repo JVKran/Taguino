@@ -1,9 +1,16 @@
+/// @file
+
 #ifndef __TRANSMITTER_HPP
 #define __TRANSMITTER_HPP
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
 
+/// \brief
+/// Infrared Transmitter
+/// \details
+/// This class is responsible for transmitting data; it does that by transmitting one uint16_t per time.
+/// One data transmission is divided in 16 short transmissions.
 class infraredTransmitter : public rtos::task<> {
 private:
 	hwlib::target::d3_38kHz transmitter = hwlib::target::d3_38kHz();

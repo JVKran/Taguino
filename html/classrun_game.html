@@ -65,13 +65,18 @@ $(function() {
 <div class="title">runGame Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Run Game.  
+ <a href="classrun_game.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_weapon_2_control_2game_8hpp_source.html">game.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for runGame:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrun_game.png" usemap="#runGame_map" alt=""/>
   <map id="runGame_map" name="runGame_map">
-<area href="classmessage_listener.html" alt="messageListener" shape="rect" coords="0,0,106,24"/>
+<area href="classmessage_listener.html" title="Message Listener. " alt="messageListener" shape="rect" coords="0,0,106,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -96,7 +101,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>gameStartSignalReceiv
 <tr class="memdesc:a01514dcb9b90128a9fc097e8523355af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Game Running Task.  <a href="#a01514dcb9b90128a9fc097e8523355af">More...</a><br /></td></tr>
 <tr class="separator:a01514dcb9b90128a9fc097e8523355af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Run Game. </p>
+<p>This class is responsible for managing the entire game; getting hit, starting and stopping. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af12b141c2d06b3b2c81f05192c7a3a4a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af12b141c2d06b3b2c81f05192c7a3a4a">&#9670;&nbsp;</a></span>runGame()</h2>
 
@@ -148,7 +156,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>gameStartSignalReceiv
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p>This constructor has a couple of mandatory parameters; A display which is needed to show the time, health and powerups, an SPI-Bus needed to create a <a class="el" href="classexchange_game_data.html">exchangeGameData</a> object because <a class="el" href="classrun_game.html">runGame</a> is the only object controlling it, an <a class="el" href="classinput_handler.html">inputHandler</a> Task to suspend and resume the possibility to shoot and a weaponNumber which is initialized in the <a class="el" href="classrun_game.html#a01514dcb9b90128a9fc097e8523355af" title="Game Running Task. ">main()</a>. After constructing the inputHanlder is suspended to prevent shooting and getting hit and the master is informed about this specific weapon beeing online. </p>
+<p>This constructor has a couple of mandatory parameters; A display which is needed to show the time, health and powerups, an SPI-Bus needed to create a <a class="el" href="classexchange_game_data.html" title="Exchange Game Data. ">exchangeGameData</a> object because <a class="el" href="classrun_game.html" title="Run Game. ">runGame</a> is the only object controlling it, an <a class="el" href="classinput_handler.html" title="Input Handler. ">inputHandler</a> Task to suspend and resume the possibility to shoot and a weaponNumber which is initialized in the <a class="el" href="classrun_game.html#a01514dcb9b90128a9fc097e8523355af" title="Game Running Task. ">main()</a>. After constructing the inputHanlder is suspended to prevent shooting and getting hit and the master is informed about this specific weapon beeing online. </p>
 
 </div>
 </div>
@@ -208,7 +216,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>gameStartSignalReceiv
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 7 2019 09:48:28 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Nov 7 2019 11:13:48 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

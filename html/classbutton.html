@@ -65,6 +65,11 @@ $(function() {
 <div class="title">button Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Button.  
+ <a href="classbutton.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_master_2_boundary_2input_8hpp_source.html">input.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -74,11 +79,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa6cfc2cf7ff3ad4500702e3044c410c7"><td class="memItemLeft" align="right" valign="top"><a id="aa6cfc2cf7ff3ad4500702e3044c410c7"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><b>getId</b> ()</td></tr>
 <tr class="separator:aa6cfc2cf7ff3ad4500702e3044c410c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48330e7f52c89804f5cac30cee233230"><td class="memItemLeft" align="right" valign="top"><a id="a48330e7f52c89804f5cac30cee233230"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
+<tr class="memitem:a48330e7f52c89804f5cac30cee233230"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbutton.html#a48330e7f52c89804f5cac30cee233230">update</a> ()</td></tr>
+<tr class="memdesc:a48330e7f52c89804f5cac30cee233230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update.  <a href="#a48330e7f52c89804f5cac30cee233230">More...</a><br /></td></tr>
 <tr class="separator:a48330e7f52c89804f5cac30cee233230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a703dff9de5230282471fb0062950225a"><td class="memItemLeft" align="right" valign="top"><a id="a703dff9de5230282471fb0062950225a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>button</b> (const int pinNumber, <a class="el" href="classinput_handler.html">inputHandler</a> *handler, <a class="el" href="classbutton_listener.html">buttonListener</a> *listener, const char id, const int buttonNotToBeSet=0)</td></tr>
+<tr class="memitem:a703dff9de5230282471fb0062950225a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbutton.html#a703dff9de5230282471fb0062950225a">button</a> (const int pinNumber, <a class="el" href="classinput_handler.html">inputHandler</a> *handler, <a class="el" href="classbutton_listener.html">buttonListener</a> *listener, const char id, const int buttonNotToBeSet=0)</td></tr>
+<tr class="memdesc:a703dff9de5230282471fb0062950225a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a703dff9de5230282471fb0062950225a">More...</a><br /></td></tr>
 <tr class="separator:a703dff9de5230282471fb0062950225a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6cfc2cf7ff3ad4500702e3044c410c7"><td class="memItemLeft" align="right" valign="top"><a id="aa6cfc2cf7ff3ad4500702e3044c410c7"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><b>getId</b> ()</td></tr>
@@ -96,6 +101,80 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>getId</b> ()</td></tr
 void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
 <tr class="separator:a48330e7f52c89804f5cac30cee233230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Button. </p>
+<p>The button gets updated on <a class="el" href="classbutton.html#a48330e7f52c89804f5cac30cee233230" title="Update. ">update()</a> call. It then checks the register that gets updated by the <a class="el" href="classinput_handler.html" title="Input Handler. ">inputHandler</a>. When it is pressed it calls the listener.buttonPressed() function. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a703dff9de5230282471fb0062950225a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a703dff9de5230282471fb0062950225a">&#9670;&nbsp;</a></span>button()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">button::button </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>pinNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classinput_handler.html">inputHandler</a> *&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classbutton_listener.html">buttonListener</a> *&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>buttonNotToBeSet</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<p>The constructor has several mandatory parameters as defined in the class diagram </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a48330e7f52c89804f5cac30cee233230"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48330e7f52c89804f5cac30cee233230">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void button::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update. </p>
+<p>Checks register, if set, call buttonPressed on listener. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_weapon_2_boundary_2433mhz_2_grenade_2input_8hpp_source.html">Weapon/Boundary/433mhz/Grenade/input.hpp</a></li>
 <li>Weapon/Boundary/433mhz/Grenade/input.cpp</li>
@@ -103,7 +182,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></t
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 7 2019 09:48:28 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Nov 7 2019 11:13:48 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

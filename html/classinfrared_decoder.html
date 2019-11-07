@@ -65,14 +65,19 @@ $(function() {
 <div class="title">infraredDecoder Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Infrared Decoder.  
+ <a href="classinfrared_decoder.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_weapon_2_boundary_2_infrared_2receiver_8hpp_source.html">receiver.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for infraredDecoder:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classinfrared_decoder.png" usemap="#infraredDecoder_map" alt=""/>
   <map id="infraredDecoder_map" name="infraredDecoder_map">
-<area href="classhigh_signal_listener.html" alt="highSignalListener" shape="rect" coords="126,0,242,24"/>
-<area href="classhigh_signal_listener.html" alt="highSignalListener" shape="rect" coords="378,0,494,24"/>
+<area href="classhigh_signal_listener.html" title="High Signal Listener. " alt="highSignalListener" shape="rect" coords="126,0,242,24"/>
+<area href="classhigh_signal_listener.html" title="High Signal Listener. " alt="highSignalListener" shape="rect" coords="378,0,494,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -103,7 +108,10 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>calculateControlBi
 void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> () override</td></tr>
 <tr class="separator:ae6c27d33b37a0e88bdde290543083fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Infrared Decoder. </p>
+<p>This class is responsible for decoding the received durations. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0056e6627f26fdf5e45a610090d1bb05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0056e6627f26fdf5e45a610090d1bb05">&#9670;&nbsp;</a></span>infraredDecoder()</h2>
 
@@ -121,7 +129,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> () override<
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p>This constructor has one mandatory parameter; the <a class="el" href="classmessage_listener.html">messageListener</a> to notify when a signal has been detected. There also is a channel created which contains the high durations; based on these the signal can be decoded. </p>
+<p>This constructor has one mandatory parameter; the <a class="el" href="classmessage_listener.html" title="Message Listener. ">messageListener</a> to notify when a signal has been detected. There also is a channel created which contains the high durations; based on these the signal can be decoded. </p>
 
 </div>
 </div>
@@ -202,7 +210,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> () override<
 </div><div class="memdoc">
 
 <p>Infrared Decoding Task. </p>
-<p>This function uses the highDurations in the channel to determine what data has been received. A complete infrared message can only be started by a startConditions; 2400us high signal followed by a low signal for 2400us. When such a highDuration is received the state changes from IDLE to MESSAGE and every used attribute is set to 0. For the next 16 bits a logic 1 is received when the duration is higher than 1200us and a logic 0 if it is lower than 1200us. The real duration for high vs low is 1600 vs 800 but 1200 is a nice switchpoint. If 16 bits have been received it's time to start checking the controlbits; hence the new state is CONTROL. The process described above is repeated 8 times for the controlbits after which the value of the controlbits is calculated. If the received controlbits are equal to the calculated ones, the <a class="el" href="classmessage_listener.html">messageListener</a> is notified of a new message. Else, the value is thrown away. </p>
+<p>This function uses the highDurations in the channel to determine what data has been received. A complete infrared message can only be started by a startConditions; 2400us high signal followed by a low signal for 2400us. When such a highDuration is received the state changes from IDLE to MESSAGE and every used attribute is set to 0. For the next 16 bits a logic 1 is received when the duration is higher than 1200us and a logic 0 if it is lower than 1200us. The real duration for high vs low is 1600 vs 800 but 1200 is a nice switchpoint. If 16 bits have been received it's time to start checking the controlbits; hence the new state is CONTROL. The process described above is repeated 8 times for the controlbits after which the value of the controlbits is calculated. If the received controlbits are equal to the calculated ones, the <a class="el" href="classmessage_listener.html" title="Message Listener. ">messageListener</a> is notified of a new message. Else, the value is thrown away. </p>
 
 </div>
 </div>
@@ -213,7 +221,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> () override<
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 7 2019 09:48:28 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Nov 7 2019 11:13:48 for Taguino by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __INTERFACE_HPP
 #define __INTERFACE_HPP
 
@@ -9,6 +11,10 @@
 #include "display.hpp"
 #include "keypad.hpp"
 
+/// \brief
+/// Interface Manager
+/// \details
+/// This class is responsible for managing an interface; the interfaces are managed by the rotary encoder.
 class interfaceManager : public encoderListener, public rtos::task<> {
 	private:
 		display & Display;

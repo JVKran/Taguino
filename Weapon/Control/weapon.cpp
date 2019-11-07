@@ -1,5 +1,12 @@
+/// @file
+
 #include "weapon.hpp"
 
+/// \brief
+/// Constructor
+/// \details
+/// This constructor has some parameters; the display, handler, game, player and transmitter. These are needed
+/// according to the class diagram. Furthermore some RTOS objects are created.
 weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, infraredTransmitter & irTransmitter):
 	task("Weapon managing task"),
 	Display(Display),
@@ -29,15 +36,27 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	Display.showMagazines(weapon.getAmountOfMags());
 }
 
+/// \brief
+/// Button Pressed
+/// \details
+/// This function puts the id in the buttonsChannel.
 void weaponManager::buttonPressed(const char id){
 	buttonsChannel.write(id);
 }
 
+/// \brief
+/// New Weapon Selected
+/// \details
+/// This function puts the id in the weaponPool.
 void weaponManager::newWeaponSelected(const int id){
 	newWeaponPool.write(id);
 	newWeaponFlag.set();
 }
 
+/// \brief
+/// Select New Weapon
+/// \details
+/// This function prints the right amount of bullets, magazines and weapon.
 void weaponManager::selectNewWeapon(){
 	weaponId = newWeaponPool.read();
 	weapon.setId(weaponId);
@@ -50,6 +69,11 @@ void weaponManager::selectNewWeapon(){
 	Display.showFireMode(0);
 }
 
+/// \brief
+/// Shoot Bullet
+/// \details
+/// This function shoots the bullet if there are bullets remaining and the required period has been passed. It also measures distance
+/// and shoots that.
 void weaponManager::shootBullet(){
 	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
 		dataToSend = 0;
@@ -75,6 +99,11 @@ void weaponManager::shootBullet(){
 	}
 }	
 
+/// \brief
+/// Main
+/// \details
+/// Waits for shootTimer, newWeaponFlag and buttonsChannel. Based on the event and values
+/// actions are taken.
 void weaponManager::main(){
 	for(;;){
 		auto event = wait(buttonsChannel+shootTimer+newWeaponFlag);
