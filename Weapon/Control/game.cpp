@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler.suspend();
 	exchanger.signalOnline();
 	
-	//gameStartSignalReceived(100);
+	gameStartSignalReceived(100);
 	
 }
 
