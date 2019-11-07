@@ -93,7 +93,7 @@ protected:
 public:
 	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal);
 
-	scoreboard Scoreboard = scoreboard(scoreBoardTerminal);
+	scoreboard Scoreboard = scoreboard(scoreBoardTerminal, this);
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
 
@@ -120,6 +120,7 @@ public:
 	void drawSetting();
 
 	void selectedWindow(const int window);
+	int getSelectedWindow();
 	void drawSelectedWindow();
 
 	void showFireMode(const int mode);

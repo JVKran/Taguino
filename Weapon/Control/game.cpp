@@ -165,7 +165,6 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 			break;
 		case 2:
 			Display.Scoreboard.updateScoreBoard(data);
-			Display.Scoreboard.printScoreboard();
 			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;

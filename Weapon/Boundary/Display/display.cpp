@@ -553,6 +553,14 @@ void display::selectedWindow(const int window){
 }
 
 /// \brief
+/// Get Selected Window
+/// \details
+/// This function returns the currently selected window.
+int display::getSelectedWindow(){
+
+}
+
+/// \brief
 /// Draw Selected Window
 /// \details
 /// This function draws the window that has to be drawn. The window to print is equal

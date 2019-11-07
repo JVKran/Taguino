@@ -6,7 +6,8 @@
 /// Constructor
 /// \details
 /// This class sets all elements in the arrays to zero.
-scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
+scoreboard::scoreboard(hwlib::terminal & scoreTerminal, display * Display):
+    Display(Display),
 	scoreTerminal(scoreTerminal)
 {
     for(auto & element : playerNumbers){
