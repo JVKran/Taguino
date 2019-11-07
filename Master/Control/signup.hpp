@@ -7,7 +7,7 @@
 #include "keypad.hpp"
 #include "input.hpp"
 #include "mp3.hpp"
-
+#include "scoreboard.hpp"
 #include "game.hpp"
 
 
@@ -22,7 +22,8 @@ private:
 	NRF24 radio;
 
 	uint8_t assignedWeapons = 1;
-
+	std::array<char, 8> name;
+	int namepos=0 ;
 
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};
@@ -32,9 +33,10 @@ private:
 	mp3Control<2> mp3Player = mp3Control<2>(); 
 	//inputHandler handler;
 	game & Game;
+	scoreboard & board;
 
 public:
-	signUp(NRF24 & radio, inputHandler &handler, game &Game);
+	signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board);
 
 	void startGame(const uint8_t gameTime);
 	virtual void dataReceived(const uint8_t data[], const int len) override;

@@ -171,10 +171,12 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
+			
 			if(data[1] == game->getPlayerData().getPlayerNumber()){
 				game->getPlayerData().setScore(data[2]);
 				Display.showScore(data[2]);
 			}
+			
 			Display.Scoreboard.updateScoreBoard(data);
 
 			// for(int i = 0; i < 32; i++){

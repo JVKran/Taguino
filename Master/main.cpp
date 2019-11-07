@@ -42,7 +42,7 @@ int main( void ){
 
    game gameRunner = game(Display, radio,bord);
    inputHandler handler = inputHandler(inputPollPeriod);
-   signUp signer = signUp(radio,handler,gameRunner); 
+   signUp signer = signUp(radio,handler,gameRunner, bord); 
    interfaceManager interface = interfaceManager(Display, handler, signer, gameRunner);
    radio.addListener(&signer);
    radio.addListener(&gameRunner);

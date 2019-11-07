@@ -14,8 +14,19 @@ scoreboard::scoreboard(){
     for(auto & element : playerScores){
         element = 0;
     }
+	hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
+    
+	for(int i=0; i<32; i++){
+        for(int j=0; j<8; j++){
+            playerNames[i][j]='0';
+        }
+    }
 }
-
+void scoreboard::setName(uint8_t pos,std::array<char,8> naam, int len ){
+    for(int i=0; i<len; i++){
+    playerNames[pos][i]=naam[i];
+    }
+}
 /// \brief
 /// Update Scoreboard
 /// \details
@@ -50,8 +61,12 @@ void scoreboard::updateScoreBoard(const uint8_t data[5]){
 /// This function prints the scoreboard to the display.
 void scoreboard::printScoreboard(){
 	hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-
+    
 	for(int i=0; i<32; i++){
+        for(int j=0; j<8; j++){
+            hwlib::cout<<playerNames[i][j];
+        }
+        
 hwlib::cout << playerNumbers[i] << "\t\t\t" << playerScores[i] << hwlib::endl;
     // hwlib::cout<<int(playerNumbers[1])<<hwlib::endl;
     // hwlib::cout<<int(playerNumbers[2])<<hwlib::endl;

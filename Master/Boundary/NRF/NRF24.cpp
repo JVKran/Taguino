@@ -317,7 +317,7 @@ hwlib::string<8> NRF24::getOutputPower(){
 /************************************************************************************************/
 
 void NRF24::write( uint8_t* value, uint8_t len ){
-
+   HWLIB_TRACE;
    write_payload( value, len );                                                   //writes the payload into the FIFO
    hwlib::wait_ns(20000);                                                         //waits 20 microseconds to send the data
    set_ce( 0 );                                                                   //turns TX mode off

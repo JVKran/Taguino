@@ -7,10 +7,11 @@
 /// Constructor
 /// \details
 /// Starts Lobby music to join game.
-signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game):
+signUp::signUp(NRF24 & radio, inputHandler &handler, game &Game,scoreboard &board):
 	radio(radio),
 	toetsenbord(this),
-	Game(Game)
+	Game(Game),
+	board(board)
 
 
 	{
@@ -31,6 +32,7 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 			radio.write_pipe( transmitAddress );
 			dataToTransmit[0] = 8;					//2 is defined as newScoreMessage
 			dataToTransmit[1] = assignedWeapons;
+				board.setName(assignedWeapons, name, namepos);
 			hwlib::cout << assignedWeapons << "." << hwlib::endl;
 			radio.write( dataToTransmit, amountOfDataToTransmit );
 			radio.read_pipe(receiveAddress);
@@ -49,7 +51,13 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 void signUp::keyPressed(char karakter){
 			//HWLIB_TRACE;
 
-	hwlib::cout<<karakter<<hwlib::endl;
+	name[namepos]= karakter;
+	namepos++;
+	for(int i=0; i<namepos; i++){
+		hwlib::cout<<name[i];
+	}
+	
+
 
 }
 
@@ -71,7 +79,24 @@ void signUp::startGame(const uint8_t gameTime){
 		dataToTransmit[1] = Game.getGameTime();
 		hwlib::cout << "Started game for player " << i << "!" << hwlib::endl;
 		radio.write( dataToTransmit, amountOfDataToTransmit );
+		hwlib::wait_ms(100);
+		transmitAddress[4] = i;
+		radio.write_pipe( transmitAddress );
+		dataToTransmit[0] = 1;					//2 is defined as newScoreMessage
+		dataToTransmit[1] = Game.getGameTime();
+		hwlib::cout << "Started game for player " << i << "!" << hwlib::endl;
+		radio.write( dataToTransmit, amountOfDataToTransmit );
+		hwlib::wait_ms(100);
+				transmitAddress[4] = i;
+		radio.write_pipe( transmitAddress );
+		dataToTransmit[0] = 1;					//2 is defined as newScoreMessage
+		dataToTransmit[1] = Game.getGameTime();
+		hwlib::cout << "Started game for player " << i << "!" << hwlib::endl;
+		radio.write( dataToTransmit, amountOfDataToTransmit );
+		hwlib::wait_ms(100);
+
 	}
 	radio.read_pipe(receiveAddress);
 	radio.powerUp_rx();
+
 }

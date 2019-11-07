@@ -7,7 +7,7 @@
 /// \details
 /// The constructor has several mandatory parameters as defined in the class diagram
 button::button(const int pinNumber, inputHandler* handler, buttonListener * listener, const char id, const int buttonNotToBeSet):
-	task(3, "Input Task"),
+	//task(3, "Input Task"),
 	pinNumber(pinNumber),
 	listener(listener),
 	handler(handler),
