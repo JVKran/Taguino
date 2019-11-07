@@ -6,7 +6,7 @@
 /// \brief
 /// Constructor
 /// \details
-/// Initialize hardware with required values.
+/// This constructor initializes the required registers with the required values.
 buttonRegister::buttonRegister(){
     auto inputpin = hwlib::target::pin_in(hwlib::target::pins::a8);             //make pins input to prevent shorting arduino
     auto inputpin2 = hwlib::target::pin_in(hwlib::target::pins::a9);
@@ -35,7 +35,7 @@ buttonRegister::buttonRegister(){
 /// Refresh Register
 /// \details
 /// This function refreshes the register and stores it in the register variable.
-/// Should be called before read().
+/// Should be called before read() to refresh the register.
 void buttonRegister::refreshregister(){
     registercont = PIOB->PIO_ISR;                   //take content of the interrupt status register and store it in registercont, needed because the registers clears on read
 }
@@ -43,7 +43,8 @@ void buttonRegister::refreshregister(){
 /// \brief
 /// Read pin
 /// \details
-/// This function returns the state of the pin read from the register variable.
+/// This function returns the state of the pin passed as parameter read from the register variable.
+/// Hence the refreshregister() function should be called first.
 bool buttonRegister::read(uint8_t pin){
     if((pin<22&&pin>16)||(pin==15)||(pin==14)){                 //check if button is within range
         return (( registercont & 0x1U << pin ) != 0 );          //read stored copy of the register for given button
@@ -55,7 +56,7 @@ bool buttonRegister::read(uint8_t pin){
 /// \brief
 /// Constructor
 /// \details
-/// This constructor initializes values needed to decode the rotaryEncoder
+/// This constructor initializes the registers with the required values to initialize the Quadrature Decoder.
 rotaryDecoder::rotaryDecoder(){
     // activate peripheral functions for quad pins
     PIOB->PIO_PDR = 1 << 25;     // activate peripheral function 

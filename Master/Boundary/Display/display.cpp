@@ -41,24 +41,32 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newFireModeFlag(this),
 	
 	newFireModePool("New Fire Mode Pool"),
-		scoreTerminal(scoreTerminal)
+	newWindowFlag(this),
+	newWindowPool("New Window Pool"),
+	newSettingFlag(this),
+	newSettingPool("New Setting Pool"),
+	scoreTerminal(scoreTerminal)
 {
 	oled.clear();
 }
 
 /// \brief
-/// ShowBullets
+/// Show Bullets
 /// \details
-/// This function takes the amount of bullets and puts it in a pool. After which it sets a flag.
+/// This function takes the amount of bullets and puts it in a pool after which it sets a flag.
 void display::showBullets(int amountOfBullets){
 	newBulletPool.write(amountOfBullets);
 	newBulletFlag.set();
 }
 
+
 /// \brief
-/// DrawBullets
+/// Draw Bullets
 /// \details
-/// This function just draws the specified amount of bullets if a flag has been set. Called from the mian().
+/// This function just draws the specified amount of bullets if a flag has been set. Called from the main().
+/// If the bullets that have to be printed is less than the amount that currently is printed
+/// the bullets that should desappear are overwritten with black; hence not the entire
+/// window has got to be redrawn.
 void display::drawBullets(const bool draw){
 	amountOfBullets = newBulletPool.read();
 	if((amountOfBullets != lastData.lastBullets && (amountOfBullets < 10 || !maxBulletsDrawn)) || draw == true){
@@ -89,9 +97,10 @@ void display::drawBullets(const bool draw){
 }
 
 /// \brief
-/// Show Health Bar
+/// Show Healthbar
 /// \details
-/// This functions draws the healthbar. Doesn't fill it though. That's what updateHealth() does.
+/// This function draws the outline and heart of the healthbar. It isn't filled
+/// though. That's updateHealth()'s responsibility.
 void display::showHealthBar(){
 	hwlib::line(hwlib::xy(0,2), hwlib::xy(4,6)).draw(healthWindow);
 	hwlib::line(hwlib::xy(4,6), hwlib::xy(8,2)).draw(healthWindow);
@@ -111,7 +120,9 @@ void display::showHealthBar(){
 /// \brief
 /// Upate Health
 /// \details
-/// This constructor draws the amount of health on the display.
+/// This function draws the needed amount of health. If the health that has to be printed is less than the amount that currently is printed
+/// the lines that should desappear are overwritten with black; hence not the entire
+/// window has got to be redrawn.
 void display::updateHealth(){
 	health = newHealthPool.read();
 	if(health < 0 || health > 100){
@@ -136,7 +147,7 @@ void display::updateHealth(){
 /// \brief
 /// ShowHealth
 /// \details
-/// This function puths the health in a pool and sets a flag.
+/// This function puts the health in a pool and sets a flag.
 void display::showHealth(const int health){
 	newHealthPool.write(health);
 	newHealthFlag.set();
@@ -145,7 +156,7 @@ void display::showHealth(const int health){
 /// \brief
 /// Show Magazines
 /// \details
-/// This function puths the amount of magazins in a pool and sets a flag.
+/// This function puts the amount of magazins in a pool and sets a flag.
 void display::showMagazines(int amountOfMagazines){
 	newMagazinePool.write(amountOfMagazines);
 	newMagazineFlag.set();
@@ -191,10 +202,10 @@ void display::drawMagazines(){
 }
 
 /// \brief
-/// ShowWeapon
+/// Show Weapon
 /// \details
-/// This function puts the weapon id in the pool and sets a flag. After this,
-/// the needed weapon is printed after a call from main().
+/// This function puts the weapon that has to be printed in a pool. The parameter is written
+/// in the newWeaponPool after which the flag is set. 
 void display::showWeapon(int weaponID){
 	newWeaponPool.write(weaponID);
 	lastData.lastWeaponId = weaponID;
@@ -202,15 +213,16 @@ void display::showWeapon(int weaponID){
 }
 
 /// \brief
-/// DrawWeapon
+/// Draw Weapon
 /// \details
-/// This function draws the weapon by calling showWeapon with the desired weapon.
+/// This function prints the weapon that has to be printed. The parameter is written
+/// in the newWeaponPool after which the flag is set; this function is called from the main().
 void display::drawWeapon(){
 	showWeapon(lastData.lastWeaponId);
 }
 
 /// \brief
-/// DrawUnknownWeapon
+/// Draw Unknown
 /// \details
 /// Draws a cross if unknown weapon has got to be drawn.
 void display::drawUnknown(){ 
@@ -220,6 +232,10 @@ void display::drawUnknown(){
 	weaponWindow.flush();
 }
 
+/// \brief
+/// Draw Shotgun
+/// \details
+/// This function pints the shotgun.
 void display::drawShotgun(){
 	weaponWindow.clear();
 	hwlib::line(hwlib::xy(0,10), hwlib::xy(12,5)).draw(weaponWindow); 				//recoilPadTop
@@ -236,6 +252,10 @@ void display::drawShotgun(){
 	weaponWindow.flush();
 }
 
+/// \brief
+/// Draw Pistol
+/// \details
+/// This function pints the pistol.
 void display::drawPistol(){
 	weaponWindow.clear();
 
@@ -255,6 +275,10 @@ void display::drawPistol(){
 	weaponWindow.flush();
 }
 
+/// \brief
+/// Draw Sniper
+/// \details
+/// This function pints the Sniper.
 void display::drawSniper(){
 	weaponWindow.clear();
 
@@ -283,6 +307,10 @@ void display::drawSniper(){
 
 }
 
+/// \brief
+/// Draw M16
+/// \details
+/// This function pints the M16.
 void display::drawM16(){
 	weaponWindow.clear();
 
@@ -308,6 +336,10 @@ void display::drawM16(){
 
 }
 
+/// \brief
+/// Draw AK47
+/// \details
+/// This function pints the AK47.
 void display::drawAK(){
 	weaponWindow.clear();
 
@@ -340,7 +372,7 @@ void display::drawAK(){
 }
 
 /// \brief
-/// ShowScore
+/// Show Score
 /// \details
 /// This function puts the score in the pool, sets the flag and when main sees the flag is set
 /// drawScore() is called.
@@ -350,7 +382,7 @@ void display::showScore(const int score){
 }
 
 /// \brief
-/// DrawScore
+/// Draw Score
 /// \details
 /// This function prints the score on the display.
 void display::drawScore(){
@@ -362,9 +394,10 @@ void display::drawScore(){
 }
 
 /// \brief
-/// ShowTime
+/// Show Time
 /// \details
-/// This function puts the required seconds in the required pool and sets a new variable.
+/// This function has two parameters; the remainingSeconds and the totalGameSeconds. These
+/// two are used to determine what part of the clock has to be filled.
 void display::showTime(const double remainingSeconds, double totalGameSeconds){
 
 	//HWLIB_TRACE;
@@ -379,7 +412,7 @@ void display::showTime(const double remainingSeconds, double totalGameSeconds){
 }
 
 /// \brief
-/// DrawTime
+/// Draw Time
 /// \details
 /// This function draws the current remaining time on the screen.
 void display::drawTime(){
@@ -400,14 +433,19 @@ void display::drawTime(){
 }
 
 /// \brief
-/// DrawPowerUp
+/// Show Power-Up
 /// \details
-/// This function draws the powerup on the screen.
+/// This writes the powerUpID in the powerUpPool after which the flag is set.
 void display::showPowerUp(int powerUpID){
 	newPowerUpPool.write(powerUpID);
 	newPowerUpFlag.set();
 }
 
+/// \brief
+/// Draw Power-Up
+/// \details
+/// This function determines what powerup has to be drawn. This is based on the value
+/// in the pool.
 void display::drawPowerUp(){
 	powerUpID = newPowerUpPool.read();
 	if(powerUpID == 0){
@@ -419,6 +457,10 @@ void display::drawPowerUp(){
 	}
 }
 
+/// \brief
+/// Draw Max Ammo
+/// \details
+/// This function prints the max ammo icon.
 void display::drawMaxAmmo(){
 	//Left Bullet
 	hwlib::line(hwlib::xy(4, 5), hwlib::xy(4, 13)).draw(powerUpWindow);
@@ -446,6 +488,10 @@ void display::drawMaxAmmo(){
 	powerUpWindow.flush();
 }
 
+/// \brief
+/// Draw Insta Kill Icon
+/// \details
+/// This function prints icon for insta kill.
 void display::drawInstaKill(){
 	hwlib::line(hwlib::xy(3,0), hwlib::xy(8,0)).draw(powerUpWindow);
 	hwlib::line(hwlib::xy(2,1), hwlib::xy(9,1)).draw(powerUpWindow);
@@ -466,15 +512,21 @@ void display::drawInstaKill(){
 }
 
 /// \brief
-/// SelectedSetting
+/// Selected Setting
 /// \details
 /// Sets a window called by interfaceManager.
 void display::selectedSetting(const int setting){
 	hwlib::cout << "Encoder Pressed while on position " << setting << "." << hwlib::endl;
+	newSettingPool.write(setting);
+	newSettingFlag.set();
+}
 
-	//CIRCLES DO NOT DISAPEAR
-	//WILL HAVE TO ADD THIS WHEN IT'S IMPLEMENTED
-	//EASILY DONE WITH A BLACK CIRCLE
+/// \brief
+/// Draw Setting
+/// \details
+/// Sets a window called by interfaceManager.
+void display::drawSetting(){
+	setting = newSettingPool.read();
 	switch(setting){
 		case 0:
 			//Selected to change weapon
@@ -498,60 +550,22 @@ void display::selectedSetting(const int setting){
 	}
 }
 
-void display::showScoreBoard(){
-	// const char * playerName1 = "Jochem";	//This would usually be received from the master...
- //   playerData player1 = playerData(playerName1, 1, 1);
- //   weaponData weapon1 = weaponData(2);
-
- //   const char * playerName2 = "Stefan"; //This would usually be received from the master...
- //   playerData player2 = playerData(playerName2, 1, 1);
- //   weaponData weapon2 = weaponData(2);
-
- //   const char * playerName3 = "Joshua"; //This would usually be received from the master...
- //   playerData player3 = playerData(playerName3, 1, 1);
- //   weaponData weapon3 = weaponData(2);
-
- //   const char * playerName4 = "Faizal"; //This would usually be received from the master...
- //   playerData player4 = playerData(playerName4, 1, 1);
- //   weaponData weapon4 = weaponData(2);
-
- //   const char * playerName5 = "Menno"; //This would usually be received from the master...
- //   playerData player5 = playerData(playerName5, 1, 1);
- //   weaponData weapon5 = weaponData(2);
-
- //   std::array<playerData,5> players = {player1, player2, player3, player4, player5};
- //   auto window = hwlib::window_part(oled, hwlib::xy(0,0), hwlib::xy(128, 64));
-
-	// auto windowFont 			= hwlib::font_default_8x8();
-	// auto windowName 			= hwlib::window_part(window, hwlib::xy(114, 3), hwlib::xy(122, 12));
-	// auto windowNameTerminal 	= hwlib::terminal_from(windowName, windowFont);
-	// hwlib::circle nameCircle	= hwlib::circle(hwlib::xy(117, 6), 5);
-
-	// auto windowPartFirstPlace 	= hwlib::window_part(window, hwlib::xy(0,10), hwlib::xy(124, 20));
-	// auto windowPartSecondPlace 	= hwlib::window_part(window, hwlib::xy(0,21), hwlib::xy(124, 31));
-	// auto windowPartThirdPlace 	= hwlib::window_part(window, hwlib::xy(0,32), hwlib::xy(124, 42));
-	// auto windowPartFourthPlace 	= hwlib::window_part(window, hwlib::xy(0,43), hwlib::xy(124, 53));
-	// auto windowPartFifthPlace 	= hwlib::window_part(window, hwlib::xy(0,54), hwlib::xy(124, 64));
-
-	// auto terminalFirstPlace 	= hwlib::terminal_from(windowPartFirstPlace, windowFont);
-	// auto terminalSecondPlace 	= hwlib::terminal_from(windowPartSecondPlace, windowFont);
-	// auto terminalThirdPlace 	= hwlib::terminal_from(windowPartThirdPlace, windowFont);
-	// auto terminalFourthPlace 	= hwlib::terminal_from(windowPartFourthPlace, windowFont);
-	// auto terminalFifthPlace 	= hwlib::terminal_from(windowPartFifthPlace, windowFont);
-
-
-	// terminalFirstPlace 	<< hwlib::left <<hwlib::setw(11) << players[0].getName() << players[0].getScore();
-	// terminalSecondPlace << hwlib::left <<hwlib::setw(11) << players[1].getName() << players[1].getScore();
-	// terminalThirdPlace 	<< hwlib::left <<hwlib::setw(11) << players[2].getName() << players[2].getScore();
-	// terminalFourthPlace << hwlib::left <<hwlib::setw(11) << players[3].getName() << players[3].getScore();
-	// terminalFifthPlace 	<< hwlib::left <<hwlib::setw(11) << players[4].getName() << players[4].getScore();
-	
-	// windowNameTerminal 	<< 'B';
-	// windowNameTerminal.flush();
-	// nameCircle.draw(oled);
+/// \brief
+/// Selected Window
+/// \details
+/// The parameter is written in a pool after which a flag is set.
+void display::selectedWindow(const int window){
+	newWindowPool.write(window);
+	newWindowFlag.set();
 }
 
-void display::selectedWindow(const int window){
+/// \brief
+/// Draw Selected Window
+/// \details
+/// This function draws the window that has to be drawn. The window to print is equal
+/// to the value in windowPool.
+void display::drawSelectedWindow(){
+	window = newWindowPool.read();
 	switch(window){
 		case 0:
 			currentlySelectedWindow = 0;
@@ -576,11 +590,19 @@ void display::selectedWindow(const int window){
 	}
 }
 
+/// \brief
+/// Show Fire Mode
+/// \details
+/// This function puts the parameter in the fireModePool after which a flag is set.
 void display::showFireMode(const int mode){
 	newFireModePool.write(mode);
 	newFireModeFlag.set();
 }
 
+/// \brief
+/// Draw Fire Mode
+/// \details
+/// This function prints the fire mode in the oled.
 void display::drawFireMode(){
 	fireMode = newFireModePool.read();
 	fireModeWindow.clear();
@@ -611,12 +633,13 @@ void display::drawFireMode(){
 	fireModeWindow.flush();
 }
 
+/// \brief
+/// Main
+/// \details
+/// Waits for all flags; if a flag is set the action is executed.
 void display::main(){
 	for(;;){
-				//HWLIB_TRACE;
-
-		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag);
-		//hwlib::cout<<"display "<<event<<hwlib::endl;
+		auto event = wait(newBulletFlag+newMagazineFlag+newHealthFlag+/*newScoreBoardFlag+*/newTimeFlag+newPowerUpFlag+newScoreFlag+newWeaponFlag+newFireModeFlag+newWindowFlag+newSettingFlag);
 		if(event == newBulletFlag){
 			drawBullets(false);
 		} else if (event == newMagazineFlag){
@@ -631,6 +654,10 @@ void display::main(){
 			drawScore();
 		} else if (event == newFireModeFlag){
 			drawFireMode();
+		} else if (event == newWindowFlag){
+			drawSelectedWindow();
+		} else if (event == newSettingFlag){
+			drawSetting();
 		} else if (event == newWeaponFlag){
 			weaponId = newWeaponPool.read();
 			switch(weaponId){

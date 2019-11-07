@@ -1,3 +1,5 @@
+/// @file
+
 #ifndef __DISPLAY_HPP
 #define __DISPLAY_HPP
 
@@ -7,6 +9,11 @@
 #include "scoreboard.hpp"
 #include "applicationLogic.hpp"
 
+/// \brief
+/// Display
+/// \details
+/// This class is responsible for everything related to the OLED; Displaying the currently selected weapon,
+/// remaining game time, amount of health, bullets and magazines, current score and enabled power-ups.
 class display : public rtos::task<> {
 protected:
 	hwlib::glcd_oled & oled;
@@ -71,6 +78,14 @@ protected:
 	rtos::flag newFireModeFlag;
 	rtos::pool<int> newFireModePool;
 	int fireMode;
+
+	rtos::flag newWindowFlag;
+	rtos::pool<int> newWindowPool;
+	int window;
+
+	rtos::flag newSettingFlag;
+	rtos::pool<int> newSettingPool;
+	int setting;
 public:
 	hwlib::terminal_from scoreTerminal;
 		int currentlySelectedWindow = 0;
@@ -90,8 +105,6 @@ public:
 	void showWeapon(int weaponID);
 	void drawWeapon();
 
-	void showScoreBoard();
-
 	void showScore(const int score);
 	void drawScore();
 
@@ -102,7 +115,10 @@ public:
 	void drawPowerUp();
 
 	void selectedSetting(const int setting);
+	void drawSetting();
+
 	void selectedWindow(const int window);
+	void drawSelectedWindow();
 
 	void showFireMode(const int mode);
 	void drawFireMode();
