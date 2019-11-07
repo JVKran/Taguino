@@ -3,10 +3,10 @@
 scoreboard::scoreboard(hwlib::terminal & scoreTerminal):
 	scoreTerminal(scoreTerminal)
 {
-    for(auto element : playerNumbers){
+    for(auto & element : playerNumbers){
         element = 0;
     }
-    for(auto element : playerScores){
+    for(auto & element : playerScores){
         element = 0;
     }
 }
@@ -34,17 +34,15 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
 }
 
 void scoreboard::printScoreboard(){
-    hwlib::cout<<int(playerNumbers[0])<<hwlib::endl;
-    hwlib::cout<<int(playerNumbers[1])<<hwlib::endl;
-    hwlib::cout<<int(playerNumbers[2])<<hwlib::endl;
-    hwlib::cout<<int(playerNumbers[3])<<hwlib::endl;
-    hwlib::cout<<int(playerNumbers[4])<<hwlib::endl;
 
-    scoreTerminal <<
-    int(playerNumbers[0])<<'\t'<<int(playerNumbers[0])<<'\n'<<
-    int(playerNumbers[1])<<'\t'<<int(playerNumbers[1])<<'\n'<<
-    int(playerNumbers[2])<<'\t'<<int(playerNumbers[2])<<'\n'<<
-    int(playerNumbers[3])<<'\t'<<int(playerNumbers[3])<<'\n'<<
-    int(playerNumbers[4])<<'\t'<<int(playerNumbers[4])<<'\n'<<
+    scoreTerminal
+    << hwlib::left <<hwlib::setw(10) << int(playerNumbers[0])<<int(playerScores[0])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[1])<<int(playerScores[1])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[2])<<int(playerScores[2])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[3])<<int(playerScores[3])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[4])<<int(playerScores[4])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[5])<<int(playerScores[5])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[6])<<int(playerScores[6])<<'\n'<<
+    hwlib::left << hwlib::setw(10) << int(playerNumbers[7])<<int(playerScores[7])<<'\n'<<
     hwlib::flush;
 }
