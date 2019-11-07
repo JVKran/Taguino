@@ -23,7 +23,8 @@ private:
 
 	uint8_t assignedWeapons = 1;
 	std::array<char, 8> name;
-	int namepos=0 ;
+	int namePos = 0;
+	int assignedNames = 0;
 
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 	uint8_t receiveAddress[5] = {0, 0, 0, 0, 0};

@@ -37,8 +37,8 @@ int main( void ){
 
    NRF24 radio = NRF24(spiBus, ce, csn, radioPollPeriod, addressToListenTo);
    display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal);
-      scoreboard bord;
-      bord.printScoreboard();
+   scoreboard bord;
+   bord.printScoreboard();
 
    game gameRunner = game(Display, radio,bord);
    inputHandler handler = inputHandler(inputPollPeriod);

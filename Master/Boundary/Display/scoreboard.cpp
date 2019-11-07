@@ -35,7 +35,6 @@ void scoreboard::setName(uint8_t pos,std::array<char,8> naam, int len ){
 void scoreboard::updateScoreBoard(const uint8_t data[5]){
     bool insert=true;
     for(int j = 0; j < 32; j++){
-		//hwlib::cout<<"data "<<data[1]<<"   "<<j<<"   "<<data[2]<<hwlib::endl;
         if(playerNumbers[j] == data[1]){
             playerScores[j] += data[2];
             insert=false;
@@ -53,6 +52,8 @@ void scoreboard::updateScoreBoard(const uint8_t data[5]){
             }
         }
     }
+
+    bubbleSort(playerNumbers, playerScores,31);
 }
 
 /// \brief
@@ -63,21 +64,13 @@ void scoreboard::printScoreboard(){
 	hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
     
 	for(int i=0; i<32; i++){
-        for(int j=0; j<8; j++){
-            hwlib::cout<<playerNames[i][j];
+        for(const auto & element : playerNames[i]){
+            if(element != '0'){
+                hwlib::cout << char(element);
+            } else {
+                break;
+            }
         }
-        
-hwlib::cout << playerNumbers[i] << "\t\t\t" << playerScores[i] << hwlib::endl;
-    // hwlib::cout<<int(playerNumbers[1])<<hwlib::endl;
-    // hwlib::cout<<int(playerNumbers[2])<<hwlib::endl;
-    // hwlib::cout<<int(playerNumbers[3])<<hwlib::endl;
-    // hwlib::cout<<int(playerNumbers[4])<<hwlib::endl;
+        hwlib::cout << "\t\t\t" << playerScores[i] << hwlib::endl;
 	}
-    // scoreTerminal <<
-    // int(playerNumbers[0])<<'\t'<<int(playerNumbers[0])<<'\n'<<
-    // int(playerNumbers[1])<<'\t'<<int(playerNumbers[1])<<'\n'<<
-    // int(playerNumbers[2])<<'\t'<<int(playerNumbers[2])<<'\n'<<
-    // int(playerNumbers[3])<<'\t'<<int(playerNumbers[3])<<'\n'<<
-    // int(playerNumbers[4])<<'\t'<<int(playerNumbers[4])<<'\n'<<
-    // hwlib::flush;
 }

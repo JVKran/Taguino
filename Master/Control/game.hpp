@@ -34,7 +34,7 @@ private:
 	uint8_t transmitAddress[5] = {0, 0, 0, 0, 0};
 
 	uint8_t assignedWeapons = 1;
-	scoreboard board;
+	scoreboard & board;
 
 public:
 	void setgametime(int time);
