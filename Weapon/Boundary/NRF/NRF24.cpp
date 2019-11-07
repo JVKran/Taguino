@@ -26,7 +26,6 @@ void NRF24::main(){
             radioListeners[i]->dataReceived(receivedData, amountOfBytes);
          }
          flush_rx();                                             //empties the RX FIFO
-         
       }
    }
 }

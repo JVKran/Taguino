@@ -7,7 +7,6 @@
 #include "hwlib.hpp"
 #include "rtos.hpp"
 #include "entities.hpp"
-#include "scoreboard.hpp"
 #include "applicationLogic.hpp"
 
 class display;
@@ -86,9 +85,6 @@ protected:
 	int health;
 	rtos::pool<int> newHealthPool;
 
-	//rtos::flag newScoreBoardFlag;
-	//rtos::pool<scoreboard> newScoreBoardPool;
-
 	rtos::flag newTimeFlag;
 	rtos::pool<double> newTimePool;
 	double totalGameTime = 0;
@@ -130,7 +126,7 @@ public:
 	void drawScore();
 
 	void showTime(const double remainingSeconds, double totalGameSeconds = 0);
-	void drawTime();
+	void drawTime(const bool forceOverwrite = false);
 
 	void showPowerUp(int powerUpID);
 	void drawPowerUp();

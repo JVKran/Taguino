@@ -51,7 +51,6 @@ void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
 	updateClockTimer.set((gameSeconds / 100 )* 1'000'000);
 	Display.showHealthBar();
 	Display.showFireMode(0);
-	//Display.showScore(player.getScore());
 }
 
 /// \brief
@@ -161,17 +160,18 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	switch(data[0]){
 		case 1:
 			game->gameStartSignalReceived(data[1]);
+			Display.drawTime(true);
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
 			Display.Scoreboard.updateScoreBoard(data);
 			break;
 		case 3:
-			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
+			hwlib::cout << "InfiniteBullets Activated." << hwlib::endl;
 			Display.showPowerUp(0);
 			break;
 		case 4:
-			hwlib::cout << "InstaDeath Activated" << hwlib::endl;
+			hwlib::cout << "InstaDeath Activated." << hwlib::endl;
 			Display.showPowerUp(1);
 			break;
 		case 6:
@@ -184,6 +184,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 					board.playerNames[signedUpPlayers][i - 2] = char(data[i]);
 				}
 			}
+			hwlib::cout << "." << hwlib::endl;
 			signedUpPlayers++;
 			break;
 		case 7:

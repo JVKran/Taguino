@@ -33,8 +33,6 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newMagazinePool("New Magazine Pool"),
 	newHealthFlag(this),
 	newHealthPool("New Health Pool"),
-	//newScoreBoardFlag(this),
-	//newScoreBoardPool("New Scoreboard Pool"),
 	newTimeFlag(this),
 	newTimePool("New Time Pool"),
 	newPowerUpFlag(this),
@@ -409,7 +407,10 @@ void display::showTime(const double remainingSeconds, double totalGameSeconds){
 /// Draw Time
 /// \details
 /// This function draws the current remaining time on the screen.
-void display::drawTime(){
+void display::drawTime(const bool forceOverwrite){
+	if(forceOverwrite){
+		timeWindow.clear();
+	}
 	if(currentlySelectedWindow == 0){
 		remainingSeconds = newTimePool.read();
 		hwlib::circle(hwlib::xy(10,10), 10).draw(timeWindow);
@@ -682,8 +683,5 @@ void display::main(){
 					drawUnknown();
 			}
 		}
-		/*else if (event == newScoreBoardFlag){
-
-		} */
 	}
 }

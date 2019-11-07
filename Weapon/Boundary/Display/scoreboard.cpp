@@ -43,7 +43,9 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
             }
         }
     }
+
     bubbleSort(playerNumbers, playerScores,31);
+    
     if(Display->getSelectedWindow() == 1){
         printScoreboard();
     }

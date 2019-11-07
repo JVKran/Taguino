@@ -30,10 +30,15 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	handler.addButton(&rightManualButton);
 	handler.addButton(&autoButton);	
 	handler.addButton(&burstButton);
+	HWLIB_TRACE;
 	handler.addButton(&triggerReleaseButton);
-	Display.showBullets(weapon.getAmountOfBullets());
-	Display.showWeapon(weapon.getId());	
+	HWLIB_TRACE;
 	Display.showMagazines(weapon.getAmountOfMags());
+	HWLIB_TRACE;
+	Display.showWeapon(weapon.getId());	
+	HWLIB_TRACE;
+	Display.showBullets(weapon.getAmountOfBullets());
+	HWLIB_TRACE;
 }
 
 /// \brief
