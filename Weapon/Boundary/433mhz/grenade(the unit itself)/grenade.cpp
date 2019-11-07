@@ -84,9 +84,12 @@ void exchangeGrenadeData::explode( uint8_t player, uint8_t damage ){
 void exchangeGrenadeData::main(){
 	state = states::IDLE;
 	for(;;){
+		HWLIB_TRACE;
 		switch(state){
 			case states::IDLE:
+				HWLIB_TRACE;
 				wait( buttonFlag );
+				HWLIB_TRACE;
 				state = states::ACTIVE;
 				break;
 			case states::ACTIVE:
@@ -105,6 +108,7 @@ void exchangeGrenadeData::main(){
 				state = states::END;
 				break;
 			case states::END:
+			HWLIB_TRACE;
 				stop=true;
 				break;
 		}
