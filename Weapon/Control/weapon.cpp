@@ -75,7 +75,7 @@ void weaponManager::selectNewWeapon(){
 /// This function shoots the bullet if there are bullets remaining and the required period has been passed. It also measures distance
 /// and shoots that.
 void weaponManager::shootBullet(){
-	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10))){
+	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)) && game.getPlayerData().getHealth() > 0){
 		dataToSend = 0;
 		dataToSend |= (game.getPlayerData().getPlayerNumber() << 10);
 		dataToSend |= (weapon.getId() << 6);

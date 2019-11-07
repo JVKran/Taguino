@@ -160,47 +160,12 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
 void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	switch(data[0]){
 		case 1:
-			// for(int i = 0; i < signedUpPlayers; i++){
-			// 	hwlib::cout << "Player " << board.playerNumbers[i] << ": ";
-			// 	for(int j = 0; j < 8; j++){
-			// 		hwlib::cout << board.playerNames[i][j];
-			// 	}
-			// 	hwlib::cout << hwlib::endl;
-			// }
 			game->gameStartSignalReceived(data[1]);
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
 			break;
 		case 2:
-			if(data[1] == game->getPlayerData().getPlayerNumber()){
-				game->getPlayerData().setScore(data[2]);
-				Display.showScore(data[2]);
-			}
 			Display.Scoreboard.updateScoreBoard(data);
-
-			// for(int i = 0; i < 32; i++){
-			// 	if(board.playerNumbers[i] == data[1]){
-			// 		board.playerScores[i] += data[2];
-			// 		break;
-			// 	}
-			// 	if(i == 31){
-			// 		for(int i = 0; i < 31; i++){
-			// 			if(board.playerScores[i] < data[2]){
-			// 				for(int j = 32; j >= i; j--){
-			// 					board.playerScores[j] = board.playerScores[j - 1];
-			// 					board.playerNumbers[j] = board.playerNumbers[j - 1];
-			// 				}
-			// 				board.playerScores[i] = data[2];
-			// 				board.playerNumbers[i] = data[1];
-			// 				break;
-			// 			}
-			// 		}
-			// 	}
-			// }
-			bubbleSort(Display.Scoreboard.playerNumbers, Display.Scoreboard.playerScores,30);
-			// hwlib::cout << "Playernumber\t\t\tScore" << hwlib::endl;
-			// for(int i = 0; i < 31; i++){
-			// 	hwlib::cout << int(board.playerNumbers[i]) << "\t\t\t" << int(board.playerScores[i]) << hwlib::endl;
-   //      		}
+			Display.Scoreboard.printScoreboard();
 			break;
 		case 3:
 			hwlib::cout << "InfiniteBullets Activated" << hwlib::endl;
