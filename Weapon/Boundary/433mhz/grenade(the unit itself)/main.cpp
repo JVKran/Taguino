@@ -32,6 +32,7 @@ int main(){
 	exchangeGrenadeData grenade = exchangeGrenadeData( radio, mhz, handler );
 
 	radio.addListener(&grenade);
+	hwlib::cout<<"start\n";
 	
 	rtos::run();
 	

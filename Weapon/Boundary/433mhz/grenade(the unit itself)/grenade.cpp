@@ -82,7 +82,7 @@ void exchangeGrenadeData::explode( uint8_t player, uint8_t damage ){
 };
 
 void exchangeGrenadeData::sendNrf(){
-   radio.write_pipe( receiveAddress );                                         //sets the pipe, address and payload size
+   radio.write_pipe( transmitAddress );                                         //sets the pipe, address and payload size
    radio.powerDown_rx();    
 	
    uint8_t newValue[5] = { 12, 0, 0, 0, 0 }; 
@@ -90,6 +90,7 @@ void exchangeGrenadeData::sendNrf(){
 	
    hwlib::cout<<"Send NRF\n";
    radio.write(newValue, len);
+	//hwlib::wait_ms(2000);
    radio.flush_tx();
    
    radio.read_pipe(receiveAddress);                                        //sets the pipe, address and payload size
