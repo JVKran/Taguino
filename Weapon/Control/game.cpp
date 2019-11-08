@@ -21,11 +21,8 @@ runGame::runGame(display & Display, playerData & player, hwlib::spi_bus_bit_bang
 	handler(handler)
 {
 	handler.suspend();
-	//hwlib::wait_ms(500);
 	exchanger.signalOnline();
-	
-	//gameStartSignalReceived(100);
-	
+	gameStartSignalReceived(20);
 }
 
 /// \brief
@@ -214,6 +211,9 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	   			startupAddress[4] = 0;
 				
 			}
+			game->gameStartSignalReceived(200);
+			Display.drawTime(true);
+			hwlib::cout << "Game started with a game duration of " << 2000 << " seconds!" << hwlib::endl;
 			break;
 	}
 }

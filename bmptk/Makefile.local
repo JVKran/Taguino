@@ -81,11 +81,7 @@ else
    
    # serial port defaults
    #SERIAL_PORT_DUE      ?= /dev/ttyUSB0
-<<<<<<< HEAD
-	SERIAL_PORT_DUE      ?= /dev/ttyUSB0
-=======
-	SERIAL_PORT_DUE      ?= /dev/ttyACM1
->>>>>>> c0722f2e7c67add756d9d8bcbf35001f3d5eeed8
+	SERIAL_PORT_DUE      ?= /dev/ttyACM0
 
    SERIAL_PORT_UNO      := /dev/ttyUSB0
 
