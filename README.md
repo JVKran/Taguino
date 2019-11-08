@@ -9,6 +9,10 @@ has an MP3 player to play suitable audio; lobby music while all players are sign
 
 The weapon can select the weapontype and firemode, or to display the scoreboard. Furthermore, also the health, amount of bullets and magazines and remaining time is printed on the display.
 
+A brief showcase of the functioning of the weapon can be seen [here](https://youtu.be/YKAxMUS9iD8 "Lasergame Showcase"). The entire program is built upon [HWLIB](https://github.com/wovo/hwlib), [BMPTK](https://github.com/wovo/bmptk) and [RTOS](https://github.com/wovo/rtos).
+
+The RTOS (Realtime Operating System) consists of tasks with priorities and concurrency mechanisms; pools, channels, flags, timers and clocks. All tasks are asynchronic; the used system uses cooperative multitasking.
+
 ### Gameleader
 The gameleader is built with the following components:
 - Keypad
