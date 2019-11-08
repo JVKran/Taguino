@@ -21,9 +21,10 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler(handler)
 {
 	handler.suspend();
+	//hwlib::wait_ms(500);
 	exchanger.signalOnline();
 	
-	gameStartSignalReceived(100);
+	//gameStartSignalReceived(100);
 	
 }
 
@@ -162,8 +163,11 @@ void exchangeGameData::updateScore(const uint8_t playerNumber, const uint8_t dea
 /// Case 6 means that a new player has signed up.
 /// Case 7 means that all powerups have been disabled.
 void exchangeGameData::dataReceived(uint8_t data[10], const int len){
+			//hwlib::cout<<data[0]<<hwlib::endl;
 	switch(data[0]){
+
 		case 1:
+			HWLIB_TRACE;
 			game->gameStartSignalReceived(data[1]);
 			Display.drawTime(true);
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
