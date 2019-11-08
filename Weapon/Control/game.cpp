@@ -10,11 +10,11 @@
 /// exchangeGameData object because runGame is the only object controlling it, an inputHandler Task to suspend and resume the possibility to shoot
 /// and a weaponNumber which is initialized in the main().
 /// After constructing the inputHanlder is suspended to prevent shooting and getting hit and the master is informed about this specific weapon beeing online.
-runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber):
+runGame::runGame(display & Display, playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber):
 	task(6, "Run Game"),
 	Display(Display),
 	player(player),
-	exchanger(exchangeGameData(Display, this, spiBus, duration, weaponNumber)),
+	exchanger(exchangeGameData(Display, this, spiBus, duration, weaponNumber, player)),
 	secondClock(this, 1'000'000, "Second Clock for Timekeeping"),		//Secondclock fires every second
 	receivedDataChannel(this, "Received Data Channel"),
 	updateClockTimer(this, "Update Clock Timer"),
@@ -23,7 +23,7 @@ runGame::runGame(display & Display, const playerData & player, hwlib::spi_bus_bi
 	handler.suspend();
 	exchanger.signalOnline();
 	
-	gameStartSignalReceived(100);
+	//gameStartSignalReceived(100);
 	
 }
 
@@ -99,9 +99,10 @@ void runGame::main(){
 /// \details
 /// This function has several mandatory parameters. A display for the socreboard, a game to get temporary playerData, 
 /// an SPI-Bus for the NRF24L01+, a duration that specifies the NRF24L01+'s poll period and a weaponNumber that's specified in the main().
-exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber):
+exchangeGameData::exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber, playerData & player):
 	Display(Display),
 	game(game),
+	player(player),
 	weaponNumber(weaponNumber),
 	radio(NRF24(spiBus, ce, csn, duration, game->getPlayerData().getPlayerNumber()))
 {

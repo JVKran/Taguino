@@ -30,9 +30,8 @@ class weaponManager : public buttonListener, public rtos::task<> {
 
 		infraredTransmitter & irTransmitter;
 		uint16_t dataToSend;
-
-		runGame & game;
-		const playerData & player;
+		
+		playerData & player;
 
 		bool autoFireMode = false;
 
@@ -59,7 +58,7 @@ class weaponManager : public buttonListener, public rtos::task<> {
 		rtos::pool<int> newWeaponPool;
 		int weaponId;
 	public:
-		weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player,  infraredTransmitter & irTransmitter);
+		weaponManager(display & Display, inputHandler & handler, playerData & player,  infraredTransmitter & irTransmitter);
 		virtual void buttonPressed(const char id) override;
 
 		void newWeaponSelected(const int id);

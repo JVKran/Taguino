@@ -1,14 +1,16 @@
 /// @file
 
 #include "display.hpp"
+#include "game.hpp"
 
 /// \brief
 /// Constructor
 /// \details
 /// This class sets all elements in the arrays to zero.
-scoreboard::scoreboard(hwlib::terminal & scoreTerminal, display * Display):
+scoreboard::scoreboard(hwlib::terminal & scoreTerminal, display * Display, playerData & player):
     scoreTerminal(scoreTerminal),
-    Display(Display)
+    Display(Display),
+    player(player)
 {
     for(auto & element : playerNumbers){
         element = 0;
@@ -45,9 +47,15 @@ void scoreboard::updateScoreBoard(uint8_t data[5]){
     }
 
     bubbleSort(playerNumbers, playerScores,31);
-    
     if(Display->getSelectedWindow() == 1){
         printScoreboard();
+    }
+    playerNumber = player.getPlayerNumber();
+    for(unsigned int i = 0; i < 32; i++){
+        if(playerNumbers[i] == playerNumber){
+            Display->showScore(playerScores[i]);
+            break;
+        }
     }
 }
 
@@ -66,4 +74,13 @@ void scoreboard::printScoreboard(){
     hwlib::left << hwlib::setw(10) << int(playerNumbers[25])<<int(playerScores[25])<<'\n'<<
     hwlib::left << hwlib::setw(10) << int(playerNumbers[24])<<int(playerScores[24])<<'\n'<<
     hwlib::flush;
+}
+
+uint8_t scoreboard::getScore(){
+    for(unsigned int i = 0; i < 32; i++){
+        if(playerNumbers[i] == playerNumber){
+            return playerScores[i];
+        }
+    }
+    return 0;
 }

@@ -42,14 +42,14 @@ int main( void ){
    const long long int radioPollPeriod = 100'000;
    
    playerData player = playerData();
-   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal);
    weaponData weapon = weaponData(2);
    inputHandler handler = inputHandler(inputPollPeriod);                   //Period to poll register with buttonstates
+   display Display = display(oled, xCoordinates, yCoordinates, scoreWindow, scoreTerminal, scoreBoardTerminal, player);
    runGame game = runGame(Display, player, spiBus, radioPollPeriod, handler, weaponNumber);
    infraredDecoder decoder = infraredDecoder(game);
    infraredReceiver receiver = infraredReceiver(decoder, infraredPollPeriod);
    infraredTransmitter Transmitter = infraredTransmitter(infraredTransmitPeriod);
-   weaponManager gunManager = weaponManager(Display, handler, game, player, Transmitter);
+   weaponManager gunManager = weaponManager(Display, handler, player, Transmitter);
    interfaceManager interface = interfaceManager(Display, handler, gunManager);
 
    hwlib::cout << "Weapon Started!" << hwlib::endl;

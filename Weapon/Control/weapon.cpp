@@ -5,9 +5,9 @@
 /// \brief
 /// Constructor
 /// \details
-/// This constructor has some parameters; the display, handler, game, player and transmitter. These are needed
+/// This constructor has some parameters; the display, handler, player and transmitter. These are needed
 /// according to the class diagram. Furthermore some RTOS objects are created.
-weaponManager::weaponManager(display & Display, inputHandler & handler, runGame & game, playerData & player, infraredTransmitter & irTransmitter):
+weaponManager::weaponManager(display & Display, inputHandler & handler, playerData & player, infraredTransmitter & irTransmitter):
 	task(7, "Weapon managing task"),
 	Display(Display),
 	triggerButton(button(17, &handler, this, 'T')),
@@ -18,7 +18,6 @@ weaponManager::weaponManager(display & Display, inputHandler & handler, runGame 
 	rightManualButton(button(21, &handler, this, 'M', 18)),
 	handler(handler),
 	irTransmitter(irTransmitter),
-	game(game),
 	player(player),
 	shootTimer(this, "Shoot Timer"),
 	buttonsChannel(this, "Pressed Buttons Channel"),
@@ -75,10 +74,10 @@ void weaponManager::selectNewWeapon(){
 /// This function shoots the bullet if there are bullets remaining and the required period has been passed. It also measures distance
 /// and shoots that.
 void weaponManager::shootBullet(){
-	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)) && game.getPlayerData().getHealth() > 0){
+	if(weapon.getAmountOfBullets() > 0 && hwlib::now_us() - lastShot > (1'000'000 / (weapon.maxShotsPerTenSeconds() / 10)) && player.getHealth() > 0){
 		hwlib::cout << "Shot Bullet!" << hwlib::endl;
 		dataToSend = 0;
-		dataToSend |= (game.getPlayerData().getPlayerNumber() << 10);
+		dataToSend |= (player.getPlayerNumber() << 10);
 		dataToSend |= (weapon.getId() << 6);
 		if(hwlib::now_us() - lastShot > 1'000'000){
 			measuredDistance = distanceSensor.getDistance();  //Need one more bit so substract the biggest one
