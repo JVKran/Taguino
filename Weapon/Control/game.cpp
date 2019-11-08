@@ -45,6 +45,7 @@ void runGame::messageReceived(const uint16_t data){
 }
 
 void runGame::gameStartSignalReceived(const uint8_t timeToPlay){
+	HWLIB_TRACE;
 	handler.resume();
 	gameSeconds = timeToPlay * 10;
 	remainingSeconds = timeToPlay * 10;
@@ -167,7 +168,7 @@ void exchangeGameData::dataReceived(uint8_t data[10], const int len){
 	switch(data[0]){
 
 		case 1:
-			HWLIB_TRACE;
+			//HWLIB_TRACE;
 			game->gameStartSignalReceived(data[1]);
 			Display.drawTime(true);
 			hwlib::cout << "Game started with a game duration of " << data[1] * 10 << " seconds!" << hwlib::endl;
