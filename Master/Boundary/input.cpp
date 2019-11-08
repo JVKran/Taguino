@@ -35,7 +35,7 @@ void button::update(){
 /// \details
 /// The constructor has several mandatory parameters for RTOS tasks.
 inputHandler::inputHandler(unsigned long long int period, const char * name):
-	task(2, name),
+	task(6, name),
 	updateClock(this, period, "Update Clock")
 {
 	buttonInterrupter.refreshregister();

@@ -7,7 +7,7 @@
 /// \details
 /// Starts Game for all online weapons based on protocol as defined in documentation.
 game::game(display & Display, NRF24 & radio, scoreboard &board):
-	task(1,"gamerunning"),
+	task(7,"gamerunning"),
 	Display(Display),
 	radio(radio),
 	secondClock(this, 1'000'000, "Second Clock for time keeping"),
