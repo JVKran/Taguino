@@ -74,9 +74,15 @@ private:
 	
 	rtos::flag buttonFlag;
 	
+	
+	
+	uint8_t receiveAddress[5] = {0, 0, 0, 0, 1};
+	uint8_t transmitAddress[5] = {0, 0, 0, 0, 101};
+	
 	uint8_t storedData[5] = { 0, 0, 0, 0, 0 };
-	uint8_t receiveAddress[5] = {0, 0, 0, 0, 101};
-	uint8_t transmitAddress[5] = {0, 0, 0, 0, 102};
+	uint8_t transmitValue[5] = { 12, 0, 0, 0, 0 }; 
+   	uint8_t len =5;
+	
 	bool stop=0;
 	
 	enum class states{ IDLE, ACTIVE, EXPLODE, END };

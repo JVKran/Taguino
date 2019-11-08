@@ -82,16 +82,14 @@ void exchangeGrenadeData::explode( uint8_t player, uint8_t damage ){
 };
 
 void exchangeGrenadeData::sendNrf(){
+	 hwlib::cout<<"Send NRF\n";
    radio.write_pipe( transmitAddress );                                         //sets the pipe, address and payload size
    radio.powerDown_rx();    
 	
-   uint8_t newValue[5] = { 12, 0, 0, 0, 0 }; 
-   int len =5;
-	
-   hwlib::cout<<"Send NRF\n";
-   radio.write(newValue, len);
-	//hwlib::wait_ms(2000);
-   radio.flush_tx();
+  
+   radio.write( transmitValue, len);
+   // radio.flush_tx();
+   //hwlib::wait_ms(2000);
    
    radio.read_pipe(receiveAddress);                                        //sets the pipe, address and payload size
    radio.powerUp_rx(); 
@@ -103,14 +101,13 @@ void exchangeGrenadeData::main(){
 	auto start = hwlib::now_us();
 	auto end = hwlib::now_us();
 	for(;;){
-		if(stop){ break; }
-		
 		switch(state){
 			
 			case states::IDLE:
-				
 				wait( buttonFlag );
 				state = states::ACTIVE;
+				break;
+				
 				break;
 				
 			case states::ACTIVE:
@@ -122,16 +119,18 @@ void exchangeGrenadeData::main(){
 				start = hwlib::now_us();
 				
 				for(;;){
-					
-					if( (end-start) >= 2'000'000){ 
+					end = hwlib::now_us();
+					if( (end-start) > 4'000'000){ 
+						hwlib::cout<<"Idle\n";
 						state = states::IDLE; 
 						break; 
 					}
 					if( storedData[0] == 13){
+						hwlib::cout<<"explode\n";
 						state = states::EXPLODE;
 						break;
 					}
-					end = hwlib::now_us();
+					
 				}
 
 				break;
@@ -144,9 +143,7 @@ void exchangeGrenadeData::main(){
 				break;
 				
 			case states::END:
-
-				stop=true;
-				break;
+				break;//Do nothing
 		}
 		
 	}
