@@ -21,7 +21,7 @@ private:
   display & Display;
   runGame * game;
 
-  playerData player;
+  playerData & player;
 
   const uint8_t weaponNumber;
 
@@ -40,7 +40,7 @@ private:
   uint8_t masterAddress[5] = {0, 0, 0, 0, 0};     //Used to store the address of the master
   const uint8_t amountOfDataToTransmit = 5;       //Contains the length of the data to transmit; always 5.
 public:
-  exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber);
+  exchangeGameData(display & Display, runGame * game, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, const uint8_t weaponNumber, playerData & player);
 
   virtual void dataReceived(uint8_t data[10], const int len);
 
@@ -56,7 +56,7 @@ public:
 class runGame : public messageListener, public rtos::task<> {
 private:
   display & Display;
-  playerData player;
+  playerData & player;
 
   hwlib::color initColor = hwlib::color(52, 112, 90);
   hwlib::color healthColor = hwlib::color(0, 255, 0);
@@ -82,7 +82,7 @@ private:
   rtos::task<> & handler;
 
 public:
-  runGame(display & Display, const playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
+  runGame(display & Display, playerData & player, hwlib::spi_bus_bit_banged_sclk_mosi_miso & spiBus, const long long int duration, rtos::task<> & handler, const uint8_t weaponNumber);
   
   playerData getPlayerData() const;                         //Used by weaponManager to get playerNumber for infraredMessage.
   void setPlayerData(playerData & newPlayer);

@@ -376,7 +376,7 @@ define All_Targets
    AS_LANGUAGE       ?= -x assembler-with-cpp   
    
    # common settings for all languages
-   ALL_ERRORS        ?= -Wall -Werror
+   ALL_ERRORS        ?= #-Wall -Werror
    ALL_IGNORE        += -Wno-maybe-uninitialized 
    ALL_IGNORE        += -Wno-unused-local-typedefs
    ALL_IGNORE        += -Wno-unused-but-set-variable

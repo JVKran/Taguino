@@ -38,7 +38,7 @@ void signUp::dataReceived(const uint8_t data[10], const int len){
 			dataToTransmit[1] = assignedWeapons;
 			for(unsigned int i = 0; i < 2; i++){
 				radio.write( dataToTransmit, amountOfDataToTransmit );
-				hwlib::wait_ms(10);
+				hwlib::wait_ms(100);
 			}
 			hwlib::cout << assignedWeapons << "." << hwlib::endl;
 			radio.write( dataToTransmit, amountOfDataToTransmit );
@@ -92,8 +92,10 @@ void signUp::startGame(const uint8_t gameTime){
 	}
 	hwlib::cout << " and " << assignedWeapons << hwlib::endl;
 	for(uint8_t i = 1; i < assignedWeapons; i++){		//Transmit start message 3 times.
+
 		for(uint8_t j = 0; j < 3; j++){	
-			hwlib::cout<<"start"<<i<<"poging  "<<j<<"met tijd"<<Game.getGameTime()<<hwlib::endl;				
+			hwlib::cout<<"start"<<i<<"poging  "<<j<<"met tijd"<<Game.getGameTime()<<hwlib::endl;								
+
 			transmitAddress[4] = i;
 			radio.write_pipe( transmitAddress );
 			dataToTransmit[0] = 1;						//2 is defined as newScoreMessage.

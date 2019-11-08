@@ -10,6 +10,7 @@
 #include "applicationLogic.hpp"
 
 class display;
+class runGame;
 
 /// \brief
 /// Scoreboard
@@ -19,10 +20,15 @@ class scoreboard {
 private:
 	hwlib::terminal & scoreTerminal;
 	display * Display;
+	playerData & player;
+
+	uint8_t playerNumber;
 public:
-	scoreboard(hwlib::terminal & scoreTerminal, display * Display);
+	scoreboard(hwlib::terminal & scoreTerminal, display * Display, playerData & player);
 	std::array<uint8_t, 32> playerNumbers;
     std::array<uint8_t, 32> playerScores;
+
+    uint8_t getScore();
 	void updateScoreBoard(uint8_t data[5]);
 	void printScoreboard();
 };
@@ -105,10 +111,12 @@ protected:
 	rtos::flag newSettingFlag;
 	rtos::pool<int> newSettingPool;
 	int setting;
-public:
-	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal);
 
-	scoreboard Scoreboard = scoreboard(scoreBoardTerminal, this);
+	playerData & player;
+public:
+	display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal, playerData & player);
+
+	scoreboard Scoreboard = scoreboard(scoreBoardTerminal, this, player);
 	void showBullets(int amountOfBullets);
 	void drawBullets(const bool draw);
 

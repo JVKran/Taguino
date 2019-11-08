@@ -7,7 +7,7 @@
 /// \details
 /// This constructor takes an oled, xCoordinates lookup, yCoordinates lookup and a windowpart and terminal. These are needed
 /// because they can't be constructed in this class by itself. Furthermore some rtos objects are created.
-display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminal):
+display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, const lookup <int, 360> yCoordinates, hwlib::window_part & scoreWindow, hwlib::terminal_from & scoreTerminal, hwlib::terminal_from & scoreBoardTerminall, playerData & player):
 	task(4, "Display"),
 	oled(oled),
 	weaponWindow(oled, hwlib::xy(0,0), hwlib::xy(40,13)),
@@ -42,7 +42,8 @@ display::display(hwlib::glcd_oled & oled, const lookup <int, 360> xCoordinates, 
 	newWindowFlag(this),
 	newWindowPool("New Window Pool"),
 	newSettingFlag(this),
-	newSettingPool("New Setting Pool")
+	newSettingPool("New Setting Pool"),
+	player(player)
 {
 	oled.clear();
 	showScore(0);
@@ -386,7 +387,7 @@ void display::showScore(const int score){
 /// This function prints the score on the display.
 void display::drawScore(){
 	score = newScorePool.read();
-	if(score >= 0){
+	if(score >= 0 && currentlySelectedWindow == 0){
 		scoreTerminal << '\f' << hwlib::setw(5) << hwlib::right << score << hwlib::flush;
 		drawTime();
 	}
