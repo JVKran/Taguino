@@ -10,6 +10,12 @@ has an MP3 player to play suitable audio; lobby music while all players are sign
 The weapon can select the weapontype and firemode, or to display the scoreboard. Furthermore, also the health, amount of bullets and magazines and remaining time is printed on the display.
 
 ### Gameleader
+The gameleader is built with the following components:
+- Keypad
+- OlED (SSD1306)
+- Rotary Encoder (EC11)
+- NRF24L01+
+
 The Gameleader dynamically assigns adresses to the weapons; when a weapon boots up, the Gameleader detects that and transmits an address to the weapon. After an address has been assigned the master concatenates the newly assigned address to an array. Now, when a player enters a name with the keypad, the first unoccupied weapon gets that name. That name is also used in the scoreboards. 
 
 When the gameleader starts the game after setting the gametime, all players receive the message that define the start of a game and its duration. When a weapon disconnects, the game can just continue; the scoreboard remains.
@@ -17,6 +23,7 @@ When the gameleader starts the game after setting the gametime, all players rece
 ### Weapon
 The weapon has the following components:
 - Ultrasonic distance sensor (HCSR04)
+- RGB Led
 - Infrared transmitter (TSUS5202) and receiver (VS1838B)
 - OLED (SSD1306)
 - Rotary Encoder (EC11)
