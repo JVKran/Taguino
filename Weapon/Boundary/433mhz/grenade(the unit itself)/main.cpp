@@ -33,6 +33,7 @@ int main(){
 
 	radio.addListener(&grenade);
 	hwlib::cout<<"start\n";
+	PIOB->PIO_PUDR=19;
 	
 	rtos::run();
 	

@@ -18,9 +18,13 @@ int main( void ){
       sclk, mosi, miso );
 
    uint8_t address[5] = { 0, 0, 0, 0, 101 };             //the address we are going to use to transmit data
+	   uint8_t address2[5] = { 0, 0, 0, 0, 102 };             //the address we are going to use to transmit data
+
 
    auto nrf = NRF24( spi_bus, ce, csn );                              //creates a nrf24l01+ object
-                                                 //starts tx mode
+   nrf.start();                                                       //set default values into the register of the rf chip
+   nrf.read_pipe(address2);                                        //sets the pipe, address and payload size
+   nrf.powerUp_rx();                        //starts tx mode
 
    //uint8_t value[5] = { 12, 1, 50, 0, 0 };                              //the value we are going to transmit
    uint8_t len = 5;                                                   //the length of the value in bytes
@@ -29,22 +33,22 @@ int main( void ){
 
    //hwlib::wait_ms(10000);
 
-   uint8_t newValue[5] = { 12, 1, 50, 0, 0 }; 
+   uint8_t newValue[5] = { 13, 1, 50, 0, 0 }; 
    uint8_t received[5] = { 0, 0, 0, 0, 0 };
 	
    for(;;){
-	  nrf.start();                                                       //set default values into the register of the rf chip
-      nrf.read_pipe(address);                                        //sets the pipe, address and payload size
-   	  nrf.powerUp_rx();
-	  if( checkRXfifo() ){
+	  if( nrf.checkRXfifo() ){
+		  hwlib::cout<<"read\n";
 		  nrf.read(received, len);
-		  nrf.flush_tx();
+		  nrf.flush_rx();
 	  }
-	  if( receveid[0] == 12 ){
+	  if( received[0] == 12 ){
+		  hwlib::cout<<"write\n";
 		  nrf.write_pipe( address );                                         //sets the pipe, address and payload size
 	  	  nrf.powerDown_rx(); 
+		  
 		  nrf.write(newValue, len);
-		  nrf.flush_rx();
+		 hwlib::wait_ms(2000);
 		  break;
 	  }
    }
