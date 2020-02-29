@@ -47,6 +47,3 @@ The microswitch is used to fire a bullet and the toggleswitch is used to select 
 
 ### Weapon
 ![alt_text](/Deliverables/weapon_bb.png "Weapon Schematic")
-
-## Protocol
-
