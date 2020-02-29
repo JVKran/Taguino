@@ -42,7 +42,7 @@ The microswitch is used to fire a bullet and the toggleswitch is used to select 
 
 ## Diagrams
 
-![alt_text](/Deliverables/schakelschema.png "Master Schematic")
+![alt_text](/Deliverables/Schakelschema.png "Master Schematic")
 
 ![alt_text](/Deliverables/weapon_bb.png "Weapon Schematic")
 
